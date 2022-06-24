@@ -12,14 +12,32 @@
     Height="450"
     FontSize="14"
     mc:Ignorable="d">
-    <ContentControl Content="{Binding CurrentViewModel}" >
-        <ContentControl.Resources>
-            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
-                <views:HomeView/>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:AddNewDeckViewModel}" >
-                <views:AddNewDeckView/>
-            </DataTemplate>
-        </ContentControl.Resources>
-    </ContentControl>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ContentControl Content="{Binding LeftViewModel}" Grid.Column="0">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
+                    <views:HomeView />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
+                    <views:HomeView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:AddNewDeckViewModel}" >
+                    <views:AddNewDeckView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:DeckPreviewViewModel}">
+                    <views:DeckPreviewView/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
 </Window>

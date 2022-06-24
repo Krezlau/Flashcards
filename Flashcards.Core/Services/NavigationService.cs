@@ -14,7 +14,7 @@ namespace Flashcards.Core.Services
         private readonly NavigationStore _navigationStore;
         private readonly Func<ObservableObject> _createViewModel;
 
-        public NavigationService(NavigationStore navigationStore, Func<ObservableObject> createViewModel)
+        public NavigationService(NavigationStore navigationStore, Func<TViewModel> createViewModel)
         {
             _navigationStore = navigationStore;
             _createViewModel = createViewModel;

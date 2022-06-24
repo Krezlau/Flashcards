@@ -25,5 +25,6 @@ namespace Flashcards.Core.ViewModels
         }
 
         public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
+        public ObservableObject LeftViewModel => _navigationStore.LeftViewModel;
     }
 }
