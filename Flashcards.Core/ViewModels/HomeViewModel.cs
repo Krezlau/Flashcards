@@ -1,5 +1,4 @@
-﻿using Flashcards.Core.Commands;
-using Flashcards.Core.Messages;
+﻿using Flashcards.Core.Messages;
 using Flashcards.Core.Models;
 using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
@@ -7,7 +6,6 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,45 +13,48 @@ namespace Flashcards.Core.ViewModels
 {
     public class HomeViewModel : ObservableRecipient
     {
-        private readonly NavigationService<AddNewDeckViewModel> _navigationService;
+        private readonly NavigationService<AddNewDeckViewModel> _newDeckNavigationService;
+        private readonly NavigationService<DeckPreviewViewModel> _deckPreviewNavigationService;
+        public readonly UserDecksStore userDecksStore;
 
-        public UserDecksModel CurrentUserDecks { get; set; }
-        public ICommand AddNewDeckCommand { get; set; }
-
-        private Deck currentDeck;
-
-        public Deck CurrentDeck
+        public ObservableCollection<Deck> Decks
         {
-            get => currentDeck;
-            set => SetProperty(ref currentDeck, value);
+            get => userDecksStore.UserDecksModel.DeckList;
+            set => userDecksStore.UserDecksModel.DeckList = value;
+        }
+        public Deck SelectedDeck
+        {
+            get => userDecksStore.SelectedDeck;
+            set
+            {
+                userDecksStore.SelectedDeck = value;
+                OnDeckSelect();
+            }
         }
 
-        public HomeViewModel(NavigationStore navigationStore)
+        public ICommand AddNewDeckCommand { get; set; }
+
+        public HomeViewModel(NavigationService<DeckPreviewViewModel> deckPreviewNavigationService,
+                            NavigationService<AddNewDeckViewModel> newDeckNavigationService,
+                            UserDecksStore userDecksStore)
         {
-            CurrentUserDecks = new UserDecksModel { DeckList = new ObservableCollection<Deck>() };
-            CurrentUserDecks.DeckList.Add(new Deck { Name = "lmao" });
-            CurrentUserDecks.DeckList.Add(new Deck { Name = "xd" });
-            CurrentUserDecks.DeckList.Add(new Deck { Name = "fajny deck" });
-           // AddNewDeckCommand = new NavigateCommand<AddNewDeckViewModel>(new NavigationService<AddNewDeckViewModel>(
-             //   navigationStore, () => new AddNewDeckViewModel(navigationStore)));
             AddNewDeckCommand = new RelayCommand(OnAddNewDeckClick);
-            _navigationService = new NavigationService<AddNewDeckViewModel>(
-                navigationStore, () => new AddNewDeckViewModel(navigationStore));
-            
+            this.userDecksStore = userDecksStore;
+            _deckPreviewNavigationService = deckPreviewNavigationService;
+            _newDeckNavigationService = newDeckNavigationService;
+
+        }
+
+        private void OnDeckSelect()
+        {
+            _deckPreviewNavigationService.Navigate();
         }
 
         private void OnAddNewDeckClick()
         {
-            _navigationService.Navigate();
+           _newDeckNavigationService.Navigate();
         }
 
-        protected override void OnActivated()
-        {
-            Messenger.Register<HomeViewModel, NewDeckMessage>(this, (r, m) =>
-            {
-                r.CurrentUserDecks.DeckList.Add(new Deck { Name = m.Value });
-            });
-            
-        }
+        
     }
 }
