@@ -1,5 +1,4 @@
-﻿using Flashcards.Core.Messages;
-using Flashcards.Core.Models;
+﻿using Flashcards.Core.Models;
 using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;

@@ -23,5 +23,10 @@ namespace Flashcards.Core.Stores
             get => _selectedDeck;
             set => SetProperty(ref _selectedDeck, value);
         }
+
+        public void AddFlashcardToSelectedDeck(Flashcard flashcard)
+        {
+
+        }
     }
 }
