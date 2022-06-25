@@ -2,11 +2,13 @@
 using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
 {
@@ -21,14 +23,31 @@ namespace Flashcards.Core.ViewModels
 
         public string CurrentDeckSize { get; set; }
 
-        public DeckPreviewViewModel(NavigationStore navigationStore, UserDecksStore userDecksStore)
+        public ICommand LearnCommand { get; set; }
+
+        public ICommand ManageFlashcardsCommand { get; set; }
+
+        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore)
         {
-            _newFlashcardNavigationService = new NavigationService<AddNewFlashcardViewModel>(navigationStore, () => new AddNewFlashcardViewModel(navigationStore));
+            _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectedDeck;
 
             CurrentDeckName = _currentDeck.Name;
             CurrentDeckSize = "Flashcards: " + _currentDeck.Size;
+
+            LearnCommand = new RelayCommand(OnLearnClick);
+            ManageFlashcardsCommand = new RelayCommand(OnManageClick);
+        }
+
+        private void OnManageClick()
+        {
+            
+        }
+
+        private void OnLearnClick()
+        {
+            _newFlashcardNavigationService.Navigate();
         }
     }
 }

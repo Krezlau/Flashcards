@@ -54,7 +54,7 @@ namespace Flashcards.Core.HostBuilderExtensions
 
         private static DeckPreviewViewModel CreateDeckPreviewViewModel(IServiceProvider services)
         {
-            return new DeckPreviewViewModel(services.GetRequiredService<NavigationStore>(), services.GetRequiredService<UserDecksStore>());
+            return new DeckPreviewViewModel(services.GetRequiredService<NavigationService<AddNewFlashcardViewModel>>(), services.GetRequiredService<UserDecksStore>());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Flashcards.Core.Messages;
-using Flashcards.Core.Models;
+﻿using Flashcards.Core.Models;
 using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -15,7 +14,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly NavigationService<AddNewDeckViewModel> _newDeckNavigationService;
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewNavigationService;
-        public readonly UserDecksStore userDecksStore;
+        private readonly UserDecksStore userDecksStore;
 
         public ObservableCollection<Deck> Decks
         {
