@@ -1,8 +1,10 @@
-﻿using Flashcards.Core.HostBuilderExtensions;
+﻿using Flashcards.Core.DTOModels;
+using Flashcards.Core.HostBuilderExtensions;
 using Flashcards.Core.Models;
 using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -17,6 +19,7 @@ namespace Flashcards.Wpf
     public partial class App : Application
     {
         private readonly IHost _host;
+        private const string CONNECTION_STRING = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FlashcardsDB;Integrated Security=True;";
 
         public App()
         {
@@ -24,6 +27,11 @@ namespace Flashcards.Wpf
                 .AddViewModels()
                 .ConfigureServices(services =>
                 {
+                    services.AddDbContext<UserContext>(options =>
+                    {
+                        options.UseSqlServer(CONNECTION_STRING);
+                    });
+
                     services.AddSingleton<NavigationStore>();
 
                     services.AddSingleton<UserDecksStore>();
@@ -45,7 +53,7 @@ namespace Flashcards.Wpf
             _navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
             UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
-            _userDecksStore.UserDecksModel = new UserDecksModel { DeckList = new ObservableCollection<Deck>() };
+            _userDecksStore.UserDecksModel = new User("lmao", new ObservableCollection<Deck>());
             _userDecksStore.UserDecksModel.DeckList.Add(new Deck("lmao"));
             _userDecksStore.UserDecksModel.DeckList.Add(new Deck("xd"));
             _userDecksStore.UserDecksModel.DeckList.Add(new Deck("fajny deck"));

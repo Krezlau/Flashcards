@@ -10,8 +10,8 @@ namespace Flashcards.Core.Stores
 {
     public class UserDecksStore : ObservableObject
     {
-        private UserDecksModel _userDecksModel;
-        public UserDecksModel UserDecksModel
+        private User _userDecksModel;
+        public User UserDecksModel
         {
             get => _userDecksModel;
             set => SetProperty(ref _userDecksModel, value);

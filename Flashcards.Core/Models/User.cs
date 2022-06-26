@@ -8,14 +8,27 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    public class UserDecksModel : ObservableObject
+    public class User : ObservableObject
     {
+        public string Username { get; set; }
         private ObservableCollection<Deck> deckList;
 
         public ObservableCollection<Deck> DeckList
         {
             get => deckList;
             set => SetProperty(ref deckList, value);
+        }
+
+        public User(string username)
+        {
+            Username = username;
+            DeckList = new ObservableCollection<Deck>();
+        }
+
+        public User(string username, ObservableCollection<Deck> decks)
+        {
+            Username = username;
+            DeckList = decks;
         }
     }
 }

@@ -10,5 +10,15 @@ namespace Flashcards.Core.Models
     {
         public string Front { get; set; }
         public string Back { get; set; }
+        public int Level { get; set; }
+        public DateTime NextReview { get; set; }
+
+        public Flashcard(string front, string back)
+        {
+            Front = front;
+            Back = back;
+            Level = 0;
+            NextReview = DateTime.Today;
+        }
     }
 }
