@@ -33,16 +33,19 @@ namespace Flashcards.Core.ViewModels
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectedDeck;
 
-            CurrentDeckName = _currentDeck.Name;
-            CurrentDeckSize = "Flashcards: " + _currentDeck.Size;
-
+            if (_currentDeck != null)
+            {
+                CurrentDeckName = _currentDeck.Name;
+                CurrentDeckSize = "Flashcards: " + _currentDeck.Size;
+            }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
         }
 
         private void OnManageClick()
         {
-            
+            //there needs to be navigate to some home view or something
+            userDecksStore.RemoveCurrentDeck();
         }
 
         private void OnLearnClick()
