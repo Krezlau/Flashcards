@@ -1,4 +1,4 @@
-﻿using Flashcards.Core.DTOModels;
+﻿using Flashcards.Core.DBConnection;
 using Flashcards.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -17,20 +17,20 @@ namespace Flashcards.Core.Services.UserDataCreators
             _dbContextFactory = dbContextFactory;
         }
 
-        public async Task SaveNewDeck(Deck deck, string username)
+        public async Task SaveNewDeck(Deck deck)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Decks.Add(ToDTOModelConverter.ToDeckDTO(deck, username));
+                context.Decks.Add(deck);
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task SaveNewFlashcard(Flashcard flashcard, Deck deck, string username)
+        public async Task SaveNewFlashcard(Flashcard flashcard)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Flashcards.Add(ToDTOModelConverter.ToFlashcardDTO(flashcard, deck, username));
+                context.Flashcards.Add(flashcard);
                 await context.SaveChangesAsync();
             }
         }

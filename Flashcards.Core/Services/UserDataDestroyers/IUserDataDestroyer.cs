@@ -9,7 +9,7 @@ namespace Flashcards.Core.Services.UserDataDestroyers
 {
     public interface IUserDataDestroyer
     {
-        Task DeleteDeck(Deck deck, string username);
-        Task DeleteFlashcard(Flashcard flashcard, Deck deck, string username);
+        Task DeleteDeck(Deck deck);
+        Task DeleteFlashcard(Flashcard flashcard);
     }
 }

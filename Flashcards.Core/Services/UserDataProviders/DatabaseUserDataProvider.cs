@@ -1,4 +1,4 @@
-﻿using Flashcards.Core.DTOModels;
+﻿using Flashcards.Core.DBConnection;
 using Flashcards.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,66 +19,54 @@ namespace Flashcards.Core.Services.UserDataProviders
             _dbContextFactory = dbContextFactory;
         }
 
-        public async Task<User> GetUserDecks(string _username)
-        {
-            using (UsersContext context = _dbContextFactory.CreateDbContext())
-            {
-                List<UserDTO> userDTOs = await context.Users
-                    .Where(b => b.Name == _username)
-                    .Include(d => d.Decks)
-                    .ToListAsync();
+        //public async Task<ObservableUser> GetUserDecks(string _username)
+        //{
+        //    using (UsersContext context = _dbContextFactory.CreateDbContext())
+        //    {
+        //        List<UserDTO> userDTOs = await context.Users
+        //            .Where(b => b.Name == _username)
+        //            .Include(d => d.Decks)
+        //            .ToListAsync();
 
-                UserDTO userDTO;
-                try
-                {
-                    userDTO = userDTOs.First();
-                } catch(Exception e)
-                {
-                    return new User(_username);
-                }
+        //        UserDTO userDTO;
+        //        try
+        //        {
+        //            userDTO = userDTOs.First();
+        //        } catch(Exception e)
+        //        {
+        //            return new ObservableUser(_username);
+        //        }
 
-                return ToUser(userDTO);
-            }
-        }
+        //        return ToUser(userDTO);
+        //    }
+        //}
 
         public User LoadUserDecks(string _username)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                List<UserDTO> userDTOs = context.Users
+                User user = context.Users
                     .Where(b => b.Name == _username)
-                    .Include(d => d.Decks)
-                    .ToList();
-                    //.AsAsyncEnumerable();
+                    .First();
 
-                UserDTO userDTO;
-                try
+                if (user == null)
                 {
-                    userDTO = userDTOs.First();
-                }
-                catch (Exception e)
-                {
-                    return new User(_username);
+                    return new User();
                 }
 
-                return ToUser(userDTO);
+               user.Decks = new ObservableCollection<Deck>(context.Decks
+                    .Where(b => b.UserName == _username)
+                    .ToList());
+
+                foreach (Deck d in user.Decks)
+                {
+                    d.Flashcards = new ObservableCollection<Flashcard>(context.Flashcards
+                        .Where(b => b.DeckId == d.Id)
+                        .ToList());
+                }
+
+                return user;
             }
         }
-
-        private User ToUser(UserDTO r)
-        {
-            if (r.Decks != null)
-            {
-                r.Decks.ToArray();
-                List<Deck> dlist = new List<Deck>();
-                foreach (DeckDTO d in r.Decks)
-                {
-                    dlist.Add(new Deck(d.Name));
-                }
-                return new User(r.Name, new ObservableCollection<Deck>(dlist));
-            }
-            return new User(r.Name, new ObservableCollection<Deck>());
-        }
-
     }
 }

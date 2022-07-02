@@ -1,34 +1,21 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Flashcards.Core.DBConnection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    public class User : ObservableObject
+    public class User
     {
-        public string Username { get; set; }
-        private ObservableCollection<Deck> deckList;
-
-        public ObservableCollection<Deck> DeckList
-        {
-            get => deckList;
-            set => SetProperty(ref deckList, value);
-        }
-
-        public User(string username)
-        {
-            Username = username;
-            DeckList = new ObservableCollection<Deck>();
-        }
-
-        public User(string username, ObservableCollection<Deck> decks)
-        {
-            Username = username;
-            DeckList = decks;
-        }
+        [Key]
+        [Required]
+        [MaxLength(50)]
+        [MinLength(5)]
+        public string Name { get; set; }
+        public ObservableCollection<Deck> Decks { get; set; }
     }
 }

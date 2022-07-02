@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flashcards.Core.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    [Migration("20220627115152_UserIdDeleted")]
-    partial class UserIdDeleted
+    [Migration("20220702195906_model_cleanups")]
+    partial class model_cleanups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace Flashcards.Core.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.DeckDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.Deck", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,17 +33,18 @@ namespace Flashcards.Core.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("UserDTOName")
+                    b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserDTOName");
+                    b.HasIndex("UserName");
 
                     b.ToTable("Decks");
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.FlashcardDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.Flashcard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +56,7 @@ namespace Flashcards.Core.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("DeckDTOId")
+                    b.Property<int>("DeckId")
                         .HasColumnType("int");
 
                     b.Property<string>("Front")
@@ -71,12 +72,12 @@ namespace Flashcards.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeckDTOId");
+                    b.HasIndex("DeckId");
 
                     b.ToTable("Flashcards");
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.UserDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.User", b =>
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(50)
@@ -87,26 +88,30 @@ namespace Flashcards.Core.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.DeckDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.Deck", b =>
                 {
-                    b.HasOne("Flashcards.Core.DTOModels.UserDTO", null)
+                    b.HasOne("Flashcards.Core.Models.User", null)
                         .WithMany("Decks")
-                        .HasForeignKey("UserDTOName");
+                        .HasForeignKey("UserName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.FlashcardDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.Flashcard", b =>
                 {
-                    b.HasOne("Flashcards.Core.DTOModels.DeckDTO", null)
+                    b.HasOne("Flashcards.Core.Models.Deck", null)
                         .WithMany("Flashcards")
-                        .HasForeignKey("DeckDTOId");
+                        .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.DeckDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.Deck", b =>
                 {
                     b.Navigation("Flashcards");
                 });
 
-            modelBuilder.Entity("Flashcards.Core.DTOModels.UserDTO", b =>
+            modelBuilder.Entity("Flashcards.Core.Models.User", b =>
                 {
                     b.Navigation("Decks");
                 });

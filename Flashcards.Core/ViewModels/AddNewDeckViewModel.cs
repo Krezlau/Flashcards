@@ -32,7 +32,7 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnAddClick()
         {
-            Deck deck = new Deck(DeckName);
+            Deck deck = new Deck(DeckName, userDecksStore.User.Name);
             await userDecksStore.AddNewDeck(deck);
         }
     }

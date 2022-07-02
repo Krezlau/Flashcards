@@ -12,7 +12,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly UserDecksStore _userDecksStore;
 
-        public string Username => "Welcome " + _userDecksStore.UserDecksModel.Username + "!";
+        public string Username => "Welcome " + _userDecksStore.User.Name + "!";
 
         public UserWelcomeViewModel(UserDecksStore userDecksStore)
         {

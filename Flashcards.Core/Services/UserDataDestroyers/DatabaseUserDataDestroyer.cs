@@ -1,4 +1,4 @@
-﻿using Flashcards.Core.DTOModels;
+﻿using Flashcards.Core.DBConnection;
 using Flashcards.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -16,20 +16,20 @@ namespace Flashcards.Core.Services.UserDataDestroyers
         {
             _dbContextFactory = dbContextFactory;
         }
-        public async Task DeleteDeck(Deck deck, string username)
+        public async Task DeleteDeck(Deck deck)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Decks.Remove(context.Decks.Single(a => a.UserName == username && a.Name == deck.Name));
+                context.Decks.Remove(context.Decks.Single(a => a.Id == deck.Id));
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task DeleteFlashcard(Flashcard flashcard, Deck deck, string username)
+        public async Task DeleteFlashcard(Flashcard flashcard)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Flashcards.Remove(ToDTOModelConverter.ToFlashcardDTO(flashcard, deck, username));
+                context.Flashcards.Remove(context.Flashcards.Single(a => a.Id == flashcard.Id));
                 await context.SaveChangesAsync();
             }
         }

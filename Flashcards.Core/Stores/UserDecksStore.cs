@@ -20,7 +20,6 @@ namespace Flashcards.Core.Stores
 
         public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer)
         {
-            UserDecksModel = new User(_username);
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
@@ -29,26 +28,26 @@ namespace Flashcards.Core.Stores
         public void Initialize()
         {
             User user = _dataProvider.LoadUserDecks(_username);
-            UserDecksModel = user;
+            User = user;
         }
 
         public async Task AddNewDeck(Deck deck)
         {
-            UserDecksModel.DeckList.Add(deck);
-            await _dataCreator.SaveNewDeck(deck, _username);
+            User.Decks.Add(deck);
+            await _dataCreator.SaveNewDeck(deck);
         }
 
         public async Task RemoveCurrentDeck()
         {
-            await _dataDestroyer.DeleteDeck(SelectedDeck, _username);
-            UserDecksModel.DeckList.Remove(SelectedDeck);
+            await _dataDestroyer.DeleteDeck(SelectedDeck);
+            User.Decks.Remove(SelectedDeck);
         }
 
-        private User _userDecksModel;
-        public User UserDecksModel
+        private User _user;
+        public User User
         {
-            get => _userDecksModel;
-            set => SetProperty(ref _userDecksModel, value);
+            get => _user;
+            set => SetProperty(ref _user, value);
         }
 
         private Deck _selectedDeck;

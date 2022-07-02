@@ -9,7 +9,6 @@ namespace Flashcards.Core.Services.UserDataProviders
 {
     public interface IUserDataProvider
     {
-        Task<User> GetUserDecks(string _username);
         User LoadUserDecks(string _username);
     }
 }

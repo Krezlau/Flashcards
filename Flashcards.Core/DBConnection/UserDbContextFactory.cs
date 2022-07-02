@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flashcards.Core.DTOModels
+namespace Flashcards.Core.DBConnection
 {
     public class UserDbContextFactory
     {

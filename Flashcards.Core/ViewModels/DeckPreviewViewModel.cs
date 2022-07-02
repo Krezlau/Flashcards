@@ -37,7 +37,7 @@ namespace Flashcards.Core.ViewModels
             if (_currentDeck != null)
             {
                 CurrentDeckName = _currentDeck.Name;
-                CurrentDeckSize = "Flashcards: " + _currentDeck.Size;
+                CurrentDeckSize = "Flashcards: " + _currentDeck.Flashcards.Count;
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);

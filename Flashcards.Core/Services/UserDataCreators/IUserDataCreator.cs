@@ -9,7 +9,7 @@ namespace Flashcards.Core.Services.UserDataCreators
 {
     public interface IUserDataCreator
     {
-        Task SaveNewDeck(Deck deck, string username);
-        Task SaveNewFlashcard(Flashcard flashcard, Deck deck, string username);
+        Task SaveNewDeck(Deck deck);
+        Task SaveNewFlashcard(Flashcard flashcard);
     }
 }
