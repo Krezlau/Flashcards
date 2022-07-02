@@ -15,6 +15,7 @@ namespace Flashcards.Core.ViewModels
     public class DeckPreviewViewModel : ObservableObject
     {
         private readonly NavigationService<AddNewFlashcardViewModel> _newFlashcardNavigationService;
+        private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
         private readonly UserDecksStore userDecksStore;
 
         private readonly Deck _currentDeck;
@@ -27,22 +28,26 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ManageFlashcardsCommand { get; set; }
 
-        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore)
+        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService)
         {
             _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectedDeck;
 
-            CurrentDeckName = _currentDeck.Name;
-            CurrentDeckSize = "Flashcards: " + _currentDeck.Size;
-
+            if (_currentDeck != null)
+            {
+                CurrentDeckName = _currentDeck.Name;
+                CurrentDeckSize = "Flashcards: " + _currentDeck.Flashcards.Count;
+            }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
+            _userWelcomeNavigatonService = userWelcomeNavigatonService;
         }
 
-        private void OnManageClick()
+        private async void OnManageClick()
         {
-            
+            await userDecksStore.RemoveCurrentDeck();
+            _userWelcomeNavigatonService.Navigate();
         }
 
         private void OnLearnClick()

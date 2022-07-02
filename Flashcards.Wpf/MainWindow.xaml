@@ -40,6 +40,9 @@
                 <DataTemplate DataType="{x:Type viewmodels:AddNewFlashcardViewModel}">
                     <views:AddNewFlashcardView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:UserWelcomeViewModel}">
+                    <views:UserWelcomeView/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
     </Grid>

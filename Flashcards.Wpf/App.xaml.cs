@@ -1,8 +1,13 @@
-﻿using Flashcards.Core.HostBuilderExtensions;
+﻿using Flashcards.Core.DBConnection;
+using Flashcards.Core.HostBuilderExtensions;
 using Flashcards.Core.Models;
 using Flashcards.Core.Services;
+using Flashcards.Core.Services.UserDataCreators;
+using Flashcards.Core.Services.UserDataDestroyers;
+using Flashcards.Core.Services.UserDataProviders;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -17,6 +22,8 @@ namespace Flashcards.Wpf
     public partial class App : Application
     {
         private readonly IHost _host;
+        private const string CONNECTION_STRING = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FlashcardDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
 
         public App()
         {
@@ -24,6 +31,16 @@ namespace Flashcards.Wpf
                 .AddViewModels()
                 .ConfigureServices(services =>
                 {
+                    services.AddDbContext<UsersContext>(options =>
+                    {
+                        options.UseSqlServer(CONNECTION_STRING);
+                    });
+
+                    services.AddSingleton<IUserDataProvider, DatabaseUserDataProvider>();
+                    services.AddSingleton<IUserDataCreator, DatabaseUserDataCreator>();
+                    services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
+                    services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
+
                     services.AddSingleton<NavigationStore>();
 
                     services.AddSingleton<UserDecksStore>();
@@ -41,15 +58,11 @@ namespace Flashcards.Wpf
             _host.Start();
 
             NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
-            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<AddNewDeckViewModel>();
+            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<UserWelcomeViewModel>();
             _navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
             UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
-            _userDecksStore.UserDecksModel = new UserDecksModel { DeckList = new ObservableCollection<Deck>() };
-            _userDecksStore.UserDecksModel.DeckList.Add(new Deck("lmao"));
-            _userDecksStore.UserDecksModel.DeckList.Add(new Deck("xd"));
-            _userDecksStore.UserDecksModel.DeckList.Add(new Deck("fajny deck"));
-
+            _userDecksStore.Initialize();
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
@@ -58,6 +71,7 @@ namespace Flashcards.Wpf
 
         protected override void OnExit(ExitEventArgs e)
         {
+
             _host.Dispose();
 
             base.OnExit(e);

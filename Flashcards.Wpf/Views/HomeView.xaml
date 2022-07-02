@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Flashcards.Wpf"
-        mc:Ignorable="d" Height="auto"  Width="auto">
+        xmlns:local="clr-namespace:Flashcards.Wpf" xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core" d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
+             mc:Ignorable="d" Height="auto"  Width="auto">
     <Grid Background="Red">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -21,7 +21,7 @@
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Decks, Mode=OneWay}"
+        <ListView ItemsSource="{Binding Decks}"
                   Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
                   Margin="5" SelectedItem="{Binding SelectedDeck}">
             <ListView.ItemTemplate>

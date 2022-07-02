@@ -30,10 +30,10 @@ namespace Flashcards.Core.ViewModels
             this.userDecksStore = userDecksStore;
         }
 
-        private void OnAddClick()
+        private async void OnAddClick()
         {
-            Deck deck = new Deck(DeckName);
-            userDecksStore.UserDecksModel.DeckList.Add(deck);
+            Deck deck = new Deck(DeckName, userDecksStore.User.Name);
+            await userDecksStore.AddNewDeck(deck);
         }
     }
 }

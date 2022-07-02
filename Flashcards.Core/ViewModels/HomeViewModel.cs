@@ -16,11 +16,8 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewNavigationService;
         private readonly UserDecksStore userDecksStore;
 
-        public ObservableCollection<Deck> Decks
-        {
-            get => userDecksStore.UserDecksModel.DeckList;
-            set => userDecksStore.UserDecksModel.DeckList = value;
-        }
+        public ObservableCollection<Deck> Decks => userDecksStore.User.Decks;
+
         public Deck SelectedDeck
         {
             get => userDecksStore.SelectedDeck;
