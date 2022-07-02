@@ -38,9 +38,9 @@ namespace Flashcards.Core.Stores
             await _dataCreator.SaveNewDeck(deck, _username);
         }
 
-        public void RemoveCurrentDeck()
+        public async Task RemoveCurrentDeck()
         {
-            _dataDestroyer.DeleteDeck(SelectedDeck, _username);
+            await _dataDestroyer.DeleteDeck(SelectedDeck, _username);
             UserDecksModel.DeckList.Remove(SelectedDeck);
         }
 

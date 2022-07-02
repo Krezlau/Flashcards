@@ -58,7 +58,7 @@ namespace Flashcards.Wpf
             _host.Start();
 
             NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
-            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<AddNewDeckViewModel>();
+            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<UserWelcomeViewModel>();
             _navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
             UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();

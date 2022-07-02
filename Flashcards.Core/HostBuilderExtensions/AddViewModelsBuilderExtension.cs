@@ -33,6 +33,10 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<HomeViewModel>>((s) => () => s.GetRequiredService<HomeViewModel>());
                 services.AddSingleton<NavigationService<HomeViewModel>>();
 
+                services.AddTransient<UserWelcomeViewModel>();
+                services.AddSingleton<Func<UserWelcomeViewModel>>((s) => () => s.GetRequiredService<UserWelcomeViewModel>());
+                services.AddSingleton<NavigationService<UserWelcomeViewModel>>();
+
 
                 services.AddSingleton<MainViewModel>();
             });
@@ -54,7 +58,8 @@ namespace Flashcards.Core.HostBuilderExtensions
 
         private static DeckPreviewViewModel CreateDeckPreviewViewModel(IServiceProvider services)
         {
-            return new DeckPreviewViewModel(services.GetRequiredService<NavigationService<AddNewFlashcardViewModel>>(), services.GetRequiredService<UserDecksStore>());
+            return new DeckPreviewViewModel(services.GetRequiredService<NavigationService<AddNewFlashcardViewModel>>(), services.GetRequiredService<UserDecksStore>(),
+                                                services.GetRequiredService<NavigationService<UserWelcomeViewModel>>());
         }
     }
 }
