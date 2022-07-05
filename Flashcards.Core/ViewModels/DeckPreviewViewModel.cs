@@ -16,6 +16,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly NavigationService<AddNewFlashcardViewModel> _newFlashcardNavigationService;
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
+        private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
         private readonly UserDecksStore userDecksStore;
 
         private readonly Deck _currentDeck;
@@ -28,7 +29,9 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ManageFlashcardsCommand { get; set; }
 
-        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService)
+        public ICommand DeleteDeckCommand { get; set; }
+
+        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService)
         {
             _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
@@ -41,13 +44,20 @@ namespace Flashcards.Core.ViewModels
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
+            DeleteDeckCommand = new RelayCommand(OnDeleteClick);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
+            _flashcardManagementService = flashcardManagementService;
         }
 
-        private async void OnManageClick()
+        private async void OnDeleteClick()
         {
             await userDecksStore.RemoveCurrentDeck();
             _userWelcomeNavigatonService.Navigate();
+        }
+
+        private void OnManageClick()
+        {
+            _flashcardManagementService.Navigate();
         }
 
         private void OnLearnClick()

@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Flashcards.Wpf.Views.FlashcardManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Flashcards.Wpf.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="580">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="10" />
+        </Grid.RowDefinitions>
+
+        <ListView ItemsSource="{Binding Flashcards}"
+                  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3"
+                  Grid.RowSpan="2"
+                  Margin="5" SelectedItem="{Binding SelectedFlashcard}">
+            <!--<ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Front}" Grid.Column="0"
+                                   Padding="5" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Back}" Grid.Column="1"
+                                   Padding="5" 
+                                   TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding Level}" Grid.Column="2"
+                                   Padding="5" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>-->
+            <ListView.View>
+
+                <GridView>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Front}" Header="Front" 
+                                    Width="230"/>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Back}" Header="Back"
+                                    Width="230"/>
+                    
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Level}" Header="Level" Width="65"/>
+                </GridView>
+
+            </ListView.View>
+        </ListView>
+
+        <Button Content=" &lt; " Command="{Binding GoBackCommand}"
+                Grid.Column="1" Grid.Row="1"
+                 Margin="5"/>
+
+        <Button Content="Add new" Command="{Binding NewFlashcardCommand}"
+                Grid.Column="3" Grid.Row="4"
+                Margin="5" />
+
+        <Button Content="Edit" Command="{Binding EditCommand}"
+                Grid.Column="1" Grid.Row="4" 
+                Margin="5"/>
+
+    </Grid>
+</UserControl>

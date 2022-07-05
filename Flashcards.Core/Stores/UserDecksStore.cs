@@ -57,6 +57,13 @@ namespace Flashcards.Core.Stores
             set => SetProperty(ref _selectedDeck, value);
         }
 
+        private Flashcard _selectedFlashcard;
+        public Flashcard SelectedFlashcard
+        {
+            get => _selectedFlashcard;
+            set => SetProperty(ref _selectedFlashcard, value);
+        }
+
         public void AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
 
