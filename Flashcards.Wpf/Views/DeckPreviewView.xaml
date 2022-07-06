@@ -37,7 +37,7 @@
         <Button Content="Manage flashcards" 
                 Command="{Binding ManageFlashcardsCommand}"
                 Grid.Column="2" Grid.Row="3" Margin="5" Padding="5"
-                Width="125"/>
+                Width="150"/>
 
         <Button Content="Delete deck"
                 Command="{Binding DeleteDeckCommand}"

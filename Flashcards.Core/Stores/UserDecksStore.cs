@@ -64,9 +64,23 @@ namespace Flashcards.Core.Stores
             set => SetProperty(ref _selectedFlashcard, value);
         }
 
-        public void AddFlashcardToSelectedDeck(Flashcard flashcard)
+        public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
+            // deck size in home view does not get refreshed after adding a flashcard
+            User.Decks[GetSelectedDeckIndex()].Flashcards.Add(flashcard);
+            await _dataCreator.SaveNewFlashcard(flashcard);
+        }
 
+        private int GetSelectedDeckIndex()
+        {
+            for (int i = 0; i < User.Decks.Count; i++)
+            {
+                if ( User.Decks[i].Id == SelectedDeck.Id)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }

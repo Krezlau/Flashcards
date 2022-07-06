@@ -1,4 +1,5 @@
-﻿using Flashcards.Core.Services;
+﻿using Flashcards.Core.Models;
+using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -13,19 +14,34 @@ namespace Flashcards.Core.ViewModels
 {
     public class AddNewFlashcardViewModel : ObservableObject
     {
-        private readonly NavigationService<DeckPreviewViewModel> _navigationService;
+        private readonly NavigationService<FlashcardManagementViewModel> _navigationService;
         private readonly UserDecksStore _userDecksStore;
 
-        public AddNewFlashcardViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore)
+        public ICommand GoBackCommand { get; set; }
+
+        public AddNewFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
             AddCommand = new RelayCommand(OnAddClick);
+            GoBackCommand = new RelayCommand(OnGoBackClick);
         }
 
-        private void OnAddClick()
-        { 
+        private void OnGoBackClick()
+        {
             _navigationService.Navigate();
+        }
+
+        private async void OnAddClick()
+        {
+            await _userDecksStore.AddFlashcardToSelectedDeck(new Flashcard
+            {
+                Front = Front,
+                Back = Back,
+                DeckId = _userDecksStore.SelectedDeck.Id,
+                Level = 0,
+                NextReview = DateTime.Now
+            });
         }
 
         private string front;

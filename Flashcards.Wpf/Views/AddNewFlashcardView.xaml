@@ -20,26 +20,31 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Deck: New Flashcard" FontSize="20" Margin="5"
-                   Grid.Column="1" Grid.Row="1" />
+        <Button Content=" &lt; " Command="{Binding GoBackCommand}"
+                Grid.Column="1" Grid.Row="1"  Width="50"
+                HorizontalAlignment="Left"/>
 
-        <TextBlock Text="Front:" FontSize="12" Grid.Column="1" Grid.Row="2" 
+        <TextBlock Text="Deck: New Flashcard" FontSize="20" Margin="5"
+                   Grid.Column="1" Grid.Row="2" />
+
+        <TextBlock Text="Front:" FontSize="12" Grid.Column="1" Grid.Row="3" 
                    Margin="5" HorizontalAlignment="Center"/>
 
         <TextBox Text="{Binding Front}" Width="200" Margin="5" FontSize="12"
-                 Grid.Row="3" Grid.Column="1" />
+                 Grid.Row="4" Grid.Column="1" />
 
-        <TextBlock Text="Back:" FontSize="12" Grid.Column="1" Grid.Row="4" 
+        <TextBlock Text="Back:" FontSize="12" Grid.Column="1" Grid.Row="5" 
                    Margin="5" HorizontalAlignment="Center"/>
 
         <TextBox Text="{Binding Back}" Width="200" Margin="5" FontSize="12"
-                 Grid.Row="5" Grid.Column="1" />
+                 Grid.Row="6" Grid.Column="1" />
 
         <Button Content="Add" Command="{Binding AddCommand}" Grid.Column="1"
-                Grid.Row="6" Margin="5" Width="100"/>
+                Grid.Row="7" Margin="5" Width="100"/>
 
     </Grid>
 </UserControl>
