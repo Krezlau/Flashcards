@@ -21,9 +21,9 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<AddNewDeckViewModel>>((s) => () => s.GetRequiredService<AddNewDeckViewModel>());
                 services.AddSingleton<NavigationService<AddNewDeckViewModel>>();
 
-                services.AddTransient<AddNewFlashcardViewModel>();
-                services.AddSingleton<Func<AddNewFlashcardViewModel>>((s) => () => s.GetRequiredService<AddNewFlashcardViewModel>());
-                services.AddSingleton<NavigationService<AddNewFlashcardViewModel>>();
+                services.AddTransient<AlterFlashcardViewModel>();
+                services.AddSingleton<Func<AlterFlashcardViewModel>>((s) => () => s.GetRequiredService<AlterFlashcardViewModel>());
+                services.AddSingleton<NavigationService<AlterFlashcardViewModel>>();
 
                 services.AddTransient((s) => CreateDeckPreviewViewModel(s));
                 services.AddSingleton<Func<DeckPreviewViewModel>>((s) => () => s.GetRequiredService<DeckPreviewViewModel>());
@@ -62,7 +62,7 @@ namespace Flashcards.Core.HostBuilderExtensions
 
         private static DeckPreviewViewModel CreateDeckPreviewViewModel(IServiceProvider services)
         {
-            return new DeckPreviewViewModel(services.GetRequiredService<NavigationService<AddNewFlashcardViewModel>>(), services.GetRequiredService<UserDecksStore>(),
+            return new DeckPreviewViewModel(services.GetRequiredService<NavigationService<AlterFlashcardViewModel>>(), services.GetRequiredService<UserDecksStore>(),
                                                 services.GetRequiredService<NavigationService<UserWelcomeViewModel>>(), services.GetRequiredService<NavigationService<FlashcardManagementViewModel>>());
         }
     }

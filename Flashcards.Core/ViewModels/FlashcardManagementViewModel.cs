@@ -17,7 +17,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewService;
-        private readonly NavigationService<AddNewFlashcardViewModel> _newFlashcardService;
+        private readonly NavigationService<AlterFlashcardViewModel> _newFlashcardService;
 
         public ICommand NewFlashcardCommand { get; set; }
 
@@ -33,7 +33,7 @@ namespace Flashcards.Core.ViewModels
 
         public ObservableCollection<Flashcard> Flashcards => _userDecksStore.SelectedDeck.Flashcards;
 
-        public FlashcardManagementViewModel(NavigationService<DeckPreviewViewModel> deckPreviewService, UserDecksStore userDecksStore, NavigationService<AddNewFlashcardViewModel> newFlashcardService)
+        public FlashcardManagementViewModel(NavigationService<DeckPreviewViewModel> deckPreviewService, UserDecksStore userDecksStore, NavigationService<AlterFlashcardViewModel> newFlashcardService)
         {
             _deckPreviewService = deckPreviewService;
             _userDecksStore = userDecksStore;
@@ -46,7 +46,11 @@ namespace Flashcards.Core.ViewModels
 
         private void OnEditClick()
         {
-            
+            if (SelectedFlashcard == null)
+            {
+                return;
+            }
+            _newFlashcardService.Navigate();
         }
 
         private void OnGoBackClick()
@@ -56,6 +60,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnNewFlashcardClick()
         {
+            _userDecksStore.SelectedFlashcard = null;
             _newFlashcardService.Navigate();
         }
     }

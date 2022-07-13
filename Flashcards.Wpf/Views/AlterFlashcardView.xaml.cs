@@ -18,9 +18,9 @@ namespace Flashcards.Wpf.Views
     /// <summary>
     /// Interaction logic for AddNewFlashcardView.xaml
     /// </summary>
-    public partial class AddNewFlashcardView : UserControl
+    public partial class AlterFlashcardView : UserControl
     {
-        public AddNewFlashcardView()
+        public AlterFlashcardView()
         {
             InitializeComponent();
         }

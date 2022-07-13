@@ -14,7 +14,7 @@ namespace Flashcards.Core.ViewModels
 {
     public class DeckPreviewViewModel : ObservableObject
     {
-        private readonly NavigationService<AddNewFlashcardViewModel> _newFlashcardNavigationService;
+        private readonly NavigationService<AlterFlashcardViewModel> _newFlashcardNavigationService;
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
         private readonly UserDecksStore userDecksStore;
@@ -31,7 +31,7 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand DeleteDeckCommand { get; set; }
 
-        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService)
+        public DeckPreviewViewModel(NavigationService<AlterFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService)
         {
             _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;

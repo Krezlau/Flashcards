@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Flashcards.Wpf.Views.AddNewFlashcardView"
+﻿<UserControl x:Class="Flashcards.Wpf.Views.AlterFlashcardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -43,7 +43,7 @@
         <TextBox Text="{Binding Back}" Width="200" Margin="5" FontSize="12"
                  Grid.Row="6" Grid.Column="1" />
 
-        <Button Content="Add" Command="{Binding AddCommand}" Grid.Column="1"
+        <Button Content="{Binding ButtonContent}" Command="{Binding ButtonCommand}" Grid.Column="1"
                 Grid.Row="7" Margin="5" Width="100"/>
 
     </Grid>

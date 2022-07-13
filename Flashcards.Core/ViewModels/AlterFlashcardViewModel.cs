@@ -12,19 +12,38 @@ using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
 {
-    public class AddNewFlashcardViewModel : ObservableObject
+    public class AlterFlashcardViewModel : ObservableObject
     {
         private readonly NavigationService<FlashcardManagementViewModel> _navigationService;
         private readonly UserDecksStore _userDecksStore;
 
         public ICommand GoBackCommand { get; set; }
 
-        public AddNewFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore)
+        public string ButtonContent { get; set; } = "Add";
+
+        public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
-            AddCommand = new RelayCommand(OnAddClick);
+            ButtonCommand = new RelayCommand(OnAddClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
+
+            if (_userDecksStore.SelectedFlashcard != null)
+            {
+                Front = _userDecksStore.SelectedFlashcard.Front;
+                Back = _userDecksStore.SelectedFlashcard.Back;
+                ButtonContent = "Edit";
+                ButtonCommand = new RelayCommand(OnEditClick);
+            }
+        }
+
+        private void OnEditClick()
+        {
+            // TODO:
+            // IUserDataChanger
+            // DatabaseUserDataChanger
+            // and this method down below
+            _userDecksStore.AlterSelectedFlashcard(Front, Back);
         }
 
         private void OnGoBackClick()
@@ -58,6 +77,6 @@ namespace Flashcards.Core.ViewModels
             set => SetProperty(ref back, value);
         }
 
-        public ICommand AddCommand { get; set; }
+        public ICommand ButtonCommand { get; set; }
     }
 }

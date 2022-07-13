@@ -50,6 +50,11 @@ namespace Flashcards.Core.Stores
             set => SetProperty(ref _user, value);
         }
 
+        internal void AlterSelectedFlashcard(string front, string back)
+        {
+            throw new NotImplementedException();
+        }
+
         private Deck _selectedDeck;
         public Deck SelectedDeck
         {

@@ -38,8 +38,8 @@
                 <DataTemplate DataType="{x:Type viewmodels:DeckPreviewViewModel}">
                     <views:DeckPreviewView/>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewmodels:AddNewFlashcardViewModel}">
-                    <views:AddNewFlashcardView/>
+                <DataTemplate DataType="{x:Type viewmodels:AlterFlashcardViewModel}">
+                    <views:AlterFlashcardView/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:UserWelcomeViewModel}">
                     <views:UserWelcomeView/>
