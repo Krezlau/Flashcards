@@ -37,13 +37,13 @@ namespace Flashcards.Core.ViewModels
             }
         }
 
-        private void OnEditClick()
+        private async void OnEditClick()
         {
             // TODO:
             // IUserDataChanger
             // DatabaseUserDataChanger
             // and this method down below
-            _userDecksStore.AlterSelectedFlashcard(Front, Back);
+            await _userDecksStore.AlterFlashcard(Front, Back);
         }
 
         private void OnGoBackClick()

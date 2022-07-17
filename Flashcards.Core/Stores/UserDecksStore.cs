@@ -1,4 +1,5 @@
 ﻿using Flashcards.Core.Models;
+using Flashcards.Core.Services.UserDataChangers;
 using Flashcards.Core.Services.UserDataCreators;
 using Flashcards.Core.Services.UserDataDestroyers;
 using Flashcards.Core.Services.UserDataProviders;
@@ -16,19 +17,28 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataProvider _dataProvider;
         private readonly IUserDataCreator _dataCreator;
         private readonly IUserDataDestroyer _dataDestroyer;
+        private readonly IUserDataChanger _dataChanger;
         private string _username = "lmao";
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
+            _dataChanger = dataChanger;
         }
 
         public void Initialize()
         {
             User user = _dataProvider.LoadUserDecks(_username);
             User = user;
+        }
+
+        public async Task AlterFlashcard(string front, string back)
+        {
+            User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()].Front = front;
+            User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()].Back = back;
+            await _dataChanger.ChangeFlashcard(User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()]);
         }
 
         public async Task AddNewDeck(Deck deck)
@@ -48,11 +58,6 @@ namespace Flashcards.Core.Stores
         {
             get => _user;
             set => SetProperty(ref _user, value);
-        }
-
-        internal void AlterSelectedFlashcard(string front, string back)
-        {
-            throw new NotImplementedException();
         }
 
         private Deck _selectedDeck;
@@ -80,7 +85,19 @@ namespace Flashcards.Core.Stores
         {
             for (int i = 0; i < User.Decks.Count; i++)
             {
-                if ( User.Decks[i].Id == SelectedDeck.Id)
+                if (User.Decks[i].Id == SelectedDeck.Id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private int GetSelectedFlashcardIndex()
+        {
+            for (int i = 0; i <= SelectedDeck.Flashcards.Count; i++)
+            {
+                if (SelectedDeck.Flashcards[i].Id == SelectedFlashcard.Id)
                 {
                     return i;
                 }
