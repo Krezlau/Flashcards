@@ -35,7 +35,7 @@ namespace Flashcards.Core.ViewModels
         {
             _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
-            _currentDeck = userDecksStore.SelectedDeck;
+            _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
 
             if (_currentDeck != null)
             {
@@ -62,7 +62,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnLearnClick()
         {
-            _newFlashcardNavigationService.Navigate();
+            //TODO
         }
     }
 }

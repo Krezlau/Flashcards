@@ -50,7 +50,7 @@ namespace Flashcards.Core.HostBuilderExtensions
 
         private static AddNewDeckViewModel CreateAddNewDeckViewModel(IServiceProvider services)
         {
-            return new AddNewDeckViewModel(services.GetRequiredService<NavigationService<HomeViewModel>>(), services.GetRequiredService<UserDecksStore>());
+            return new AddNewDeckViewModel(services.GetRequiredService<NavigationService<DeckPreviewViewModel>>(), services.GetRequiredService<UserDecksStore>());
         }
 
         private static HomeViewModel CreateHomeViewModel(IServiceProvider services)

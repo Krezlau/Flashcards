@@ -45,6 +45,8 @@ namespace Flashcards.Wpf
 
                     services.AddSingleton<NavigationStore>();
 
+                    services.AddSingleton<SelectionStore>();
+
                     services.AddSingleton<UserDecksStore>();
 
                     services.AddSingleton(s => new MainWindow()

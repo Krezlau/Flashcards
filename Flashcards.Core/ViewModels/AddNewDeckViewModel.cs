@@ -10,7 +10,7 @@ namespace Flashcards.Core.ViewModels
 {
     public class AddNewDeckViewModel : ObservableRecipient
     {
-        private readonly NavigationService<HomeViewModel> _navigationService;
+        private readonly NavigationService<DeckPreviewViewModel> _navigationService;
         private readonly UserDecksStore userDecksStore;
 
         public ICommand AddCommand { get; set; }
@@ -23,7 +23,7 @@ namespace Flashcards.Core.ViewModels
             set => SetProperty(ref deckName, value);
         }
 
-        public AddNewDeckViewModel(NavigationService<HomeViewModel> navigationService, UserDecksStore userDecksStore)
+        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore)
         {
             AddCommand = new RelayCommand(OnAddClick);
             _navigationService = navigationService;
@@ -33,7 +33,9 @@ namespace Flashcards.Core.ViewModels
         private async void OnAddClick()
         {
             Deck deck = new Deck(DeckName, userDecksStore.User.Name);
+            userDecksStore.SelectionStore.SelectedDeck = deck;
             await userDecksStore.AddNewDeck(deck);
+            _navigationService.Navigate();
         }
     }
 }

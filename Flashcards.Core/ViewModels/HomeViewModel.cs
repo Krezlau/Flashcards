@@ -20,10 +20,10 @@ namespace Flashcards.Core.ViewModels
 
         public Deck SelectedDeck
         {
-            get => userDecksStore.SelectedDeck;
+            get => userDecksStore.SelectionStore.SelectedDeck;
             set
             {
-                userDecksStore.SelectedDeck = value;
+                userDecksStore.SelectionStore.SelectedDeck = value;
                 OnDeckSelect();
             }
         }

@@ -25,13 +25,15 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand EditCommand { get; set; }
 
+        public ICommand DeleteCommand { get; set; }
+
         public Flashcard SelectedFlashcard
         {
-            get => _userDecksStore.SelectedFlashcard;
-            set => _userDecksStore.SelectedFlashcard = value;
+            get => _userDecksStore.SelectionStore.SelectedFlashcard;
+            set => _userDecksStore.SelectionStore.SelectedFlashcard = value;
         }
 
-        public ObservableCollection<Flashcard> Flashcards => _userDecksStore.SelectedDeck.Flashcards;
+        public ObservableCollection<Flashcard> Flashcards => _userDecksStore.SelectionStore.SelectedDeck.Flashcards;
 
         public FlashcardManagementViewModel(NavigationService<DeckPreviewViewModel> deckPreviewService, UserDecksStore userDecksStore, NavigationService<AlterFlashcardViewModel> newFlashcardService)
         {
@@ -42,6 +44,12 @@ namespace Flashcards.Core.ViewModels
             NewFlashcardCommand = new RelayCommand(OnNewFlashcardClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
             EditCommand = new RelayCommand(OnEditClick);
+            DeleteCommand = new RelayCommand(OnDeleteClick);
+        }
+
+        private async void OnDeleteClick()
+        {
+            await _userDecksStore.RemoveCurrentFlashcard();
         }
 
         private void OnEditClick()
@@ -60,7 +68,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnNewFlashcardClick()
         {
-            _userDecksStore.SelectedFlashcard = null;
+            _userDecksStore.SelectionStore.SelectedFlashcard = null;
             _newFlashcardService.Navigate();
         }
     }

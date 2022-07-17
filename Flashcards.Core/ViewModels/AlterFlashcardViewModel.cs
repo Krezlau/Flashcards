@@ -28,10 +28,10 @@ namespace Flashcards.Core.ViewModels
             ButtonCommand = new RelayCommand(OnAddClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
 
-            if (_userDecksStore.SelectedFlashcard != null)
+            if (_userDecksStore.SelectionStore.SelectedFlashcard != null)
             {
-                Front = _userDecksStore.SelectedFlashcard.Front;
-                Back = _userDecksStore.SelectedFlashcard.Back;
+                Front = _userDecksStore.SelectionStore.SelectedFlashcard.Front;
+                Back = _userDecksStore.SelectionStore.SelectedFlashcard.Back;
                 ButtonContent = "Edit";
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
@@ -44,6 +44,7 @@ namespace Flashcards.Core.ViewModels
             // DatabaseUserDataChanger
             // and this method down below
             await _userDecksStore.AlterFlashcard(Front, Back);
+            _navigationService.Navigate();
         }
 
         private void OnGoBackClick()
@@ -57,10 +58,11 @@ namespace Flashcards.Core.ViewModels
             {
                 Front = Front,
                 Back = Back,
-                DeckId = _userDecksStore.SelectedDeck.Id,
+                DeckId = _userDecksStore.SelectionStore.SelectedDeck.Id,
                 Level = 0,
                 NextReview = DateTime.Now
             });
+            _navigationService.Navigate();
         }
 
         private string front;

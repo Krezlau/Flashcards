@@ -20,13 +20,16 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataChanger _dataChanger;
         private string _username = "lmao";
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
             _dataChanger = dataChanger;
+            SelectionStore = selectionStore;
         }
+
+        public SelectionStore SelectionStore { get; }
 
         public void Initialize()
         {
@@ -36,9 +39,11 @@ namespace Flashcards.Core.Stores
 
         public async Task AlterFlashcard(string front, string back)
         {
-            User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()].Front = front;
-            User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()].Back = back;
-            await _dataChanger.ChangeFlashcard(User.Decks[GetSelectedDeckIndex()].Flashcards[GetSelectedFlashcardIndex()]);
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            int flashcardIndex = SelectionStore.GetSelectedFlashcardIndex();
+            User.Decks[deckIndex].Flashcards[flashcardIndex].Front = front;
+            User.Decks[deckIndex].Flashcards[flashcardIndex].Back = back;
+            await _dataChanger.ChangeFlashcard(User.Decks[deckIndex].Flashcards[flashcardIndex]);
         }
 
         public async Task AddNewDeck(Deck deck)
@@ -47,10 +52,18 @@ namespace Flashcards.Core.Stores
             await _dataCreator.SaveNewDeck(deck);
         }
 
+        public async Task RemoveCurrentFlashcard()
+        {
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            int flashcardIndex = SelectionStore.GetSelectedFlashcardIndex();
+            await _dataDestroyer.DeleteFlashcard(SelectionStore.SelectedFlashcard);
+            User.Decks[deckIndex].Flashcards.Remove(SelectionStore.SelectedFlashcard);
+        }
+
         public async Task RemoveCurrentDeck()
         {
-            await _dataDestroyer.DeleteDeck(SelectedDeck);
-            User.Decks.Remove(SelectedDeck);
+            await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
+            User.Decks.Remove(SelectionStore.SelectedDeck);
         }
 
         private User _user;
@@ -60,49 +73,11 @@ namespace Flashcards.Core.Stores
             set => SetProperty(ref _user, value);
         }
 
-        private Deck _selectedDeck;
-        public Deck SelectedDeck
-        {
-            get => _selectedDeck;
-            set => SetProperty(ref _selectedDeck, value);
-        }
-
-        private Flashcard _selectedFlashcard;
-        public Flashcard SelectedFlashcard
-        {
-            get => _selectedFlashcard;
-            set => SetProperty(ref _selectedFlashcard, value);
-        }
-
         public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
             // deck size in home view does not get refreshed after adding a flashcard
-            User.Decks[GetSelectedDeckIndex()].Flashcards.Add(flashcard);
+            User.Decks[SelectionStore.GetSelectedDeckIndex(User)].Flashcards.Add(flashcard);
             await _dataCreator.SaveNewFlashcard(flashcard);
-        }
-
-        private int GetSelectedDeckIndex()
-        {
-            for (int i = 0; i < User.Decks.Count; i++)
-            {
-                if (User.Decks[i].Id == SelectedDeck.Id)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private int GetSelectedFlashcardIndex()
-        {
-            for (int i = 0; i <= SelectedDeck.Flashcards.Count; i++)
-            {
-                if (SelectedDeck.Flashcards[i].Id == SelectedFlashcard.Id)
-                {
-                    return i;
-                }
-            }
-            return -1;
         }
     }
 }

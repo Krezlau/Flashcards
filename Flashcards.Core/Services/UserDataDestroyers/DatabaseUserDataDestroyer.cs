@@ -29,7 +29,7 @@ namespace Flashcards.Core.Services.UserDataDestroyers
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Flashcards.Remove(context.Flashcards.Single(a => a.Id == flashcard.Id));
+                context.Flashcards.Remove(flashcard);
                 await context.SaveChangesAsync();
             }
         }
