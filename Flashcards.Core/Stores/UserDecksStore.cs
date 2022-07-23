@@ -46,6 +46,13 @@ namespace Flashcards.Core.Stores
             await _dataChanger.ChangeFlashcard(User.Decks[deckIndex].Flashcards[flashcardIndex]);
         }
 
+        public async Task AlterDeck(string name)
+        {
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            User.Decks[deckIndex].Name = name;
+            await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+        }
+
         public async Task AddNewDeck(Deck deck)
         {
             User.Decks.Add(deck);

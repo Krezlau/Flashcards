@@ -39,10 +39,6 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnEditClick()
         {
-            // TODO:
-            // IUserDataChanger
-            // DatabaseUserDataChanger
-            // and this method down below
             await _userDecksStore.AlterFlashcard(Front, Back);
             _navigationService.Navigate();
         }

@@ -14,14 +14,19 @@ namespace Flashcards.Core.ViewModels
 {
     public class DeckPreviewViewModel : ObservableObject
     {
-        private readonly NavigationService<AlterFlashcardViewModel> _newFlashcardNavigationService;
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
+        private readonly NavigationService<AddNewDeckViewModel> _alterDeckService;
         private readonly UserDecksStore userDecksStore;
 
         private readonly Deck _currentDeck;
 
-        public string CurrentDeckName { get; set; }
+        private string _currentDeckName;
+        public string CurrentDeckName
+        {
+            get => _currentDeckName;
+            set => SetProperty(ref _currentDeckName, value);
+        }
 
         public string CurrentDeckSize { get; set; }
 
@@ -31,9 +36,12 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand DeleteDeckCommand { get; set; }
 
-        public DeckPreviewViewModel(NavigationService<AlterFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService)
+        public ICommand RenameCommand { get; set; }
+
+        public ICommand EscPressedCommand { get; set; }
+
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<AddNewDeckViewModel> alterDeckService)
         {
-            _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
 
@@ -45,8 +53,21 @@ namespace Flashcards.Core.ViewModels
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
             DeleteDeckCommand = new RelayCommand(OnDeleteClick);
+            RenameCommand = new RelayCommand(OnRenameClick);
+            EscPressedCommand = new RelayCommand(OnEscPressed);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
             _flashcardManagementService = flashcardManagementService;
+            _alterDeckService = alterDeckService;
+        }
+
+        private void OnEscPressed()
+        {
+            CurrentDeckName = _currentDeck.Name;
+        }
+
+        private async void OnRenameClick()
+        {
+            await userDecksStore.AlterDeck(CurrentDeckName);
         }
 
         private async void OnDeleteClick()
