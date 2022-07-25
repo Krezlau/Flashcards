@@ -6,6 +6,7 @@ using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
@@ -39,6 +40,13 @@ namespace Flashcards.Core.ViewModels
             _deckPreviewNavigationService = deckPreviewNavigationService;
             _newDeckNavigationService = newDeckNavigationService;
 
+            userDecksStore.DeckChanged += OnDeckChanged;
+
+        }
+
+        private void OnDeckChanged(int deckIndex)
+        {
+            
         }
 
         private void OnDeckSelect()

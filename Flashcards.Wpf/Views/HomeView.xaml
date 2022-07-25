@@ -33,7 +33,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Name}" Grid.Column="0"
                                    Padding="5"/>
-                        <TextBlock Text="{Binding Size}" Grid.Column="1"
+                        <TextBlock Text="{Binding Flashcards.Count}" Grid.Column="1"
                                    Padding="5" HorizontalAlignment="Right"/>
                     </Grid>
                 </DataTemplate>
