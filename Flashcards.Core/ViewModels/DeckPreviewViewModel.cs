@@ -14,13 +14,19 @@ namespace Flashcards.Core.ViewModels
 {
     public class DeckPreviewViewModel : ObservableObject
     {
-        private readonly NavigationService<AddNewFlashcardViewModel> _newFlashcardNavigationService;
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
+        private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
+        private readonly NavigationService<AddNewDeckViewModel> _alterDeckService;
         private readonly UserDecksStore userDecksStore;
 
         private readonly Deck _currentDeck;
 
-        public string CurrentDeckName { get; set; }
+        private string _currentDeckName;
+        public string CurrentDeckName
+        {
+            get => _currentDeckName;
+            set => SetProperty(ref _currentDeckName, value);
+        }
 
         public string CurrentDeckSize { get; set; }
 
@@ -28,11 +34,16 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ManageFlashcardsCommand { get; set; }
 
-        public DeckPreviewViewModel(NavigationService<AddNewFlashcardViewModel> newFlashcardNavigationService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService)
+        public ICommand DeleteDeckCommand { get; set; }
+
+        public ICommand RenameCommand { get; set; }
+
+        public ICommand EscPressedCommand { get; set; }
+
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<AddNewDeckViewModel> alterDeckService)
         {
-            _newFlashcardNavigationService = newFlashcardNavigationService;
             this.userDecksStore = userDecksStore;
-            _currentDeck = userDecksStore.SelectedDeck;
+            _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
 
             if (_currentDeck != null)
             {
@@ -41,18 +52,38 @@ namespace Flashcards.Core.ViewModels
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
+            DeleteDeckCommand = new RelayCommand(OnDeleteClick);
+            RenameCommand = new RelayCommand(OnRenameClick);
+            EscPressedCommand = new RelayCommand(OnEscPressed);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
+            _flashcardManagementService = flashcardManagementService;
+            _alterDeckService = alterDeckService;
         }
 
-        private async void OnManageClick()
+        private void OnEscPressed()
+        {
+            CurrentDeckName = _currentDeck.Name;
+        }
+
+        private async void OnRenameClick()
+        {
+            await userDecksStore.AlterDeck(CurrentDeckName);
+        }
+
+        private async void OnDeleteClick()
         {
             await userDecksStore.RemoveCurrentDeck();
             _userWelcomeNavigatonService.Navigate();
         }
 
+        private void OnManageClick()
+        {
+            _flashcardManagementService.Navigate();
+        }
+
         private void OnLearnClick()
         {
-            _newFlashcardNavigationService.Navigate();
+            //TODO
         }
     }
 }

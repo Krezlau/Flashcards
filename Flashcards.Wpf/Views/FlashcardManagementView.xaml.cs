@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Flashcards.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for AddNewFlashcardView.xaml
+    /// Interaction logic for FlashcardManagementView.xaml
     /// </summary>
-    public partial class AddNewFlashcardView : UserControl
+    public partial class FlashcardManagementView : UserControl
     {
-        public AddNewFlashcardView()
+        public FlashcardManagementView()
         {
             InitializeComponent();
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,14 +10,18 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    public class Deck
+    public class Deck : ObservableObject
     {
         [Key]
         [Required]
         public int Id { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
         public ObservableCollection<Flashcard> Flashcards { get; set; }
         [ForeignKey("User")]
         [Required]
@@ -31,5 +36,7 @@ namespace Flashcards.Core.Models
         }
 
         public Deck() { }
+
+        private string _name;
     }
 }

@@ -11,6 +11,7 @@
     Width="800"
     Height="450"
     FontSize="14"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,11 +38,14 @@
                 <DataTemplate DataType="{x:Type viewmodels:DeckPreviewViewModel}">
                     <views:DeckPreviewView/>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewmodels:AddNewFlashcardViewModel}">
-                    <views:AddNewFlashcardView/>
+                <DataTemplate DataType="{x:Type viewmodels:AlterFlashcardViewModel}">
+                    <views:AlterFlashcardView/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:UserWelcomeViewModel}">
                     <views:UserWelcomeView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:FlashcardManagementViewModel}">
+                    <views:FlashcardManagementView/>
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>

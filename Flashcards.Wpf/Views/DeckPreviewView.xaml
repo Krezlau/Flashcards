@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Flashcards.Wpf.Views"
+             xmlns:local="clr-namespace:Flashcards.Wpf.Views" xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core" d:DataContext="{d:DesignInstance Type=viewmodels:DeckPreviewViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
@@ -22,21 +23,42 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <Label Content="{Binding CurrentDeckName}" Grid.Row="1" Grid.Column="1"
-               FontSize="24"/>
+        <TextBox Text="{Binding CurrentDeckName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.Row="1" Grid.Column="1"
+               FontSize="24" Grid.ColumnSpan="2"
+                 Background="Transparent"
+                 BorderThickness="0">
+            <TextBox.InputBindings>
+                <KeyBinding
+                    Key="Esc"
+                    Command="{Binding EscPressedCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
 
         <Label Content="{Binding CurrentDeckSize}" Grid.Row="2" Grid.Column="1" />
 
         <Button Content="Learn" Command="{Binding LearnCommand}" 
-                Grid.Column="1" Grid.Row="3"  Margin="5"
-                Width="125"/>
+                Grid.Column="1" Grid.Row="6"  Margin="5" Padding="5"
+                Grid.ColumnSpan="5"
+                Width="200"/>
 
         <Button Content="Manage flashcards" 
                 Command="{Binding ManageFlashcardsCommand}"
-                Grid.Column="2" Grid.Row="3" Margin="5" Padding="5"
+                Grid.Column="1" Grid.Row="4" Margin="5" Padding="5"
+                Width="150"/>
+
+        <Button Content="Delete deck"
+                Command="{Binding DeleteDeckCommand}"
+                Grid.Column="2" Grid.Row="4" Margin="5" Padding="5"
+                Width="125" />
+
+        <Button Content="Rename"
+                Command="{Binding RenameCommand}"
+                Grid.Column="3" Grid.Row="4" Margin="5" Padding="5"
                 Width="125"/>
 
     </Grid>

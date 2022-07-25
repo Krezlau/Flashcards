@@ -6,30 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flashcards.Core.Services.UserDataDestroyers
+namespace Flashcards.Core.Services.UserDataChangers
 {
-    public class DatabaseUserDataDestroyer : IUserDataDestroyer
+    public class DatabaseUserDataChanger : IUserDataChanger
     {
         private readonly UserDbContextFactory _dbContextFactory;
 
-        public DatabaseUserDataDestroyer(UserDbContextFactory dbContextFactory)
+        public DatabaseUserDataChanger(UserDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }
-        public async Task DeleteDeck(Deck deck)
+        public async Task ChangeDeck(Deck deck)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Decks.Remove(context.Decks.Single(a => a.Id == deck.Id));
+                context.Decks.Update(deck);
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task DeleteFlashcard(Flashcard flashcard)
+        public async Task ChangeFlashcard(Flashcard flashcard)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Flashcards.Remove(flashcard);
+                context.Flashcards.Update(flashcard);
                 await context.SaveChangesAsync();
             }
         }

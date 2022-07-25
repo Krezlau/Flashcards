@@ -1,4 +1,5 @@
 ﻿using Flashcards.Core.Models;
+using Flashcards.Core.Services.UserDataChangers;
 using Flashcards.Core.Services.UserDataCreators;
 using Flashcards.Core.Services.UserDataDestroyers;
 using Flashcards.Core.Services.UserDataProviders;
@@ -16,19 +17,49 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataProvider _dataProvider;
         private readonly IUserDataCreator _dataCreator;
         private readonly IUserDataDestroyer _dataDestroyer;
+        private readonly IUserDataChanger _dataChanger;
         private string _username = "lmao";
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
+            _dataChanger = dataChanger;
+            SelectionStore = selectionStore;
         }
+
+        public SelectionStore SelectionStore { get; }
+
+        public event Action<int> DeckChanged;
 
         public void Initialize()
         {
             User user = _dataProvider.LoadUserDecks(_username);
             User = user;
+        }
+
+        private void OnDeckChanged(int deckIndex)
+        {
+            DeckChanged?.Invoke(deckIndex);
+        }
+
+        public async Task AlterFlashcard(string front, string back)
+        {
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            int flashcardIndex = SelectionStore.GetSelectedFlashcardIndex();
+            User.Decks[deckIndex].Flashcards[flashcardIndex].Front = front;
+            User.Decks[deckIndex].Flashcards[flashcardIndex].Back = back;
+            await _dataChanger.ChangeFlashcard(User.Decks[deckIndex].Flashcards[flashcardIndex]);
+        }
+
+        public async Task AlterDeck(string name)
+        {
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            User.Decks[deckIndex].Name = name;
+            await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+
+            OnDeckChanged(deckIndex);
         }
 
         public async Task AddNewDeck(Deck deck)
@@ -37,10 +68,20 @@ namespace Flashcards.Core.Stores
             await _dataCreator.SaveNewDeck(deck);
         }
 
+        public async Task RemoveCurrentFlashcard()
+        {
+            int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            int flashcardIndex = SelectionStore.GetSelectedFlashcardIndex();
+            await _dataDestroyer.DeleteFlashcard(SelectionStore.SelectedFlashcard);
+            User.Decks[deckIndex].Flashcards.Remove(SelectionStore.SelectedFlashcard);
+
+            OnDeckChanged(deckIndex);
+        }
+
         public async Task RemoveCurrentDeck()
         {
-            await _dataDestroyer.DeleteDeck(SelectedDeck);
-            User.Decks.Remove(SelectedDeck);
+            await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
+            User.Decks.Remove(SelectionStore.SelectedDeck);
         }
 
         private User _user;
@@ -50,16 +91,13 @@ namespace Flashcards.Core.Stores
             set => SetProperty(ref _user, value);
         }
 
-        private Deck _selectedDeck;
-        public Deck SelectedDeck
+        public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
-            get => _selectedDeck;
-            set => SetProperty(ref _selectedDeck, value);
-        }
+            // deck size in home view does not get refreshed after adding a flashcard
+            User.Decks[SelectionStore.GetSelectedDeckIndex(User)].Flashcards.Add(flashcard);
+            await _dataCreator.SaveNewFlashcard(flashcard);
 
-        public void AddFlashcardToSelectedDeck(Flashcard flashcard)
-        {
-
+            OnDeckChanged(SelectionStore.GetSelectedDeckIndex(User));
         }
     }
 }
