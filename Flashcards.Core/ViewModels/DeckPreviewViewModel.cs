@@ -16,7 +16,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
-        private readonly NavigationService<AddNewDeckViewModel> _alterDeckService;
+        private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
         private readonly UserDecksStore userDecksStore;
 
         private readonly Deck _currentDeck;
@@ -40,7 +40,7 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand EscPressedCommand { get; set; }
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<AddNewDeckViewModel> alterDeckService)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
@@ -57,7 +57,7 @@ namespace Flashcards.Core.ViewModels
             EscPressedCommand = new RelayCommand(OnEscPressed);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
             _flashcardManagementService = flashcardManagementService;
-            _alterDeckService = alterDeckService;
+            _frontLearnService = frontLearnService;
         }
 
         private void OnEscPressed()
@@ -83,7 +83,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnLearnClick()
         {
-            //TODO
+            _frontLearnService.Navigate();
         }
     }
 }
