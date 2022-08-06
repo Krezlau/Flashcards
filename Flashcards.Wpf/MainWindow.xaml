@@ -47,6 +47,12 @@
                 <DataTemplate DataType="{x:Type viewmodels:FlashcardManagementViewModel}">
                     <views:FlashcardManagementView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:BackLearnViewModel}">
+                    <views:BackLearnView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:FrontLearnViewModel}">
+                    <views:FrontLearnView/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
     </Grid>

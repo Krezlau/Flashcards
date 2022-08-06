@@ -49,6 +49,8 @@ namespace Flashcards.Wpf
 
                     services.AddSingleton<UserDecksStore>();
 
+                    services.AddSingleton<ReviewStore>();
+
                     services.AddSingleton(s => new MainWindow()
                     {
                         DataContext = s.GetRequiredService<MainViewModel>()

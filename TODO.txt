@@ -1,0 +1,5 @@
+flashcard CRUD										=> TASK01
+learning											=> TASK02
+login, create account
+validation (adding flashcards, decks and all)
+ui redo
