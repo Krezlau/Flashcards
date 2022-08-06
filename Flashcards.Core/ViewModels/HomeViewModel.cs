@@ -39,9 +39,6 @@ namespace Flashcards.Core.ViewModels
             this.userDecksStore = userDecksStore;
             _deckPreviewNavigationService = deckPreviewNavigationService;
             _newDeckNavigationService = newDeckNavigationService;
-
-            userDecksStore.DeckChanged += OnDeckChanged;
-
         }
 
         private void OnDeckChanged(int deckIndex)

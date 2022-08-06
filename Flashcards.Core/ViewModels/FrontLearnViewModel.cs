@@ -16,18 +16,20 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewService;
         private readonly NavigationService<BackLearnViewModel> _backLearnService;
+        private readonly ReviewStore _reviewStore;
 
         public ICommand GoBackCommand { get; set; }
 
         public ICommand FlipCommand { get; set; }
 
-        public string Front => _userDecksStore.SelectionStore.SelectedFlashcard.Front;
+        public string Front => _reviewStore.ToReviewList[_reviewStore.Iterator].Front;
 
-        public FrontLearnViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> deckPreviewService, NavigationService<BackLearnViewModel> backLearnService)
+        public FrontLearnViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> deckPreviewService, NavigationService<BackLearnViewModel> backLearnService, ReviewStore reviewStore)
         {
             _userDecksStore = userDecksStore;
             _deckPreviewService = deckPreviewService;
             _backLearnService = backLearnService;
+            _reviewStore = reviewStore;
 
             FlipCommand = new RelayCommand(OnFlipClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);

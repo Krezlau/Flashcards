@@ -56,7 +56,7 @@ namespace Flashcards.Core.ViewModels
                 Back = Back,
                 DeckId = _userDecksStore.SelectionStore.SelectedDeck.Id,
                 Level = 0,
-                NextReview = DateTime.Now
+                NextReview = DateTime.Today
             });
             _navigationService.Navigate();
         }

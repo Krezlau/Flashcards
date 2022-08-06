@@ -34,7 +34,7 @@
 
         <Button Content="Flip" Command="{Binding FlipCommand}"
                 Grid.Column="1" Grid.Row="5"
-                Width="100" Height="25"
+                Width="100" Height="30"
                 Padding="5" Margin="5"/>
 
     </Grid>

@@ -39,7 +39,11 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <Label Content="{Binding CurrentDeckSize}" Grid.Row="2" Grid.Column="1" />
+        <Label Content="{Binding CurrentDeckSize}" 
+               Grid.Row="2" Grid.Column="1" />
+        
+        <Label Content="{Binding CurrentDeckToReviewCount}" 
+               Grid.Row="2" Grid.Column="2" />
 
         <Button Content="Learn" Command="{Binding LearnCommand}" 
                 Grid.Column="1" Grid.Row="6"  Margin="5" Padding="5"

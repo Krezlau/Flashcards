@@ -38,5 +38,18 @@ namespace Flashcards.Core.Models
         public Deck() { }
 
         private string _name;
+
+        public List<Flashcard> CollectToReview()
+        {
+            List<Flashcard> toReview = new();
+            foreach (Flashcard f in Flashcards)
+            {
+                if (f.NextReview <= DateTime.Today)
+                {
+                    toReview.Add(f);
+                }
+            }
+            return toReview;
+        }
     }
 }

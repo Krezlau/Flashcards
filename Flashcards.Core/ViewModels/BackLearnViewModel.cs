@@ -16,6 +16,7 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewService;
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
+        private readonly ReviewStore _reviewStore;
 
         public ICommand GoBackCommand { get; set; }
 
@@ -23,15 +24,16 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand AgainCommand { get; set; }
 
-        public string Front => _userDecksStore.SelectionStore.SelectedFlashcard.Front;
+        public string Front => _reviewStore.ToReviewList[_reviewStore.Iterator].Front;
 
-        public string Back => _userDecksStore.SelectionStore.SelectedFlashcard.Back;
+        public string Back => _reviewStore.ToReviewList[_reviewStore.Iterator].Back;
 
-        public BackLearnViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> deckPreviewService, NavigationService<FrontLearnViewModel> frontLearnService)
+        public BackLearnViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> deckPreviewService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore)
         {
             _userDecksStore = userDecksStore;
             _deckPreviewService = deckPreviewService;
             _frontLearnService = frontLearnService;
+            _reviewStore = reviewStore;
 
             GoodCommand = new RelayCommand(OnGoodClick);
             AgainCommand = new RelayCommand(OnAgainClick);
@@ -40,17 +42,32 @@ namespace Flashcards.Core.ViewModels
 
         private void OnGoBackClick()
         {
+            // how to count this? is it reviewed then?
+            // user has already seen the back definition but didnt choose good nor again
             _deckPreviewService.Navigate();
         }
 
         private void OnAgainClick()
         {
-            throw new NotImplementedException();
+            _reviewStore.Again();
+            FlashcardDone();
         }
 
-        private void OnGoodClick()
+        private async void OnGoodClick()
         {
-            throw new NotImplementedException();
+            await _userDecksStore.FlashcardSetReview(_reviewStore.ToReviewList[_reviewStore.Iterator]);
+            _reviewStore.Good();
+            FlashcardDone();
+        }
+
+        private void FlashcardDone()
+        {
+            if (_reviewStore.Iterator >= _reviewStore.ToReviewList.Count)
+            {
+                _deckPreviewService.Navigate();
+                return;
+            }
+            _frontLearnService.Navigate();
         }
     }
 }

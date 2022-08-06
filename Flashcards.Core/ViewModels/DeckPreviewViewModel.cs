@@ -18,6 +18,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
         private readonly UserDecksStore userDecksStore;
+        private readonly ReviewStore _reviewStore;
 
         private readonly Deck _currentDeck;
 
@@ -30,6 +31,8 @@ namespace Flashcards.Core.ViewModels
 
         public string CurrentDeckSize { get; set; }
 
+        public string CurrentDeckToReviewCount { get; set; }
+
         public ICommand LearnCommand { get; set; }
 
         public ICommand ManageFlashcardsCommand { get; set; }
@@ -40,15 +43,18 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand EscPressedCommand { get; set; }
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
+            _reviewStore = reviewStore;
 
             if (_currentDeck != null)
             {
+                _reviewStore.SelectedDeck = _currentDeck;
                 CurrentDeckName = _currentDeck.Name;
                 CurrentDeckSize = "Flashcards: " + _currentDeck.Flashcards.Count;
+                CurrentDeckToReviewCount = "To Review: " + _reviewStore.ToReviewList.Count;
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
@@ -83,7 +89,10 @@ namespace Flashcards.Core.ViewModels
 
         private void OnLearnClick()
         {
-            _frontLearnService.Navigate();
+            if (_reviewStore.ToReviewList.Count > 0)
+            {
+                _frontLearnService.Navigate();
+            }
         }
     }
 }
