@@ -1,0 +1,30 @@
+﻿<Window x:Class="Flashcards.Wpf.Services.Dialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Flashcards.Wpf.Services"
+        mc:Ignorable="d"
+        Title="Dialog" Height="200" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="10" />
+        </Grid.RowDefinitions>
+
+        <Label x:Name="Label"
+               Content="message" Grid.Row="1" Grid.Column="0"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+
+        <Button x:Name="Button" Click="OnButtonClick"
+                Content="OK" Grid.Column="0" Grid.Row="2" 
+                Width="50" Height="25"/>
+    </Grid> 
+</Window>

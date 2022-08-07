@@ -11,6 +11,7 @@ namespace Flashcards.Core.ViewModels
     public class AddNewDeckViewModel : ObservableRecipient
     {
         private readonly NavigationService<DeckPreviewViewModel> _navigationService;
+        private readonly IDialogService dialogService;
         private readonly UserDecksStore userDecksStore;
 
         public ICommand AddCommand { get; set; }
@@ -23,11 +24,12 @@ namespace Flashcards.Core.ViewModels
             set => SetProperty(ref deckName, value);
         }
 
-        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore)
+        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
         {
             AddCommand = new RelayCommand(OnAddClick);
             _navigationService = navigationService;
             this.userDecksStore = userDecksStore;
+            this.dialogService = dialogService;
         }
 
         private async void OnAddClick()

@@ -8,6 +8,7 @@ using Flashcards.Core.Services.UserDataDestroyers;
 using Flashcards.Core.Services.UserDataProviders;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
+using Flashcards.Wpf.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,6 +42,7 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IUserDataCreator, DatabaseUserDataCreator>();
                     services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
+                    services.AddSingleton<IDialogService, WpfDialogService>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
 
                     services.AddSingleton<NavigationStore>();
