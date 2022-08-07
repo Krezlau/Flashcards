@@ -15,13 +15,14 @@ namespace Flashcards.Core.ViewModels
     public class AlterFlashcardViewModel : ObservableObject
     {
         private readonly NavigationService<FlashcardManagementViewModel> _navigationService;
+        private readonly IDialogService _dialogService;
         private readonly UserDecksStore _userDecksStore;
 
         public ICommand GoBackCommand { get; set; }
 
         public string ButtonContent { get; set; } = "Add";
 
-        public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore)
+        public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -35,6 +36,7 @@ namespace Flashcards.Core.ViewModels
                 ButtonContent = "Edit";
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
+            _dialogService = dialogService;
         }
 
         private async void OnEditClick()
@@ -50,6 +52,16 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnAddClick()
         {
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || UserInputValidator.ValidateFlashcardTextField(Back) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be at least 3 characters long.");
+                return;
+            }
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || UserInputValidator.ValidateFlashcardTextField(Back) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be not longer than 100 characters.");
+                return;
+            }
             await _userDecksStore.AddFlashcardToSelectedDeck(new Flashcard
             {
                 Front = Front,

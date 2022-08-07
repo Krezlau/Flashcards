@@ -24,7 +24,7 @@ namespace Flashcards.Wpf.Services
             InitializeComponent();
             this.Owner = mainWindow;
             this.Title = title;
-            Label.Content = message;
+            Label.Text = message;
         }
 
         public void OnButtonClick(object sender, RoutedEventArgs e)

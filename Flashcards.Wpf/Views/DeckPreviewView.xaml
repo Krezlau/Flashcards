@@ -29,7 +29,7 @@
 
         <TextBox Text="{Binding CurrentDeckName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Row="1" Grid.Column="1"
-               FontSize="24" Grid.ColumnSpan="2"
+               FontSize="24" Grid.ColumnSpan="5"
                  Background="Transparent"
                  BorderThickness="0">
             <TextBox.InputBindings>
