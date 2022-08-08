@@ -14,7 +14,13 @@ TASK03:
 		* flashcard fields
 	* IDialogService for displaying info when the value in the field is wrong
 
+TASK04:
+	* ability to log in and create account
+
+TASK05:
+	* account management view with ability to change username, password
 
 UNSPECIFIED:
-login, create account
+change database to an online one
+change initial decks loading to async with loading screen
 ui redo
