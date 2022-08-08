@@ -75,7 +75,8 @@ namespace Flashcards.Core.HostBuilderExtensions
                                                 services.GetRequiredService<NavigationService<UserWelcomeViewModel>>(),
                                                 services.GetRequiredService<NavigationService<FlashcardManagementViewModel>>(),
                                                 services.GetRequiredService<NavigationService<FrontLearnViewModel>>(),
-                                                services.GetRequiredService<ReviewStore>());
+                                                services.GetRequiredService<ReviewStore>(),
+                                                services.GetRequiredService<NavigationService<AddNewDeckViewModel>>());
         }
     }
 }

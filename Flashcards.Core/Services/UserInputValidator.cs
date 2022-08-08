@@ -18,9 +18,9 @@ namespace Flashcards.Core.Services
         /// </summary>
         /// <param name="name">Name of the deck</param>
         /// <returns>
-        /// 0 => name valid |
-        /// 1 => name too short |
-        /// 2 => name too long
+        /// <para>0 => name valid</para>
+        /// <para>1 => name too short</para>
+        /// <para>2 => name too long</para>
         /// </returns>
         public static int ValidateDeckName(string name)
         {
@@ -40,9 +40,9 @@ namespace Flashcards.Core.Services
         /// </summary>
         /// <param name="text">Back/Front of a flashcard</param>
         /// <returns>
-        /// 0 => text valid |
-        /// 1 => text too short |
-        /// 2 => text too long
+        /// 0 => text valid<br />
+        /// 1 => text too short<br />
+        /// 2 => text too long<br />
         /// </returns>
         public static int ValidateFlashcardTextField(string text)
         {

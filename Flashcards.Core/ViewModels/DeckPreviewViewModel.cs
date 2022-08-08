@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeNavigatonService;
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
+        private readonly NavigationService<AddNewDeckViewModel> _newDeckService;
         private readonly UserDecksStore userDecksStore;
         private readonly ReviewStore _reviewStore;
 
@@ -41,9 +42,8 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand RenameCommand { get; set; }
 
-        public ICommand EscPressedCommand { get; set; }
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
@@ -60,20 +60,15 @@ namespace Flashcards.Core.ViewModels
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
             DeleteDeckCommand = new RelayCommand(OnDeleteClick);
             RenameCommand = new RelayCommand(OnRenameClick);
-            EscPressedCommand = new RelayCommand(OnEscPressed);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
             _flashcardManagementService = flashcardManagementService;
             _frontLearnService = frontLearnService;
+            _newDeckService = newDeckService;
         }
 
-        private void OnEscPressed()
+        private void OnRenameClick()
         {
-            CurrentDeckName = _currentDeck.Name;
-        }
-
-        private async void OnRenameClick()
-        {
-            await userDecksStore.AlterDeck(CurrentDeckName);
+            _newDeckService.Navigate();
         }
 
         private async void OnDeleteClick()
