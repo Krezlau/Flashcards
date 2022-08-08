@@ -26,7 +26,7 @@
         <TextBox Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center"
                  Margin="5" Text="{Binding DeckName}" Grid.Column="1"
                  MaxWidth="600" MinWidth="200" Width="auto"/>
-        <Button Content="Add" Command="{Binding AddCommand}" Grid.Column="1" 
+        <Button Content="{Binding ButtonContent}" Command="{Binding AddCommand}" Grid.Column="1" 
                 Grid.Row="3" Padding="5" Margin="5" HorizontalAlignment="Center"
                 Width="50"/>
     </Grid>

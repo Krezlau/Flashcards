@@ -27,17 +27,9 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <TextBox Text="{Binding CurrentDeckName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <TextBlock Text="{Binding CurrentDeckName}"
                  Grid.Row="1" Grid.Column="1"
-               FontSize="24" Grid.ColumnSpan="2"
-                 Background="Transparent"
-                 BorderThickness="0">
-            <TextBox.InputBindings>
-                <KeyBinding
-                    Key="Esc"
-                    Command="{Binding EscPressedCommand}" />
-            </TextBox.InputBindings>
-        </TextBox>
+               FontSize="24" Grid.ColumnSpan="5" />
 
         <Label Content="{Binding CurrentDeckSize}" 
                Grid.Row="2" Grid.Column="1" />

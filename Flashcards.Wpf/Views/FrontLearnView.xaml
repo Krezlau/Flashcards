@@ -30,7 +30,8 @@
                    Grid.Column="1" Grid.Row="2"
                    Padding="10" Margin="10"
                    HorizontalAlignment="Center"
-                   FontSize="16" FontWeight="Bold"/>
+                   FontSize="16" FontWeight="Bold"
+                   TextWrapping="Wrap"/>
 
         <Button Content="Flip" Command="{Binding FlipCommand}"
                 Grid.Column="1" Grid.Row="5"

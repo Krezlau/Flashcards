@@ -32,13 +32,15 @@
                    Grid.ColumnSpan="2"
                    Padding="10" Margin="10"
                    HorizontalAlignment="Center"
-                   FontSize="16" FontWeight="Bold"/>
+                   FontSize="16" FontWeight="Bold"
+                   TextWrapping="Wrap"/>
         <TextBlock Text="{Binding Back}"
                    Grid.ColumnSpan="2"
                    Grid.Column="1" Grid.Row="3"
                    Padding="10" Margin="10,50,10,10"
                    HorizontalAlignment="Center"
-                   FontSize="12"/>
+                   FontSize="12"
+                   TextWrapping="Wrap"/>
 
         <Button Content="Again" Command="{Binding AgainCommand}"
                 Grid.Column="1" Grid.Row="5"

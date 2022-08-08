@@ -1,5 +1,20 @@
-flashcard CRUD										=> TASK01
-learning											=> TASK02
+TASK LIST
+
+TASK01:
+	* flashcard CRUD
+	* deck CRUD
+	* views for those
+
+TASK02:
+	* learning / review functionality
+
+TASK03:
+	* validation:
+		* deck names
+		* flashcard fields
+	* IDialogService for displaying info when the value in the field is wrong
+
+
+UNSPECIFIED:
 login, create account
-validation (adding flashcards, decks and all)
 ui redo

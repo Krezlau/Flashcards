@@ -32,7 +32,8 @@
                             <ColumnDefinition Width="25" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Name}" Grid.Column="0"
-                                   Padding="5"/>
+                                   Padding="5"
+                                   TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding Flashcards.Count}" Grid.Column="1"
                                    Padding="5" HorizontalAlignment="Right"/>
                     </Grid>
