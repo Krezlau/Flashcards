@@ -49,7 +49,7 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnAgainClick()
         {
-            await _userDecksStore.FlashcardSetReviewFailder(_reviewStore.ToReviewList[_reviewStore.Iterator]);
+            await _userDecksStore.FlashcardSetReviewFailed(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Again();
             FlashcardDone();
         }

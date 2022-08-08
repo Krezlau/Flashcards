@@ -94,7 +94,7 @@ namespace Flashcards.Core.Stores
             await _dataChanger.ChangeFlashcard(flashcard);
         }
 
-        public async Task FlashcardSetReviewFailder(Flashcard flashcard)
+        public async Task FlashcardSetReviewFailed(Flashcard flashcard)
         {
             flashcard.Level = 0;
             await _dataChanger.ChangeFlashcard(flashcard);
