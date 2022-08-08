@@ -47,8 +47,9 @@ namespace Flashcards.Core.ViewModels
             _deckPreviewService.Navigate();
         }
 
-        private void OnAgainClick()
+        private async void OnAgainClick()
         {
+            await _userDecksStore.FlashcardSetReviewFailder(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Again();
             FlashcardDone();
         }

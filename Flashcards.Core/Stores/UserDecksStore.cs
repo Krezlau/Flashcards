@@ -93,5 +93,11 @@ namespace Flashcards.Core.Stores
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level + 1);
             await _dataChanger.ChangeFlashcard(flashcard);
         }
+
+        public async Task FlashcardSetReviewFailder(Flashcard flashcard)
+        {
+            flashcard.Level = 0;
+            await _dataChanger.ChangeFlashcard(flashcard);
+        }
     }
 }
