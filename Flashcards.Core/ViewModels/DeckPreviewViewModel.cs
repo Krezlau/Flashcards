@@ -20,6 +20,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AddNewDeckViewModel> _newDeckService;
         private readonly UserDecksStore userDecksStore;
         private readonly ReviewStore _reviewStore;
+        private readonly IDialogService _dialogService;
 
         private readonly Deck _currentDeck;
 
@@ -43,7 +44,7 @@ namespace Flashcards.Core.ViewModels
         public ICommand RenameCommand { get; set; }
 
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
@@ -64,6 +65,7 @@ namespace Flashcards.Core.ViewModels
             _flashcardManagementService = flashcardManagementService;
             _frontLearnService = frontLearnService;
             _newDeckService = newDeckService;
+            _dialogService = dialogService;
         }
 
         private void OnRenameClick()
@@ -87,6 +89,11 @@ namespace Flashcards.Core.ViewModels
             if (_reviewStore.ToReviewList.Count > 0)
             {
                 _frontLearnService.Navigate();
+                return;
+            }
+            if (_reviewStore.ToReviewList.Count == 0)
+            {
+                _dialogService.ShowMessageDialog("Done for now", "No flashcards to review for now! Come back tomorrow!");
             }
         }
     }
