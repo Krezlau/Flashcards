@@ -23,6 +23,7 @@ TASK05:
 UNSPECIFIED:
 change database to an online one
 change initial decks loading to async with loading screen
+implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
 refactor DatabaseServices and UserDecksStore
 storing data and displaying it to the user (time spent reviewing flashcards etc.)
 ui redo
