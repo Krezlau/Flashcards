@@ -17,7 +17,7 @@ namespace Flashcards.Core.HostBuilderExtensions
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddTransient((s) => CreateAddNewDeckViewModel(s));
+                services.AddTransient<AddNewDeckViewModel>();
                 services.AddSingleton<Func<AddNewDeckViewModel>>((s) => () => s.GetRequiredService<AddNewDeckViewModel>());
                 services.AddSingleton<NavigationService<AddNewDeckViewModel>>();
 
@@ -64,11 +64,7 @@ namespace Flashcards.Core.HostBuilderExtensions
             return hostBuilder;
         }
 
-        private static AddNewDeckViewModel CreateAddNewDeckViewModel(IServiceProvider services)
-        {
-            return new AddNewDeckViewModel(services.GetRequiredService<NavigationService<DeckPreviewViewModel>>(), services.GetRequiredService<UserDecksStore>(),
-                                            services.GetRequiredService<IDialogService>());
-        }
+
 
         private static HomeViewModel CreateHomeViewModel(IServiceProvider services)
         {
