@@ -17,6 +17,12 @@ namespace Flashcards.Core.ViewModels
             _navigationStore = navigationStore;
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            _navigationStore.LeftViewModelChanged += OnLeftViewModelChanged;
+        }
+
+        private void OnLeftViewModelChanged()
+        {
+            OnPropertyChanged(nameof(LeftViewModel));
         }
 
         private void OnCurrentViewModelChanged()

@@ -44,8 +44,6 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
                     services.AddSingleton<IDialogService, WpfDialogService>();
-                    services.AddSingleton<IGetPasswordService, LogInView>();
-                    services.AddSingleton<IGetConfirmedPasswordService, RegistrationView>();
                     services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
 
@@ -71,10 +69,9 @@ namespace Flashcards.Wpf
 
             NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
             _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<LogInViewModel>();
-            _navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
+            //_navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
             UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
-            _userDecksStore.Initialize();
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 

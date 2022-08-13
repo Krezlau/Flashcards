@@ -14,7 +14,6 @@ namespace Flashcards.Core.ViewModels
 {
     public class RegistrationViewModel : ObservableObject
     {
-        private readonly IGetPasswordService _passwordService;
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
         private readonly UserDecksStore _userDecksStore;
@@ -24,13 +23,16 @@ namespace Flashcards.Core.ViewModels
         public string Username { get; set; }
         public string Email { get; set; }
 
+        public string Password { private get; set; }
+
+        public string ConfirmPassword { private get; set; }
+
         public ICommand RegisterCommand { get; set; }
 
         public ICommand GoBackCommand { get; set; }
 
-        public RegistrationViewModel(IGetPasswordService passwordService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, NavigationService<LogInViewModel> logInService, IAuthenticationService authService, IDialogService dialogService)
+        public RegistrationViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, NavigationService<LogInViewModel> logInService, IAuthenticationService authService, IDialogService dialogService)
         {
-            _passwordService = passwordService;
             _userDecksStore = userDecksStore;
             _userWelcomeService = userWelcomeService;
             _logInService = logInService;
@@ -48,15 +50,20 @@ namespace Flashcards.Core.ViewModels
         // need to fix those awaits probably
         private async void OnRegisterClick()
         {
-            bool ifSuccesfulRegistration = await _authService.CreateAccountAsync(Username, Email, _passwordService.GetPassword());
-            if (ifSuccesfulRegistration)
+            if (Password == ConfirmPassword)
             {
-                User user = await _authService.LoginUserAsync(Username, _passwordService.GetPassword());
-                _userDecksStore.User = user;
-                _userWelcomeService.Navigate();
+                bool ifSuccesfulRegistration = await _authService.CreateAccountAsync(Username, Email, Password);
+                if (ifSuccesfulRegistration)
+                {
+                    User user = await _authService.LoginUserAsync(Username, Password);
+                    _userDecksStore.Initialize(user);
+                    _userWelcomeService.Navigate();
+                    return;
+                }
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Either username or email is taken.");
                 return;
             }
-            _dialogService.ShowMessageDialog("ERROR", "Failed to register. Either username or email is taken.");
+            _dialogService.ShowMessageDialog("ERROR", "Password and confirmed password are different!");
         }
     }
 }

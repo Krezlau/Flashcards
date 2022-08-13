@@ -6,6 +6,7 @@ using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,7 +15,6 @@ namespace Flashcards.Core.ViewModels
 {
     public class LogInViewModel : ObservableObject
     {
-        private readonly IGetPasswordService _passwordService;
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
         private readonly UserDecksStore _userDecksStore;
@@ -23,16 +23,20 @@ namespace Flashcards.Core.ViewModels
 
         public string Username { get; set; }
 
+        public string Password { private get; set; }
+
         public ICommand LogInCommand { get; set; }
+
+        public ICommand EnterLogInCommand { get; set; }
 
         public ICommand RegisterCommand { get; set; }
 
-        public LogInViewModel(IGetPasswordService passwordService, IAuthenticationService authService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, IDialogService dialogService, NavigationService<RegistrationViewModel> registerService)
+        public LogInViewModel(IAuthenticationService authService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, IDialogService dialogService, NavigationService<RegistrationViewModel> registerService)
         {
-            _passwordService = passwordService;
             _authService = authService;
             LogInCommand = new RelayCommand(OnLogInClick);
             RegisterCommand = new RelayCommand(OnRegisterClick);
+            EnterLogInCommand = new RelayCommand(OnLogInClick);
             _userDecksStore = userDecksStore;
             _userWelcomeService = userWelcomeService;
             _dialogService = dialogService;
@@ -46,10 +50,10 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnLogInClick()
         {
-            User user = await _authService.LoginUserAsync(Username, _passwordService.GetPassword());
-            if (_authService.LoginUserAsync(Username, _passwordService.GetPassword()) is not null)
+            User user = await _authService.LoginUserAsync(Username, Password);
+            if (user is not null)
             {
-                _userDecksStore.User = user;
+                _userDecksStore.Initialize(user);
                 _userWelcomeService.Navigate();
                 return;
             }

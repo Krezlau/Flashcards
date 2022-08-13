@@ -19,16 +19,16 @@ namespace Flashcards.Wpf.Views
     /// <summary>
     /// Interaction logic for LogInView.xaml
     /// </summary>
-    public partial class LogInView : UserControl, IGetPasswordService
+    public partial class LogInView : UserControl
     {
         public LogInView()
         {
             InitializeComponent();
         }
-
-        public string GetPassword()
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            return PasswordBox.Password;
+            if (this.DataContext != null)
+            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
         }
     }
 }

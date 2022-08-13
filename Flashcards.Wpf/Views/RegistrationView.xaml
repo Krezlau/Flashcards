@@ -11,6 +11,7 @@
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="220" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
@@ -57,7 +58,7 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="6" />
 
-        <PasswordBox x:Name="PasswordBox" Margin="5"
+        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="7" Width="250"
                  />
@@ -66,7 +67,8 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="8" />
 
-        <PasswordBox x:Name="ConfirmPasswordBox" Margin="5"
+        <PasswordBox PasswordChanged="PasswordBox_ConfirmPasswordChanged"
+                     Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="9" Width="250"
                  />

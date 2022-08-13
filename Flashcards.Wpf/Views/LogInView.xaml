@@ -11,6 +11,7 @@
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="220" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
@@ -25,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <Grid.InputBindings>
-            <KeyBinding Command="{Binding LogInCommand}"
+            <KeyBinding Command="{Binding EnterLogInCommand}"
                         Key="Enter" />
         </Grid.InputBindings>
 
@@ -46,7 +47,7 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="5" />
 
-        <PasswordBox x:Name="PasswordBox" Margin="5"
+        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="6" Width="250"
                  />

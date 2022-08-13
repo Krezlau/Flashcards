@@ -1,8 +1,10 @@
 ﻿using Flashcards.Core.Models;
+using Flashcards.Core.Services;
 using Flashcards.Core.Services.UserDataChangers;
 using Flashcards.Core.Services.UserDataCreators;
 using Flashcards.Core.Services.UserDataDestroyers;
 using Flashcards.Core.Services.UserDataProviders;
+using Flashcards.Core.ViewModels;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -18,23 +20,25 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataCreator _dataCreator;
         private readonly IUserDataDestroyer _dataDestroyer;
         private readonly IUserDataChanger _dataChanger;
-        private string _username = "lmao";
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore)
+        private readonly NavigationService<HomeViewModel> _navigationService;
+
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
             _dataChanger = dataChanger;
             SelectionStore = selectionStore;
+            _navigationService = navigationService;
         }
 
         public SelectionStore SelectionStore { get; }
 
-        public void Initialize()
+        public void Initialize(User user)
         {
-            User user = _dataProvider.LoadUserDecks(_username);
-            User = user;
+            User = _dataProvider.LoadUserDecks(user.Name);
+            _navigationService.NavigateLeft();
         }
 
         public async Task AlterFlashcard(string front, string back)
@@ -73,7 +77,7 @@ namespace Flashcards.Core.Stores
             User.Decks.Remove(SelectionStore.SelectedDeck);
         }
 
-        private User _user;
+        private User _user = new User() { Decks = new System.Collections.ObjectModel.ObservableCollection<Deck>() };
         public User User
         {
             get => _user;

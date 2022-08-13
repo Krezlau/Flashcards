@@ -19,21 +19,23 @@ namespace Flashcards.Wpf.Views
     /// <summary>
     /// Interaction logic for RegistrationView.xaml
     /// </summary>
-    public partial class RegistrationView : UserControl, IGetConfirmedPasswordService
+    public partial class RegistrationView : UserControl
     {
         public RegistrationView()
         {
             InitializeComponent();
         }
 
-        public string GetConfirmedPassword()
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (PasswordBox.Password == ConfirmPasswordBox.Password)
-            {
-                return PasswordBox.Password;
-            }
-            // TODO validation
-            throw new Exception();
+            if (this.DataContext != null)
+            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
+        }
+
+        private void PasswordBox_ConfirmPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+            { ((dynamic)this.DataContext).ConfirmPassword = ((PasswordBox)sender).Password; }
         }
     }
 }

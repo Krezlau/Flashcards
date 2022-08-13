@@ -21,6 +21,7 @@ TASK05:
 	* account management view with ability to change username, password
 
 UNSPECIFIED:
+password hashing and overall password security improvement
 change database to an online one
 change initial decks loading to async with loading screen
 implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
