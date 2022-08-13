@@ -55,6 +55,11 @@
                 Margin="20" Padding="5" Grid.Column="1"
                 Grid.Row="7" VerticalAlignment="Top" 
                 Width="100"/>
+        
+        <Button Content="Create account" Command="{Binding RegisterCommand}"
+                Margin="20,20,65,20" Padding="5" Grid.Column="1"
+                Grid.Row="7" VerticalAlignment="Center" 
+                HorizontalAlignment="Right"/>
 
     </Grid>
 </UserControl>

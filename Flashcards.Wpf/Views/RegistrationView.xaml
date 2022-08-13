@@ -75,5 +75,10 @@
                 Margin="20" Padding="5" Grid.Column="1"
                 Grid.Row="10" VerticalAlignment="Top" 
                 Width="100"/>
+
+        <Button Content=" &lt; " Command="{Binding GoBackCommand}"
+                Margin="20" Padding="5" Grid.Column="1"
+                Grid.Row="1" VerticalAlignment="Top" 
+                Width="50" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>

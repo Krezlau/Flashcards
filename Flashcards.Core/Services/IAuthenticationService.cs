@@ -9,7 +9,7 @@ namespace Flashcards.Core.Services
 {
     public interface IAuthenticationService
     {
-        Task<bool> CreateAccountAsync(string username, string email, string password, string confirmPassword);
+        Task<bool> CreateAccountAsync(string username, string email, string password);
 
         Task<User> LoginUserAsync(string username, string password);
     }

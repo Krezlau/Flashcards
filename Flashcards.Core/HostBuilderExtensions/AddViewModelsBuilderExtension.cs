@@ -49,6 +49,14 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<BackLearnViewModel>>((s) => () => s.GetRequiredService<BackLearnViewModel>());
                 services.AddSingleton<NavigationService<BackLearnViewModel>>();
 
+                services.AddTransient<LogInViewModel>();
+                services.AddSingleton<Func<LogInViewModel>>((s) => () => s.GetRequiredService<LogInViewModel>());
+                services.AddSingleton<NavigationService<LogInViewModel>>();
+
+                services.AddTransient<RegistrationViewModel>();
+                services.AddSingleton<Func<RegistrationViewModel>>((s) => () => s.GetRequiredService<RegistrationViewModel>());
+                services.AddSingleton<NavigationService<RegistrationViewModel>>();
+
 
                 services.AddSingleton<MainViewModel>();
             });

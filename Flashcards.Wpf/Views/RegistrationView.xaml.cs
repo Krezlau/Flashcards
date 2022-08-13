@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Flashcards.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,21 @@ namespace Flashcards.Wpf.Views
     /// <summary>
     /// Interaction logic for RegistrationView.xaml
     /// </summary>
-    public partial class RegistrationView : UserControl
+    public partial class RegistrationView : UserControl, IGetConfirmedPasswordService
     {
         public RegistrationView()
         {
             InitializeComponent();
+        }
+
+        public string GetConfirmedPassword()
+        {
+            if (PasswordBox.Password == ConfirmPasswordBox.Password)
+            {
+                return PasswordBox.Password;
+            }
+            // TODO validation
+            throw new Exception();
         }
     }
 }
