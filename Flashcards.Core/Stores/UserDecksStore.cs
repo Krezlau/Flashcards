@@ -21,21 +21,33 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataDestroyer _dataDestroyer;
         private readonly IUserDataChanger _dataChanger;
 
+        private readonly NavigationStore _navigationStore;
+
         private readonly NavigationService<HomeViewModel> _navigationService;
         private readonly NavigationService<UserIconViewModel> _rightNavService;
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService<HomeViewModel> navigationService, NavigationService<UserIconViewModel> rightNavService)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
             _dataChanger = dataChanger;
             SelectionStore = selectionStore;
-            _navigationService = navigationService;
+            _navigationStore = navigationStore;
             _rightNavService = rightNavService;
+            _navigationService = navigationService;
         }
 
         public SelectionStore SelectionStore { get; }
+
+        public void LogOutUser()
+        {
+            User = null;
+            SelectionStore.SelectedDeck = null;
+            SelectionStore.SelectedFlashcard = null;
+            _navigationStore.LeftViewModel = null;
+            _navigationStore.RightViewModel = null;
+        }
 
         public void Initialize(User user)
         {

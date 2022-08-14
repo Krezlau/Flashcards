@@ -1,4 +1,5 @@
-﻿using Flashcards.Core.Stores;
+﻿using Flashcards.Core.Services;
+using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
@@ -14,13 +15,16 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly UserDecksStore _userDecksStore;
 
+        private readonly NavigationService<LogInViewModel> _logInNavService;
+
         public string Username => _userDecksStore.User.Name;
         public ICommand ManageCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
 
-        public UserIconViewModel(UserDecksStore userDecksStore)
+        public UserIconViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInNavService)
         {
             _userDecksStore = userDecksStore;
+            _logInNavService = logInNavService;
 
             ManageCommand = new RelayCommand(OnManageClick);
             LogOutCommand = new RelayCommand(OnLogOutClick);
@@ -28,7 +32,9 @@ namespace Flashcards.Core.ViewModels
 
         private void OnLogOutClick()
         {
-            //todo
+            _logInNavService.Navigate();
+            _userDecksStore.LogOutUser();
+
         }
 
         private void OnManageClick()
