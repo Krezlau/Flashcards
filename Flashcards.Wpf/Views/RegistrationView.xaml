@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <Grid.InputBindings>
-            <KeyBinding Command="{Binding LogInCommand}"
+            <KeyBinding Command="{Binding RegisterCommand}"
                         Key="Enter" />
         </Grid.InputBindings>
 

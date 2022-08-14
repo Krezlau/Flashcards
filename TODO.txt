@@ -18,6 +18,7 @@ TASK04:
 	* ability to log in and create account
 
 TASK05:
+	* ability to log out
 	* account management view with ability to change username, password
 
 UNSPECIFIED:
