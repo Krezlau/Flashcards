@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flashcards.Wpf.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="250">
+             d:DesignHeight="600" d:DesignWidth="780">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
@@ -17,17 +17,26 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Name:" Grid.Row="1" HorizontalAlignment="Center"
-                   Grid.Column="1" Margin="5"/>
-        <TextBox Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center"
-                 Margin="5" Text="{Binding DeckName}" Grid.Column="1"
-                 MaxWidth="600" MinWidth="200" Width="auto"/>
-        <Button Content="{Binding ButtonContent}" Command="{Binding AddCommand}" Grid.Column="1" 
-                Grid.Row="3" Padding="5" Margin="5" HorizontalAlignment="Center"
-                Width="50"/>
+        <Button Content=" &lt; " Command="{Binding GoBackCommand}"
+                Grid.Column="1" Grid.Row="1"  Width="50"
+                HorizontalAlignment="Left"/>
+
+        <TextBlock Text="{Binding BigText}" FontSize="20" Margin="5"
+                   Grid.Column="1" Grid.Row="2" />
+
+        <TextBlock Text="Name:" FontSize="12" Grid.Column="1" Grid.Row="3" 
+                   Margin="5" HorizontalAlignment="Center"/>
+
+        <TextBox Text="{Binding DeckName}" Width="200" Margin="5" FontSize="12"
+                 Grid.Row="4" Grid.Column="1" />
+
+        <Button Content="{Binding ButtonContent}" 
+                Command="{Binding ButtonCommand}" Grid.Column="1"
+                Grid.Row="5" Margin="5" Width="100"/>
     </Grid>
 </UserControl>

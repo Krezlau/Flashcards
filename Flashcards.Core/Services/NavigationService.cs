@@ -24,5 +24,10 @@ namespace Flashcards.Core.Services
         {
             _navigationStore.CurrentViewModel = _createViewModel();
         }
+
+        public void NavigateLeft()
+        {
+            _navigationStore.LeftViewModel = _createViewModel();
+        }
     }
 }

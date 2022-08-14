@@ -14,7 +14,18 @@ TASK03:
 		* flashcard fields
 	* IDialogService for displaying info when the value in the field is wrong
 
+TASK04:
+	* ability to log in and create account
+
+TASK05:
+	* ability to log out
+	* account management view with ability to change username, password
 
 UNSPECIFIED:
-login, create account
+password hashing and overall password security improvement
+change database to an online one
+change initial decks loading to async with loading screen
+implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
+refactor DatabaseServices and UserDecksStore
+storing data and displaying it to the user (time spent reviewing flashcards etc.)
 ui redo

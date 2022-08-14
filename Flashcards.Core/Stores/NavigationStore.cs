@@ -20,8 +20,23 @@ namespace Flashcards.Core.Stores
             }
         }
 
-        // not able to change for now
-        public ObservableObject LeftViewModel { get; set; }
+        private ObservableObject _leftViewModel;
+        public ObservableObject LeftViewModel
+        {
+            get => _leftViewModel;
+            set
+            {
+                _leftViewModel = value;
+                OnLeftViewModelChanged();
+            }
+        }
+
+        public event Action LeftViewModelChanged;
+
+        private void OnLeftViewModelChanged()
+        {
+            LeftViewModelChanged?.Invoke();
+        }
 
         public event Action CurrentViewModelChanged;
 

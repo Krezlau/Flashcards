@@ -41,11 +41,6 @@ namespace Flashcards.Core.ViewModels
             _newDeckNavigationService = newDeckNavigationService;
         }
 
-        private void OnDeckChanged(int deckIndex)
-        {
-            
-        }
-
         private void OnDeckSelect()
         {
             _deckPreviewNavigationService.Navigate();
@@ -53,6 +48,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnAddNewDeckClick()
         {
+            userDecksStore.SelectionStore.SelectedDeck = null;
            _newDeckNavigationService.Navigate();
         }
 

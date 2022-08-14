@@ -17,7 +17,7 @@ namespace Flashcards.Core.HostBuilderExtensions
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddTransient((s) => CreateAddNewDeckViewModel(s));
+                services.AddTransient<AddNewDeckViewModel>();
                 services.AddSingleton<Func<AddNewDeckViewModel>>((s) => () => s.GetRequiredService<AddNewDeckViewModel>());
                 services.AddSingleton<NavigationService<AddNewDeckViewModel>>();
 
@@ -49,6 +49,14 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<BackLearnViewModel>>((s) => () => s.GetRequiredService<BackLearnViewModel>());
                 services.AddSingleton<NavigationService<BackLearnViewModel>>();
 
+                services.AddTransient<LogInViewModel>();
+                services.AddSingleton<Func<LogInViewModel>>((s) => () => s.GetRequiredService<LogInViewModel>());
+                services.AddSingleton<NavigationService<LogInViewModel>>();
+
+                services.AddTransient<RegistrationViewModel>();
+                services.AddSingleton<Func<RegistrationViewModel>>((s) => () => s.GetRequiredService<RegistrationViewModel>());
+                services.AddSingleton<NavigationService<RegistrationViewModel>>();
+
 
                 services.AddSingleton<MainViewModel>();
             });
@@ -56,11 +64,7 @@ namespace Flashcards.Core.HostBuilderExtensions
             return hostBuilder;
         }
 
-        private static AddNewDeckViewModel CreateAddNewDeckViewModel(IServiceProvider services)
-        {
-            return new AddNewDeckViewModel(services.GetRequiredService<NavigationService<DeckPreviewViewModel>>(), services.GetRequiredService<UserDecksStore>(),
-                                            services.GetRequiredService<IDialogService>());
-        }
+
 
         private static HomeViewModel CreateHomeViewModel(IServiceProvider services)
         {

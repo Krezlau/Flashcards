@@ -8,8 +8,8 @@
     xmlns:views="clr-namespace:Flashcards.Wpf.Views"
     xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core"
     Title="Flashcards"
-    Width="800"
-    Height="450"
+    Width="1000"
+    Height="600"
     FontSize="14"
     ResizeMode="NoResize"
     mc:Ignorable="d">
@@ -52,6 +52,12 @@
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:FrontLearnViewModel}">
                     <views:FrontLearnView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:LogInViewModel}">
+                    <views:LogInView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:RegistrationViewModel}">
+                    <views:RegistrationView/>
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>

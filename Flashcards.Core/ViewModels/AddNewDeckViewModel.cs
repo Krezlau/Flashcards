@@ -12,11 +12,14 @@ namespace Flashcards.Core.ViewModels
 {
     public class AddNewDeckViewModel : ObservableValidator
     {
+        private readonly NavigationService<UserWelcomeViewModel> _userWelcomeService;
         private readonly NavigationService<DeckPreviewViewModel> _navigationService;
         private readonly IDialogService dialogService;
         private readonly UserDecksStore userDecksStore;
 
-        public ICommand AddCommand { get; set; }
+        public ICommand ButtonCommand { get; set; }
+
+        public ICommand GoBackCommand { get; set; }
 
         private string deckName;
         public string DeckName
@@ -25,21 +28,31 @@ namespace Flashcards.Core.ViewModels
             set => SetProperty(ref deckName, value);
         }
 
+        public string BigText { get; set; } = "Create new deck";
+
         public string ButtonContent { get; set; } = "Add";
 
-        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
+        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService, NavigationService<UserWelcomeViewModel> userWelcomeService)
         {
-            AddCommand = new RelayCommand(OnAddClick);
+            ButtonCommand = new RelayCommand(OnAddClick);
             if (userDecksStore.SelectionStore.SelectedDeck != null)
             {
                 DeckName = userDecksStore.SelectionStore.SelectedDeck.Name;
                 ButtonContent = "Edit";
-                AddCommand = new RelayCommand(OnEditClick);
+                BigText = "Rename " + DeckName;
+                ButtonCommand = new RelayCommand(OnEditClick);
             }
 
+            GoBackCommand = new RelayCommand(OnGoBackClick);
             _navigationService = navigationService;
             this.userDecksStore = userDecksStore;
             this.dialogService = dialogService;
+            _userWelcomeService = userWelcomeService;
+        }
+
+        private void OnGoBackClick()
+        {
+            _userWelcomeService.Navigate();
         }
 
         private async void OnEditClick()

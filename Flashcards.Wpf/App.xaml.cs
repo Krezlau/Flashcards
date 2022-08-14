@@ -9,6 +9,7 @@ using Flashcards.Core.Services.UserDataProviders;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
 using Flashcards.Wpf.Services;
+using Flashcards.Wpf.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +44,7 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
                     services.AddSingleton<IDialogService, WpfDialogService>();
+                    services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
 
                     services.AddSingleton<NavigationStore>();
@@ -66,11 +68,10 @@ namespace Flashcards.Wpf
             _host.Start();
 
             NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
-            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<UserWelcomeViewModel>();
-            _navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
+            _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<LogInViewModel>();
+            //_navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
             UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
-            _userDecksStore.Initialize();
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
