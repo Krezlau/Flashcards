@@ -16,18 +16,20 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
 
         private readonly NavigationService<LogInViewModel> _logInNavService;
+        private readonly NavigationService<AccountManagementViewModel> _accountManagementService;
 
         public string Username => _userDecksStore.User.Name;
         public ICommand ManageCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
 
-        public UserIconViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInNavService)
+        public UserIconViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInNavService, NavigationService<AccountManagementViewModel> accountManagementService)
         {
             _userDecksStore = userDecksStore;
             _logInNavService = logInNavService;
 
             ManageCommand = new RelayCommand(OnManageClick);
             LogOutCommand = new RelayCommand(OnLogOutClick);
+            _accountManagementService = accountManagementService;
         }
 
         private void OnLogOutClick()
@@ -39,7 +41,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnManageClick()
         {
-            //todo
+            _accountManagementService.Navigate();
         }
     }
 }
