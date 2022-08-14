@@ -18,6 +18,12 @@ namespace Flashcards.Core.ViewModels
 
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             _navigationStore.LeftViewModelChanged += OnLeftViewModelChanged;
+            _navigationStore.RightViewModelChanged += OnRightViewModelChanged;
+        }
+
+        private void OnRightViewModelChanged()
+        {
+            OnPropertyChanged(nameof(RightViewModel));
         }
 
         private void OnLeftViewModelChanged()
@@ -32,5 +38,6 @@ namespace Flashcards.Core.ViewModels
 
         public ObservableObject CurrentViewModel => _navigationStore.CurrentViewModel;
         public ObservableObject LeftViewModel => _navigationStore.LeftViewModel;
+        public ObservableObject RightViewModel => _navigationStore.RightViewModel;
     }
 }

@@ -17,11 +17,20 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <ContentControl Content="{Binding LeftViewModel}" Grid.Column="0">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
                     <views:HomeView />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+        <ContentControl Content="{Binding RightViewModel}" Grid.Column="2">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:UserIconViewModel}" >
+                    <views:UserIconView />
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>

@@ -31,11 +31,29 @@ namespace Flashcards.Core.Stores
             }
         }
 
+        private ObservableObject _rightViewModel;
+        public ObservableObject RightViewModel
+        {
+            get => _rightViewModel;
+            set
+            {
+                _rightViewModel = value;
+                OnRightViewModelChanged();
+            }
+        }
+
         public event Action LeftViewModelChanged;
 
         private void OnLeftViewModelChanged()
         {
             LeftViewModelChanged?.Invoke();
+        }
+
+        public event Action RightViewModelChanged;
+
+        private void OnRightViewModelChanged()
+        {
+            RightViewModelChanged?.Invoke();
         }
 
         public event Action CurrentViewModelChanged;

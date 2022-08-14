@@ -22,8 +22,9 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataChanger _dataChanger;
 
         private readonly NavigationService<HomeViewModel> _navigationService;
+        private readonly NavigationService<UserIconViewModel> _rightNavService;
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService<HomeViewModel> navigationService)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService<HomeViewModel> navigationService, NavigationService<UserIconViewModel> rightNavService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
@@ -31,6 +32,7 @@ namespace Flashcards.Core.Stores
             _dataChanger = dataChanger;
             SelectionStore = selectionStore;
             _navigationService = navigationService;
+            _rightNavService = rightNavService;
         }
 
         public SelectionStore SelectionStore { get; }
@@ -39,6 +41,7 @@ namespace Flashcards.Core.Stores
         {
             User = _dataProvider.LoadUserDecks(user.Name);
             _navigationService.NavigateLeft();
+            _rightNavService.NavigateRight();
         }
 
         public async Task AlterFlashcard(string front, string back)
