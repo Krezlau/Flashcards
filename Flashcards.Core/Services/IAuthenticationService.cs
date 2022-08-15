@@ -15,5 +15,7 @@ namespace Flashcards.Core.Services
         Task<User> LoginUserAsync(string username, string password);
 
         Task<bool> ChangeUserPasswordAsync(string newPassword, string oldPassword, string username);
+
+        Task<bool> IfPasswordCorrect(string password, string username);
     }
 }

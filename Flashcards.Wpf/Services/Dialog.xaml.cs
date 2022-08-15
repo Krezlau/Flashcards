@@ -25,6 +25,15 @@ namespace Flashcards.Wpf.Services
             this.Owner = mainWindow;
             this.Title = title;
             Label.Text = message;
+            this.KeyDown += OnKeyClick;
+        }
+
+        private void OnKeyClick(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                this.Close();
+            }
         }
 
         public void OnButtonClick(object sender, RoutedEventArgs e)

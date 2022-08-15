@@ -15,6 +15,8 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<AccountManagementViewModel> _navigationService;
+        private readonly IAuthenticationService _authService;
+        private readonly IDialogService _dialogService;
 
         public string LabelText { get; set; }
 
@@ -30,7 +32,7 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public AccountInfoChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore)
+        public AccountInfoChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore, IAuthenticationService authService, IDialogService dialogService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -42,6 +44,8 @@ namespace Flashcards.Core.ViewModels
             GoBackCommand = new RelayCommand(OnGoBackClick);
 
             _userDecksStore.EmailChangeRequest += PrepareForEmailChange;
+            _authService = authService;
+            _dialogService = dialogService;
         }
 
         private void OnGoBackClick()
@@ -67,8 +71,31 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnChangeUsernameClick()
         {
-            // validation todo
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username is too short - must be at least 4 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username is too long - must be no longer than 25 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 3)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username can't consist of white space characters.");
+                return;
+            }
+
+            bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
+            if (!ifPasswordCorrect)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
+                return;
+            }
+
             _userDecksStore.User.Name = UpperTextField;
+            //USERCHANGE NOT WORKING WHEN THERE ARE DECKS
             await _userDecksStore.UserChange();
             _navigationService.Navigate();
         }

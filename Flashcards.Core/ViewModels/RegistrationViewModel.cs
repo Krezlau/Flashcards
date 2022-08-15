@@ -47,23 +47,55 @@ namespace Flashcards.Core.ViewModels
             _logInService.Navigate();
         }
 
-        // need to fix those awaits probably
         private async void OnRegisterClick()
         {
-            if (Password == ConfirmPassword)
+            if (UserInputValidator.ValidateUsername(Username) == 0 &&
+                UserInputValidator.ValidatePassword(Password) == 0 &&
+                ConfirmPassword == Password)
             {
                 bool ifSuccesfulRegistration = await _authService.CreateAccountAsync(Username, Email, Password);
-                if (ifSuccesfulRegistration)
+                if (!ifSuccesfulRegistration)
                 {
-                    User user = await _authService.LoginUserAsync(Username, Password);
-                    _userDecksStore.Initialize(user);
-                    _userWelcomeService.Navigate();
+                    _dialogService.ShowMessageDialog("ERROR", "Failed to register. Either username or email is taken.");
                     return;
+
                 }
-                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Either username or email is taken.");
+                User user = await _authService.LoginUserAsync(Username, Password);
+                _userDecksStore.Initialize(user);
+                _userWelcomeService.Navigate();
                 return;
             }
-            _dialogService.ShowMessageDialog("ERROR", "Password and confirmed password are different!");
+
+            // ERROR cases
+            if (ConfirmPassword != Password)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Inserted passwords are different.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(Username) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Username is too short - must be at least 4 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(Username) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Username is too long - must be no longer than 25 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(Username) == 3)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Username can't consist of white space characters.");
+            }
+            if (UserInputValidator.ValidatePassword(Password) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Password is too short - must be at least 8 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidatePassword(Password) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Password is too long - must be no longer than 25 characters.");
+                return;
+            }
         }
     }
 }

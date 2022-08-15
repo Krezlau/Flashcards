@@ -75,5 +75,17 @@ namespace Flashcards.Core.Services
 
             }
         }
+
+        public async Task<bool> IfPasswordCorrect(string password, string username)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                User dbUser = await LoginUserAsync(username, password);
+
+                if (dbUser is null) return false;
+
+                return true;
+            }
+        }
     }
 }
