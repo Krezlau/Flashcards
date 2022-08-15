@@ -57,6 +57,21 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<RegistrationViewModel>>((s) => () => s.GetRequiredService<RegistrationViewModel>());
                 services.AddSingleton<NavigationService<RegistrationViewModel>>();
 
+                services.AddTransient<UserIconViewModel>();
+                services.AddSingleton<Func<UserIconViewModel>>((s) => () => s.GetRequiredService<UserIconViewModel>());
+                services.AddSingleton<NavigationService<UserIconViewModel>>();
+
+                services.AddTransient<AccountManagementViewModel>();
+                services.AddSingleton<Func<AccountManagementViewModel>>((s) => () => s.GetRequiredService<AccountManagementViewModel>());
+                services.AddSingleton<NavigationService<AccountManagementViewModel>>();
+
+                services.AddTransient<AccountInfoChangeViewModel>();
+                services.AddSingleton<Func<AccountInfoChangeViewModel>>((s) => () => s.GetRequiredService<AccountInfoChangeViewModel>());
+                services.AddSingleton<NavigationService<AccountInfoChangeViewModel>>();
+
+                services.AddTransient<PasswordChangeViewModel>();
+                services.AddSingleton<Func<PasswordChangeViewModel>>((s) => () => s.GetRequiredService<PasswordChangeViewModel>());
+                services.AddSingleton<NavigationService<PasswordChangeViewModel>>();
 
                 services.AddSingleton<MainViewModel>();
             });

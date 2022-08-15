@@ -21,24 +21,51 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataDestroyer _dataDestroyer;
         private readonly IUserDataChanger _dataChanger;
 
-        private readonly NavigationService<HomeViewModel> _navigationService;
+        private readonly NavigationStore _navigationStore;
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService<HomeViewModel> navigationService)
+        private readonly NavigationService<HomeViewModel> _navigationService;
+        private readonly NavigationService<UserIconViewModel> _rightNavService;
+
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
             _dataDestroyer = dataDestroyer;
             _dataChanger = dataChanger;
             SelectionStore = selectionStore;
+            _navigationStore = navigationStore;
+            _rightNavService = rightNavService;
             _navigationService = navigationService;
         }
 
+        public event Action EmailChangeRequest;
+
+        public void EmailChangeRequestInvoke()
+        {
+            EmailChangeRequest?.Invoke();
+        }
+
+        public async Task UserChange()
+        {
+            await _dataChanger.ChangeUserAsync(User);
+        }
+
         public SelectionStore SelectionStore { get; }
+
+        public void LogOutUser()
+        {
+            User = null;
+            SelectionStore.SelectedDeck = null;
+            SelectionStore.SelectedFlashcard = null;
+            _navigationStore.LeftViewModel = null;
+            _navigationStore.RightViewModel = null;
+        }
 
         public void Initialize(User user)
         {
             User = _dataProvider.LoadUserDecks(user.Name);
             _navigationService.NavigateLeft();
+            _rightNavService.NavigateRight();
         }
 
         public async Task AlterFlashcard(string front, string back)

@@ -13,5 +13,7 @@ namespace Flashcards.Core.Services
         Task<bool> CreateAccountAsync(string username, string email, string password);
 
         Task<User> LoginUserAsync(string username, string password);
+
+        Task<bool> ChangeUserPasswordAsync(string newPassword, string oldPassword, string username);
     }
 }

@@ -57,5 +57,23 @@ namespace Flashcards.Core.Services
                 return null;
             }
         }
+
+        public async Task<bool> ChangeUserPasswordAsync(string newPassword, string oldPassword, string username)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                User dbUser = await LoginUserAsync(username, oldPassword);
+
+                if (dbUser is null) return false;
+
+                // hashing todo
+                dbUser.PasswordHash = newPassword;
+
+                context.Users.Update(dbUser);
+                await context.SaveChangesAsync();
+                return true;
+
+            }
+        }
     }
 }

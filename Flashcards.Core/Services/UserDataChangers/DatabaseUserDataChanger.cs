@@ -33,5 +33,14 @@ namespace Flashcards.Core.Services.UserDataChangers
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task ChangeUserAsync(User user)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

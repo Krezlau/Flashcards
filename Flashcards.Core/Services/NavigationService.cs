@@ -25,9 +25,15 @@ namespace Flashcards.Core.Services
             _navigationStore.CurrentViewModel = _createViewModel();
         }
 
+        // propably will need to separate those two into different class
         public void NavigateLeft()
         {
             _navigationStore.LeftViewModel = _createViewModel();
+        }
+
+        public void NavigateRight()
+        {
+            _navigationStore.RightViewModel = _createViewModel();
         }
     }
 }
