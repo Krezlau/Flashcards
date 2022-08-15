@@ -16,6 +16,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<AccountInfoChangeViewModel> _navigationService;
+        private readonly NavigationService<PasswordChangeViewModel> _passwordChangeService;
 
         public string Username => _userDecksStore.User.Name;
 
@@ -37,7 +38,7 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ChangePasswordCommand { get; set; }
 
-        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService)
+        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService, NavigationService<PasswordChangeViewModel> passwordChangeService)
         {
             _userDecksStore = userDecksStore;
             _navigationService = navigationService;
@@ -59,6 +60,7 @@ namespace Flashcards.Core.ViewModels
             ChangeUsernameCommand = new RelayCommand(OnChangeUsernameClick);
             ChangeEmailCommand = new RelayCommand(OnChangeEmailClick);
             ChangePasswordCommand = new RelayCommand(OnChangePasswordClick);
+            _passwordChangeService = passwordChangeService;
         }
 
         private void OnChangeUsernameClick()
@@ -74,7 +76,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnChangePasswordClick()
         {
-            _navigationService.Navigate();
+            _passwordChangeService.Navigate();
         }
 
         private Deck FindLargestDeck()

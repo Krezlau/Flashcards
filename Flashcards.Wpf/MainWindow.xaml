@@ -74,6 +74,9 @@
                 <DataTemplate DataType="{x:Type viewmodels:AccountInfoChangeViewModel}">
                     <views:AccountInfoChangeView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:PasswordChangeViewModel}">
+                    <views:PasswordChangeView/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
