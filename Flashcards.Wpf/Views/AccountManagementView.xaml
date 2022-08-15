@@ -138,23 +138,29 @@
                        FontSize="20" Margin="15,5,5,5"
                        FontWeight="Bold"/>
 
-                <Image Source="\Assets\edit.png"
-                       Grid.Column="1" Grid.Row="1"
-                       Margin="0,5,10,0"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center" />
+                <Button Grid.Column="1" Grid.Row="1"
+                       Margin="0,5,10,0" Width="20"
+                        Height="20" VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                        Command="{Binding ChangeUsernameCommand}">
+                    <Image Source="\Assets\edit.png" />
+                </Button>
 
-                <Image Source="\Assets\edit.png"
-                       Grid.Column="1" Grid.Row="2"
-                       Margin="0,5,10,0"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center" />
+                <Button Grid.Column="1" Grid.Row="2"
+                       Margin="0,5,10,0" Width="20"
+                        Height="20" VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                        Command="{Binding ChangeEmailCommand}">
+                    <Image Source="\Assets\edit.png" />
+                </Button>
 
-                <Image Source="\Assets\edit.png"
-                       Grid.Column="1" Grid.Row="3"
-                       Margin="0,5,10,0"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center" />
+                <Button Grid.Column="1" Grid.Row="3"
+                       Margin="0,5,10,0" Width="20"
+                        Height="20" VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                        Command="{Binding ChangePasswordCommand}">
+                    <Image Source="\Assets\edit.png" />
+                </Button>
 
                 <TextBlock Text="{Binding UsernameText}"
                            Grid.Row="1"

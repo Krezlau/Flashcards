@@ -1,17 +1,21 @@
 ﻿using Flashcards.Core.Models;
+using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
 {
     public class AccountManagementViewModel : ObservableObject
     {
         private readonly UserDecksStore _userDecksStore;
+        private readonly NavigationService<AccountInfoChangeViewModel> _navigationService;
 
         public string Username => _userDecksStore.User.Name;
 
@@ -27,9 +31,16 @@ namespace Flashcards.Core.ViewModels
 
         public string FlashcardTileText { get; set; }
 
-        public AccountManagementViewModel(UserDecksStore userDecksStore)
+        public ICommand ChangeUsernameCommand { get; set; }
+
+        public ICommand ChangeEmailCommand { get; set; }
+
+        public ICommand ChangePasswordCommand { get; set; }
+
+        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService)
         {
             _userDecksStore = userDecksStore;
+            _navigationService = navigationService;
 
             Deck largestDeck = FindLargestDeck();
             int flashcardCount = CountFlashcards();
@@ -44,6 +55,26 @@ namespace Flashcards.Core.ViewModels
 
             UsernameText = "Username: " + _userDecksStore.User.Name;
             Email = "Email: " + _userDecksStore.User.Email;
+
+            ChangeUsernameCommand = new RelayCommand(OnChangeUsernameClick);
+            ChangeEmailCommand = new RelayCommand(OnChangeEmailClick);
+            ChangePasswordCommand = new RelayCommand(OnChangePasswordClick);
+        }
+
+        private void OnChangeUsernameClick()
+        {
+            _navigationService.Navigate();
+        }
+
+        private void OnChangeEmailClick()
+        {
+            _navigationService.Navigate();
+            _userDecksStore.EmailChangeRequestInvoke();
+        }
+
+        private void OnChangePasswordClick()
+        {
+            _navigationService.Navigate();
         }
 
         private Deck FindLargestDeck()

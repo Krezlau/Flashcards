@@ -11,5 +11,6 @@ namespace Flashcards.Core.Services.UserDataChangers
     {
         Task ChangeFlashcard(Flashcard flashcard);
         Task ChangeDeck(Deck deck);
+        Task ChangeUserAsync(User user);
     }
 }

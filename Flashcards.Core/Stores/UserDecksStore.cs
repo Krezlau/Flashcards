@@ -38,6 +38,18 @@ namespace Flashcards.Core.Stores
             _navigationService = navigationService;
         }
 
+        public event Action EmailChangeRequest;
+
+        public void EmailChangeRequestInvoke()
+        {
+            EmailChangeRequest?.Invoke();
+        }
+
+        public async Task UserChange()
+        {
+            await _dataChanger.ChangeUserAsync(User);
+        }
+
         public SelectionStore SelectionStore { get; }
 
         public void LogOutUser()
