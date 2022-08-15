@@ -21,9 +21,16 @@ TASK05:
 	* ability to log out
 	* account management view with ability to change username, password
 
+TASK06:
+	* login validation
+	* registration validation
+	* change username/email/password validation
+	* (those 3 only local - not sorting out database conflicts)
+	* password hashing
+
 UNSPECIFIED:
-password validation
-password hashing and overall password security improvement
+collecting data about daily streak and displaying it on account management screen and in bottom right corner
+overall password security improvement
 change database to an online one
 change initial decks loading to async with loading screen
 implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
