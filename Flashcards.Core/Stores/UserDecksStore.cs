@@ -121,7 +121,7 @@ namespace Flashcards.Core.Stores
         public async Task FlashcardSetReview(Flashcard flashcard)
         {
             flashcard.Level += 1;
-            flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level + 1);
+            flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);
             await _dataChanger.ChangeFlashcard(flashcard);
         }
 
