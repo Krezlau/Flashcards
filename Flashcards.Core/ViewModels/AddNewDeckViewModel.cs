@@ -84,7 +84,7 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", "Inserted name is too long.");
                 return;
             }
-            Deck deck = new Deck(DeckName, userDecksStore.User.Name);
+            Deck deck = new Deck(DeckName, userDecksStore.User.Id);
             userDecksStore.SelectionStore.SelectedDeck = deck;
             await userDecksStore.AddNewDeck(deck);
             _navigationService.Navigate();

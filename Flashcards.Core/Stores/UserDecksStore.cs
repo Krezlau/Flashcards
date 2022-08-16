@@ -63,7 +63,7 @@ namespace Flashcards.Core.Stores
 
         public void Initialize(User user)
         {
-            User = _dataProvider.LoadUserDecks(user.Name);
+            User = _dataProvider.LoadUserDecks(user.Id);
             _navigationService.NavigateLeft();
             _rightNavService.NavigateRight();
         }

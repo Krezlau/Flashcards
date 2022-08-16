@@ -25,12 +25,12 @@ namespace Flashcards.Core.Models
         public ObservableCollection<Flashcard> Flashcards { get; set; }
         [ForeignKey("User")]
         [Required]
-        public string UserName { get; set; }
+        public int UserId { get; set; }
         public int Size => Flashcards.Count;
 
-        public Deck(string name, string username)
+        public Deck(string name, int userId)
         {
-            UserName = username;
+            UserId = userId;
             Name = name;
             Flashcards = new ObservableCollection<Flashcard>();
         }

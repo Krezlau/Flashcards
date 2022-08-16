@@ -42,12 +42,12 @@ namespace Flashcards.Core.Services.UserDataProviders
         //    }
         //}
 
-        public User LoadUserDecks(string _username)
+        public User LoadUserDecks(int userId)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
                 User user = context.Users
-                    .Where(b => b.Name == _username)
+                    .Where(b => b.Id == userId)
                     .First();
 
                 if (user == null)
@@ -56,7 +56,7 @@ namespace Flashcards.Core.Services.UserDataProviders
                 }
 
                user.Decks = new ObservableCollection<Deck>(context.Decks
-                    .Where(b => b.UserName == _username)
+                    .Where(b => b.UserId == userId)
                     .ToList());
 
                 foreach (Deck d in user.Decks)
