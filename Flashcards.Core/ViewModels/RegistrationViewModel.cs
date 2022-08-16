@@ -51,7 +51,8 @@ namespace Flashcards.Core.ViewModels
         {
             if (UserInputValidator.ValidateUsername(Username) == 0 &&
                 UserInputValidator.ValidatePassword(Password) == 0 &&
-                ConfirmPassword == Password)
+                ConfirmPassword == Password &&
+                UserInputValidator.IsValidEmail(Email))
             {
                 bool ifSuccesfulRegistration = await _authService.CreateAccountAsync(Username, Email, Password);
                 if (!ifSuccesfulRegistration)
@@ -94,6 +95,11 @@ namespace Flashcards.Core.ViewModels
             if (UserInputValidator.ValidatePassword(Password) == 2)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Failed to register. Password is too long - must be no longer than 25 characters.");
+                return;
+            }
+            if (!UserInputValidator.IsValidEmail(Email))
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Email not valid.");
                 return;
             }
         }

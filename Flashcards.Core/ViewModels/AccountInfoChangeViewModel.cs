@@ -62,8 +62,20 @@ namespace Flashcards.Core.ViewModels
         }
 
         private async void OnChangeEmailClick()
-        {
-            // validation todo
+        { 
+            if (!UserInputValidator.IsValidEmail(UpperTextField))
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email not valid");
+                return;
+            }
+
+            bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
+            if (!ifPasswordCorrect)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
+                return;
+            }
+
             _userDecksStore.User.Email = UpperTextField;
             await _userDecksStore.UserChange();
             _dialogService.ShowMessageDialog("SUCCESS", "Email changed.");

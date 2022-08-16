@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,6 +102,12 @@ namespace Flashcards.Core.Services
             if (password.Length > PasswordMaxLength) return 2;
             // todo validate if characters are allowed
             return 0;
+        }
+
+        public static bool IsValidEmail(string email)
+        {
+            if (email is null) return false;
+            return new EmailAddressAttribute().IsValid(email);
         }
     }
 }
