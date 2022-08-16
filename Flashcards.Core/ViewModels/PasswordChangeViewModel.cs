@@ -16,6 +16,7 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<AccountManagementViewModel> _navigationService;
         private readonly IAuthenticationService _authService;
+        private readonly IDialogService _dialogService;
 
         public string Password { get; set; }
 
@@ -27,7 +28,7 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public PasswordChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore, IAuthenticationService authService)
+        public PasswordChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore, IAuthenticationService authService, IDialogService dialogService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -35,6 +36,7 @@ namespace Flashcards.Core.ViewModels
             ButtonCommand = new RelayCommand(OnChangePasswordClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
             _authService = authService;
+            _dialogService = dialogService;
         }
 
         private void OnGoBackClick()
@@ -47,6 +49,7 @@ namespace Flashcards.Core.ViewModels
         {
             // validation todo
             await _authService.ChangeUserPasswordAsync(Password, OldPassword, _userDecksStore.User.Name);
+            _dialogService.ShowMessageDialog("SUCCESS", "Password changed.");
             _navigationService.Navigate();
         }
     }

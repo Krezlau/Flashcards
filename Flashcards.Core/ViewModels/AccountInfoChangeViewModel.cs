@@ -66,6 +66,7 @@ namespace Flashcards.Core.ViewModels
             // validation todo
             _userDecksStore.User.Email = UpperTextField;
             await _userDecksStore.UserChange();
+            _dialogService.ShowMessageDialog("SUCCESS", "Email changed.");
             _navigationService.Navigate();
         }
 
@@ -97,6 +98,7 @@ namespace Flashcards.Core.ViewModels
             _userDecksStore.User.Name = UpperTextField;
             //USERCHANGE NOT WORKING WHEN THERE ARE DECKS
             await _userDecksStore.UserChange();
+            _dialogService.ShowMessageDialog("SUCCESS", "Username changed.");
             _navigationService.Navigate();
         }
     }
