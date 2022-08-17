@@ -100,8 +100,13 @@ namespace Flashcards.Core.Services
         {
             if (password is null || password.Length < PasswordMinLength) return 1;
             if (password.Length > PasswordMaxLength) return 2;
-            // todo validate if characters are allowed
+            if (IfContainsUnicodeCharacter(password)) return 3;
             return 0;
+        }
+
+        private static bool IfContainsUnicodeCharacter(string input)
+        {
+            return input.Any(c => c > 255);
         }
 
         public static bool IsValidEmail(string email)

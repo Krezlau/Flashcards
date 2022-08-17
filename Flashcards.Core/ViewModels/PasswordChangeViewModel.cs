@@ -47,7 +47,27 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnChangePasswordClick()
         {
-            // validation todo
+            if (UserInputValidator.ValidatePassword(Password) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Password is too short - must be at least 8 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidatePassword(Password) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Password is too long - must be no longer than 25 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidatePassword(Password) == 3)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Illegal characters in password.");
+                return;
+            }
+            bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
+            if (!ifPasswordCorrect)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
+                return;
+            }
             await _authService.ChangeUserPasswordAsync(Password, OldPassword, _userDecksStore.User.Name);
             _dialogService.ShowMessageDialog("SUCCESS", "Password changed.");
             _navigationService.Navigate();

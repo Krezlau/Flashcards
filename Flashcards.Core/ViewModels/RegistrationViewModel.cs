@@ -97,6 +97,11 @@ namespace Flashcards.Core.ViewModels
                 _dialogService.ShowMessageDialog("ERROR", "Failed to register. Password is too long - must be no longer than 25 characters.");
                 return;
             }
+            if (UserInputValidator.ValidatePassword(Password) == 3)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to register. Illegal characters in password.");
+                return;
+            }
             if (!UserInputValidator.IsValidEmail(Email))
             {
                 _dialogService.ShowMessageDialog("ERROR", "Failed to register. Email not valid.");

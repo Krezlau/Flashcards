@@ -65,7 +65,7 @@ namespace Flashcards.Core.ViewModels
         { 
             if (!UserInputValidator.IsValidEmail(UpperTextField))
             {
-                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email not valid");
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email not valid.");
                 return;
             }
 
