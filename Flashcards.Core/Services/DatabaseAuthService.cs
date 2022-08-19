@@ -34,7 +34,7 @@ namespace Flashcards.Core.Services
                     Decks = new ObservableCollection<Deck>(),
                     Email = email,
                     Name = username,
-                    PasswordHash = password
+                    PasswordHash = PasswordHasher.Hash(password)
                 };
 
                 context.Users.Add(user);
@@ -49,8 +49,8 @@ namespace Flashcards.Core.Services
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
                 User user = await context.Users.Where(a => a.Name == username).FirstOrDefaultAsync();
-                
-                if (user is not null && user.PasswordHash == password)
+
+                if (user is not null && PasswordHasher.Verify(password, user.PasswordHash))
                 {
                     return user;
                 }
@@ -67,12 +67,24 @@ namespace Flashcards.Core.Services
                 if (dbUser is null) return false;
 
                 // hashing todo
-                dbUser.PasswordHash = newPassword;
+                dbUser.PasswordHash = PasswordHasher.Hash(newPassword);
 
                 context.Users.Update(dbUser);
                 await context.SaveChangesAsync();
                 return true;
 
+            }
+        }
+
+        public async Task<bool> IfPasswordCorrect(string password, string username)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                User dbUser = await LoginUserAsync(username, password);
+
+                if (dbUser is null) return false;
+
+                return true;
             }
         }
     }

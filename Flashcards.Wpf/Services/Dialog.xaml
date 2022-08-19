@@ -22,7 +22,8 @@
                Text="message" Grid.Row="1" Grid.Column="0"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
-               TextWrapping="Wrap"/>
+               TextWrapping="Wrap"
+               Margin="10"/>
 
         <Button x:Name="Button" Click="OnButtonClick"
                 Content="OK" Grid.Column="0" Grid.Row="2" 

@@ -14,6 +14,9 @@ namespace Flashcards.Core.Models
     {
         [Key]
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [MaxLength(50)]
         [MinLength(5)]
         public string Name { get; set; }

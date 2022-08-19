@@ -28,8 +28,11 @@ TASK06:
 	* (those 3 only local - not sorting out database conflicts)
 	* password hashing
 
+TASK07:
+	* collecting data about daily streak / reviewed flashcards and displaying it on account management screen and in bottom right corner
+
+
 UNSPECIFIED:
-collecting data about daily streak and displaying it on account management screen and in bottom right corner
 overall password security improvement
 change database to an online one
 change initial decks loading to async with loading screen
