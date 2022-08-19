@@ -31,5 +31,7 @@ namespace Flashcards.Core.Models
         [MaxLength(128)]
         public string PasswordHash { get; set; }
         public ObservableCollection<Deck> Decks { get; set; }
+
+        public List<DailyActivity> Activity { get; set; }
     }
 }
