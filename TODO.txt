@@ -31,12 +31,16 @@ TASK06:
 TASK07:
 	* collecting data about daily streak / reviewed flashcards and displaying it on account management screen and in bottom right corner
 
+TASK08:
+	* implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
+
 
 UNSPECIFIED:
+email verification
+email changing password
 overall password security improvement
 change database to an online one
 change initial decks loading to async with loading screen
-implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
 refactor DatabaseServices and UserDecksStore
 storing data and displaying it to the user (time spent reviewing flashcards etc.)
 ui redo
