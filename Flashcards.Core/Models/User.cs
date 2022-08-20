@@ -38,12 +38,14 @@ namespace Flashcards.Core.Models
         {
             int sum = 0;
 
-            if (Activity[0].Day.Day == date.Day)
+            if (Activity.Count == 0) return 0;
+
+            if (Activity[Activity.Count - 1].Day.Day == date.Day)
             {
                 sum += 1;
             }
 
-            while (sum < Activity.Count && Activity[sum].Day.Day == date.AddDays(-1).Day)
+            while (sum < Activity.Count && Activity[Activity.Count - sum - 1].Day.Day == date.AddDays(-1).Day)
             {
                 sum++;
                 date = date.AddDays(-1);
@@ -54,7 +56,8 @@ namespace Flashcards.Core.Models
 
         public bool IfLearnedToday(DateTime date)
         {
-            if (Activity[0].Day.Day == date.Day) return true;
+            if (Activity.Count == 0) return false;
+            if (Activity[Activity.Count-1].Day.Day == date.Day) return true;
             return false;
         }
     }

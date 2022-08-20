@@ -11,5 +11,6 @@ namespace Flashcards.Core.Services.UserDataCreators
     {
         Task SaveNewDeck(Deck deck);
         Task SaveNewFlashcard(Flashcard flashcard);
+        Task SaveNewDailyActivity(DailyActivity activity);
     }
 }

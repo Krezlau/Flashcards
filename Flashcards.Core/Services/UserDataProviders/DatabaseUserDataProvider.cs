@@ -57,7 +57,7 @@ namespace Flashcards.Core.Services.UserDataProviders
 
                 user.Activity = new List<DailyActivity>(context.DailyActivity
                     .Where(b => b.UserId == userId)
-                    .OrderByDescending(a => a.Day)
+                    .OrderBy(a => a.Day)
                     .ToList());
 
                 user.Decks = new ObservableCollection<Deck>(context.Decks

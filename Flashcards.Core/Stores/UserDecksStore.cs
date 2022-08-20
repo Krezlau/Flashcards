@@ -39,10 +39,16 @@ namespace Flashcards.Core.Stores
         public int Streak
         {
             get => _streak;
-            set => SetProperty(ref _streak, value);
+            set
+            {
+                _streak = value;
+                StreakChangedEvent?.Invoke();
+            }
         }
 
         public event Action EmailChangeRequest;
+
+        public event Action StreakChangedEvent;
 
         public SelectionStore SelectionStore { get; }
 
@@ -124,13 +130,30 @@ namespace Flashcards.Core.Stores
 
         public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
-            // deck size in home view does not get refreshed after adding a flashcard
             User.Decks[SelectionStore.GetSelectedDeckIndex(User)].Flashcards.Add(flashcard);
             await _dataCreator.SaveNewFlashcard(flashcard);
         }
 
         public async Task FlashcardSetReview(Flashcard flashcard)
         {
+            // probably should be called with list of flashcards to change instead of being called on every flashcard
+            if (IfTodayActivity)
+            {
+                User.Activity[User.Activity.Count - 1].ReviewedFlashcardsCount++;
+                Streak++;
+                await _dataChanger.ChangeActivityAsync(User.Activity[User.Activity.Count - 1]);
+            }
+            if (!IfTodayActivity)
+            {
+                User.Activity.Add(new DailyActivity
+                {
+                    Day = DateTime.Today,
+                    UserId = User.Id,
+                    ReviewedFlashcardsCount = 1,
+                });
+                Streak++;
+                await _dataCreator.SaveNewDailyActivity(User.Activity[User.Activity.Count - 1]);
+            }
             flashcard.Level += 1;
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);
             await _dataChanger.ChangeFlashcard(flashcard);
