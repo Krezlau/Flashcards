@@ -55,7 +55,12 @@ namespace Flashcards.Core.Services.UserDataProviders
                     return new User();
                 }
 
-               user.Decks = new ObservableCollection<Deck>(context.Decks
+                user.Activity = new List<DailyActivity>(context.DailyActivity
+                    .Where(b => b.UserId == userId)
+                    .OrderByDescending(a => a.Day)
+                    .ToList());
+
+                user.Decks = new ObservableCollection<Deck>(context.Decks
                     .Where(b => b.UserId == userId)
                     .ToList());
 

@@ -51,5 +51,11 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
+
+        <TextBlock Text="{Binding Streak}" Grid.Column="1" FontSize="20"
+                   FontWeight="Bold" TextAlignment="Center"
+                   Grid.Row="1"  VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center"
+                   Margin="5,0,5,20" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

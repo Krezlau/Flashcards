@@ -19,6 +19,13 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AccountManagementViewModel> _accountManagementService;
 
         public string Username => _userDecksStore.User.Name;
+
+        private string _streak;
+        public string Streak
+        {
+            get => _streak;
+            set => SetProperty(ref _streak, value);
+        }
         public ICommand ManageCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
 
@@ -30,6 +37,8 @@ namespace Flashcards.Core.ViewModels
             ManageCommand = new RelayCommand(OnManageClick);
             LogOutCommand = new RelayCommand(OnLogOutClick);
             _accountManagementService = accountManagementService;
+
+            Streak = $"{_userDecksStore.Streak}\nDAYS";
         }
 
         private void OnLogOutClick()

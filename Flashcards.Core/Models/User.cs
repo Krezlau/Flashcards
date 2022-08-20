@@ -33,5 +33,29 @@ namespace Flashcards.Core.Models
         public ObservableCollection<Deck> Decks { get; set; }
 
         public List<DailyActivity> Activity { get; set; }
+
+        public int CalculateStreak(DateTime date)
+        {
+            int sum = 0;
+
+            if (Activity[0].Day.Day == date.Day)
+            {
+                sum += 1;
+            }
+
+            while (sum < Activity.Count && Activity[sum].Day.Day == date.AddDays(-1).Day)
+            {
+                sum++;
+                date = date.AddDays(-1);
+            }
+
+            return sum;
+        }
+
+        public bool IfLearnedToday(DateTime date)
+        {
+            if (Activity[0].Day.Day == date.Day) return true;
+            return false;
+        }
     }
 }

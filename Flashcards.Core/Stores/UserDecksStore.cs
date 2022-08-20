@@ -26,6 +26,26 @@ namespace Flashcards.Core.Stores
         private readonly NavigationService<HomeViewModel> _navigationService;
         private readonly NavigationService<UserIconViewModel> _rightNavService;
 
+        private User _user = new User() { Decks = new System.Collections.ObjectModel.ObservableCollection<Deck>() };
+        public User User
+        {
+            get => _user;
+            set => SetProperty(ref _user, value);
+        }
+
+        public bool IfTodayActivity { get; set; }
+
+        private int _streak;
+        public int Streak
+        {
+            get => _streak;
+            set => SetProperty(ref _streak, value);
+        }
+
+        public event Action EmailChangeRequest;
+
+        public SelectionStore SelectionStore { get; }
+
         public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
@@ -38,7 +58,14 @@ namespace Flashcards.Core.Stores
             _navigationService = navigationService;
         }
 
-        public event Action EmailChangeRequest;
+        public void Initialize(User user)
+        {
+            User = _dataProvider.LoadUserDecks(user.Id);
+            IfTodayActivity = User.IfLearnedToday(DateTime.Today);
+            Streak = User.CalculateStreak(DateTime.Today);
+            _navigationService.NavigateLeft();
+            _rightNavService.NavigateRight();
+        }
 
         public void EmailChangeRequestInvoke()
         {
@@ -50,8 +77,6 @@ namespace Flashcards.Core.Stores
             await _dataChanger.ChangeUserAsync(User);
         }
 
-        public SelectionStore SelectionStore { get; }
-
         public void LogOutUser()
         {
             User = null;
@@ -59,13 +84,6 @@ namespace Flashcards.Core.Stores
             SelectionStore.SelectedFlashcard = null;
             _navigationStore.LeftViewModel = null;
             _navigationStore.RightViewModel = null;
-        }
-
-        public void Initialize(User user)
-        {
-            User = _dataProvider.LoadUserDecks(user.Id);
-            _navigationService.NavigateLeft();
-            _rightNavService.NavigateRight();
         }
 
         public async Task AlterFlashcard(string front, string back)
@@ -102,13 +120,6 @@ namespace Flashcards.Core.Stores
         {
             await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
             User.Decks.Remove(SelectionStore.SelectedDeck);
-        }
-
-        private User _user = new User() { Decks = new System.Collections.ObjectModel.ObservableCollection<Deck>() };
-        public User User
-        {
-            get => _user;
-            set => SetProperty(ref _user, value);
         }
 
         public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)

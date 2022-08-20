@@ -46,7 +46,7 @@ namespace Flashcards.Core.ViewModels
             Deck largestDeck = FindLargestDeck();
             int flashcardCount = CountFlashcards();
 
-            StreakTileText = "You have been learning for 5 days in a row. \n Keep going!"; //todo
+            StreakTileText = $"You have been learning for {_userDecksStore.Streak} days in a row. \n Keep going!"; //todo
             if (largestDeck is not null)
             {
                 DeckTileText2 = "The biggest deck is " + largestDeck.Name + " - with " + largestDeck.Size + " flashcards inside.";
