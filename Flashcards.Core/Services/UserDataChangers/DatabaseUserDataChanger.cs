@@ -16,6 +16,16 @@ namespace Flashcards.Core.Services.UserDataChangers
         {
             _dbContextFactory = dbContextFactory;
         }
+
+        public async Task ChangeActivityAsync(DailyActivity activity)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.DailyActivity.Update(activity);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task ChangeDeck(Deck deck)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())

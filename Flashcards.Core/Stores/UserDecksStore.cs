@@ -21,12 +21,38 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataDestroyer _dataDestroyer;
         private readonly IUserDataChanger _dataChanger;
 
-        private readonly NavigationStore _navigationStore;
+        private readonly NavigationService _navigationStore;
 
         private readonly NavigationService<HomeViewModel> _navigationService;
         private readonly NavigationService<UserIconViewModel> _rightNavService;
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
+        private User _user = new User() { Decks = new System.Collections.ObjectModel.ObservableCollection<Deck>() };
+        public User User
+        {
+            get => _user;
+            set => SetProperty(ref _user, value);
+        }
+
+        public bool IfTodayActivity { get; set; }
+
+        private int _streak;
+        public int Streak
+        {
+            get => _streak;
+            set
+            {
+                _streak = value;
+                StreakChangedEvent?.Invoke();
+            }
+        }
+
+        public event Action EmailChangeRequest;
+
+        public event Action StreakChangedEvent;
+
+        public SelectionStore SelectionStore { get; }
+
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
@@ -38,7 +64,14 @@ namespace Flashcards.Core.Stores
             _navigationService = navigationService;
         }
 
-        public event Action EmailChangeRequest;
+        public void Initialize(User user)
+        {
+            User = _dataProvider.LoadUserDecks(user.Id);
+            IfTodayActivity = User.IfLearnedToday(DateTime.Today);
+            Streak = User.CalculateStreak(DateTime.Today);
+            _navigationService.NavigateLeft();
+            _rightNavService.NavigateRight();
+        }
 
         public void EmailChangeRequestInvoke()
         {
@@ -50,8 +83,6 @@ namespace Flashcards.Core.Stores
             await _dataChanger.ChangeUserAsync(User);
         }
 
-        public SelectionStore SelectionStore { get; }
-
         public void LogOutUser()
         {
             User = null;
@@ -59,13 +90,6 @@ namespace Flashcards.Core.Stores
             SelectionStore.SelectedFlashcard = null;
             _navigationStore.LeftViewModel = null;
             _navigationStore.RightViewModel = null;
-        }
-
-        public void Initialize(User user)
-        {
-            User = _dataProvider.LoadUserDecks(user.Id);
-            _navigationService.NavigateLeft();
-            _rightNavService.NavigateRight();
         }
 
         public async Task AlterFlashcard(string front, string back)
@@ -104,22 +128,32 @@ namespace Flashcards.Core.Stores
             User.Decks.Remove(SelectionStore.SelectedDeck);
         }
 
-        private User _user = new User() { Decks = new System.Collections.ObjectModel.ObservableCollection<Deck>() };
-        public User User
-        {
-            get => _user;
-            set => SetProperty(ref _user, value);
-        }
-
         public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)
         {
-            // deck size in home view does not get refreshed after adding a flashcard
             User.Decks[SelectionStore.GetSelectedDeckIndex(User)].Flashcards.Add(flashcard);
             await _dataCreator.SaveNewFlashcard(flashcard);
         }
 
         public async Task FlashcardSetReview(Flashcard flashcard)
         {
+            // probably should be called with list of flashcards to change instead of being called on every flashcard
+            if (IfTodayActivity)
+            {
+                User.Activity[User.Activity.Count - 1].ReviewedFlashcardsCount++;
+                await _dataChanger.ChangeActivityAsync(User.Activity[User.Activity.Count - 1]);
+            }
+            if (!IfTodayActivity)
+            {
+                IfTodayActivity = true;
+                User.Activity.Add(new DailyActivity
+                {
+                    Day = DateTime.Today,
+                    UserId = User.Id,
+                    ReviewedFlashcardsCount = 1,
+                });
+                Streak++;
+                await _dataCreator.SaveNewDailyActivity(User.Activity[User.Activity.Count - 1]);
+            }
             flashcard.Level += 1;
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);
             await _dataChanger.ChangeFlashcard(flashcard);

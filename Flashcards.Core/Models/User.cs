@@ -31,5 +31,34 @@ namespace Flashcards.Core.Models
         [MaxLength(128)]
         public string PasswordHash { get; set; }
         public ObservableCollection<Deck> Decks { get; set; }
+
+        public List<DailyActivity> Activity { get; set; }
+
+        public int CalculateStreak(DateTime date)
+        {
+            int sum = 0;
+
+            if (Activity.Count == 0) return 0;
+
+            if (Activity[Activity.Count - 1].Day.Day == date.Day)
+            {
+                sum += 1;
+            }
+
+            while (sum < Activity.Count && Activity[Activity.Count - sum - 1].Day.Day == date.AddDays(-1).Day)
+            {
+                sum++;
+                date = date.AddDays(-1);
+            }
+
+            return sum;
+        }
+
+        public bool IfLearnedToday(DateTime date)
+        {
+            if (Activity.Count == 0) return false;
+            if (Activity[Activity.Count-1].Day.Day == date.Day) return true;
+            return false;
+        }
     }
 }

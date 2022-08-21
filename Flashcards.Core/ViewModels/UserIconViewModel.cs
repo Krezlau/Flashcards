@@ -19,6 +19,21 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AccountManagementViewModel> _accountManagementService;
 
         public string Username => _userDecksStore.User.Name;
+
+        private string _streak;
+        public string Streak
+        {
+            get => _streak;
+            set => SetProperty(ref _streak, value);
+        }
+
+        private string _imageSource;
+        public string ImageSource
+        {
+            get => _imageSource;
+            set => SetProperty(ref _imageSource, value);
+        }
+
         public ICommand ManageCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
 
@@ -30,6 +45,24 @@ namespace Flashcards.Core.ViewModels
             ManageCommand = new RelayCommand(OnManageClick);
             LogOutCommand = new RelayCommand(OnLogOutClick);
             _accountManagementService = accountManagementService;
+
+            _userDecksStore.StreakChangedEvent += OnStreakChanged;
+
+            // this isn't really correct 
+            // will need to change through something like asset manager
+            ImageSource = "\\Assets\\fire_gray.png";
+            if (_userDecksStore.IfTodayActivity)
+            {
+                ImageSource = "\\Assets\\fire.png";
+            }
+
+            Streak = $"{_userDecksStore.Streak}\nDAYS";
+        }
+
+        private void OnStreakChanged()
+        {
+            ImageSource = "\\Assets\\fire.png";
+            Streak = $"{_userDecksStore.Streak}\nDAYS";
         }
 
         private void OnLogOutClick()
