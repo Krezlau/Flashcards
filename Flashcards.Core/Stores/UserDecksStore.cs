@@ -140,11 +140,11 @@ namespace Flashcards.Core.Stores
             if (IfTodayActivity)
             {
                 User.Activity[User.Activity.Count - 1].ReviewedFlashcardsCount++;
-                Streak++;
                 await _dataChanger.ChangeActivityAsync(User.Activity[User.Activity.Count - 1]);
             }
             if (!IfTodayActivity)
             {
+                IfTodayActivity = true;
                 User.Activity.Add(new DailyActivity
                 {
                     Day = DateTime.Today,

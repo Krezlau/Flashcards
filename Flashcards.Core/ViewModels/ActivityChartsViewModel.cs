@@ -23,7 +23,6 @@ namespace Flashcards.Core.ViewModels
 
         public ActivityChartsViewModel(UserDecksStore userDecksStore, NavigationService<AccountManagementViewModel> navService)
         {
-            //probably need to implement an event like today's record changed or smth
             _userDecksStore = userDecksStore;
             _navService = navService;
 
