@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<AccountInfoChangeViewModel> _navigationService;
         private readonly NavigationService<PasswordChangeViewModel> _passwordChangeService;
+        private readonly NavigationService<ActivityChartsViewModel> _chartsNavService;
 
         public string Username => _userDecksStore.User.Name;
 
@@ -30,7 +31,7 @@ namespace Flashcards.Core.ViewModels
 
         public string DeckTileText2 { get; set; }
 
-        public string FlashcardTileText { get; set; }
+        public string ActivityTileText { get; set; }
 
         public ICommand ChangeUsernameCommand { get; set; }
 
@@ -38,7 +39,9 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ChangePasswordCommand { get; set; }
 
-        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService, NavigationService<PasswordChangeViewModel> passwordChangeService)
+        public ICommand ActivityChartsCommand { get; set; }
+
+        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService, NavigationService<PasswordChangeViewModel> passwordChangeService, NavigationService<ActivityChartsViewModel> chartsNavService)
         {
             _userDecksStore = userDecksStore;
             _navigationService = navigationService;
@@ -52,7 +55,7 @@ namespace Flashcards.Core.ViewModels
                 DeckTileText2 = "The biggest deck is " + largestDeck.Name + " - with " + largestDeck.Size + " flashcards inside.";
             }
             DeckTileText1 = "There are " + _userDecksStore.User.Decks.Count + " decks on your account.";
-            FlashcardTileText = "You have currently " + flashcardCount + " flashcards across your decks!";
+            ActivityTileText = "We store data regarding your activity. Check your activity data here.";
 
             UsernameText = "Username: " + _userDecksStore.User.Name;
             Email = "Email: " + _userDecksStore.User.Email;
@@ -60,7 +63,14 @@ namespace Flashcards.Core.ViewModels
             ChangeUsernameCommand = new RelayCommand(OnChangeUsernameClick);
             ChangeEmailCommand = new RelayCommand(OnChangeEmailClick);
             ChangePasswordCommand = new RelayCommand(OnChangePasswordClick);
+            ActivityChartsCommand = new RelayCommand(OnActivityClick);
             _passwordChangeService = passwordChangeService;
+            _chartsNavService = chartsNavService;
+        }
+
+        private void OnActivityClick()
+        {
+            _chartsNavService.Navigate();
         }
 
         private void OnChangeUsernameClick()

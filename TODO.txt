@@ -30,12 +30,14 @@ TASK06:
 
 TASK07:
 	* collecting data about daily streak / reviewed flashcards and displaying it on account management screen and in bottom right corner
+	* activity chart showing how many flashcards were reviewed on each day
 
 TASK08:
 	* implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
 
 
 UNSPECIFIED:
+buttons for activity charts to show last 30 days / last year / all time
 email verification
 email changing password
 overall password security improvement
