@@ -35,6 +35,9 @@ TASK07:
 TASK08:
 	* implement DatabaseConflictValidator (we dont want users to have same usernames, one user to have multiple decks with the same name etc.)
 
+TASK09:
+	* ui overhaul using wpfui
+
 
 UNSPECIFIED:
 buttons for activity charts to show last 30 days / last year / all time
