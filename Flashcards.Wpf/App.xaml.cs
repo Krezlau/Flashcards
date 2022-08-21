@@ -47,7 +47,7 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
 
-                    services.AddSingleton<NavigationStore>();
+                    services.AddSingleton<NavigationService>();
 
                     services.AddSingleton<SelectionStore>();
 
@@ -67,7 +67,7 @@ namespace Flashcards.Wpf
         {
             _host.Start();
 
-            NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
+            NavigationService _navigationStore = _host.Services.GetRequiredService<NavigationService>();
             _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<LogInViewModel>();
             //_navigationStore.LeftViewModel = _host.Services.GetRequiredService<HomeViewModel>();
 
