@@ -76,8 +76,13 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            bool outcome = await _userDecksStore.ChangeUserEmail(UpperTextField);
+            if (outcome == false)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email already taken.");
+                return;
+            }
             _userDecksStore.User.Email = UpperTextField;
-            await _userDecksStore.UserChange();
             _dialogService.ShowMessageDialog("SUCCESS", "Email changed.");
             _navigationService.Navigate();
         }
@@ -107,9 +112,13 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            bool outcome = await _userDecksStore.ChangeUserName(UpperTextField);
+            if (outcome == false)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Username already taken.");
+                return;
+            }
             _userDecksStore.User.Name = UpperTextField;
-            //USERCHANGE NOT WORKING WHEN THERE ARE DECKS
-            await _userDecksStore.UserChange();
             _dialogService.ShowMessageDialog("SUCCESS", "Username changed.");
             _navigationService.Navigate();
         }

@@ -78,9 +78,20 @@ namespace Flashcards.Core.Stores
             EmailChangeRequest?.Invoke();
         }
 
-        public async Task UserChange()
+        public async Task<bool> ChangeUserEmail(string email)
         {
-            await _dataChanger.ChangeUserAsync(User);
+            bool outcome = await _dataChanger.ChangeUserEmailAsync(User, email);
+            if (outcome == false) return false;
+            User.Email = email;
+            return true;
+        }
+
+        public async Task<bool> ChangeUserName(string username)
+        {
+            bool outcome = await _dataChanger.ChangeUserNameAsync(User, username);
+            if (outcome == false) return false;
+            User.Name = username;
+            return true;
         }
 
         public void LogOutUser()
@@ -101,17 +112,21 @@ namespace Flashcards.Core.Stores
             await _dataChanger.ChangeFlashcard(User.Decks[deckIndex].Flashcards[flashcardIndex]);
         }
 
-        public async Task AlterDeck(string name)
+        public async Task<bool> AlterDeck(string name)
         {
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
+            bool outcome = await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+            if (outcome == false) return false;
             User.Decks[deckIndex].Name = name;
-            await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+            return true;
         }
 
-        public async Task AddNewDeck(Deck deck)
+        public async Task<bool> AddNewDeck(Deck deck)
         {
+            bool outcome = await _dataCreator.SaveNewDeck(deck);
+            if (outcome == false) return false;
             User.Decks.Add(deck);
-            await _dataCreator.SaveNewDeck(deck);
+            return true;
         }
 
         public async Task RemoveCurrentFlashcard()
