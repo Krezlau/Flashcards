@@ -67,8 +67,14 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", "Inserted name is too long.");
                 return;
             }
+            
+            bool outcome = await userDecksStore.AlterDeck(DeckName);
+            if (outcome == false)
+            {
+                dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");
+                return;
+            }
             userDecksStore.SelectionStore.SelectedDeck.Name = DeckName;
-            await userDecksStore.AlterDeck(DeckName);
             _navigationService.Navigate();
         }
 
@@ -85,8 +91,14 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             Deck deck = new Deck(DeckName, userDecksStore.User.Id);
+            bool outcome = await userDecksStore.AddNewDeck(deck);
+            if (outcome == false)
+            {
+                dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");
+                return;
+            }
+            
             userDecksStore.SelectionStore.SelectedDeck = deck;
-            await userDecksStore.AddNewDeck(deck);
             _navigationService.Navigate();
         }
     }

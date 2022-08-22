@@ -20,12 +20,12 @@ namespace Flashcards.Core.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        //TODO hashing
         public async Task<bool> CreateAccountAsync(string username, string email, string password)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                if (context.Users.Where(a => a.Name == username).FirstOrDefault() is not null)
+                if (context.Users.Where(a => a.Name == username).FirstOrDefault() is not null
+                    || context.Users.Where(a => a.Email == email).FirstOrDefault() is not null)
                 {
                     return false;
                 }
@@ -43,7 +43,6 @@ namespace Flashcards.Core.Services
             }
         }
 
-        //TODO hashing
         public async Task<User> LoginUserAsync(string username, string password)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
@@ -66,7 +65,6 @@ namespace Flashcards.Core.Services
 
                 if (dbUser is null) return false;
 
-                // hashing todo
                 dbUser.PasswordHash = PasswordHasher.Hash(newPassword);
 
                 context.Users.Update(dbUser);

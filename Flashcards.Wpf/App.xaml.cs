@@ -6,6 +6,7 @@ using Flashcards.Core.Services.UserDataChangers;
 using Flashcards.Core.Services.UserDataCreators;
 using Flashcards.Core.Services.UserDataDestroyers;
 using Flashcards.Core.Services.UserDataProviders;
+using Flashcards.Core.Services.UserDataValidators;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
 using Flashcards.Wpf.Services;
@@ -45,6 +46,7 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
                     services.AddSingleton<IDialogService, WpfDialogService>();
                     services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
+                    services.AddSingleton<IUserDataValidator, DatabaseUserDataValidator>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
 
                     services.AddSingleton<NavigationService>();

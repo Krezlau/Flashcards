@@ -1,5 +1,6 @@
 ﻿using Flashcards.Core.DBConnection;
 using Flashcards.Core.Models;
+using Flashcards.Core.Services.UserDataValidators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace Flashcards.Core.Services.UserDataCreators
     public class DatabaseUserDataCreator : IUserDataCreator
     {
         private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDataValidator _dataValidator;
 
-        public DatabaseUserDataCreator(UserDbContextFactory dbContextFactory)
+        public DatabaseUserDataCreator(UserDbContextFactory dbContextFactory, IUserDataValidator dataValidator)
         {
             _dbContextFactory = dbContextFactory;
+            _dataValidator = dataValidator;
         }
 
         public async Task SaveNewDailyActivity(DailyActivity activity)
@@ -26,12 +29,17 @@ namespace Flashcards.Core.Services.UserDataCreators
             }
         }
 
-        public async Task SaveNewDeck(Deck deck)
+        public async Task<bool> SaveNewDeck(Deck deck)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
+                bool isValid = await _dataValidator.ValidateDeckName(deck.Name, deck.UserId);
+
+                if (!isValid) return false;
+
                 context.Decks.Add(deck);
                 await context.SaveChangesAsync();
+                return true;
             }
         }
 

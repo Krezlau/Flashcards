@@ -9,7 +9,7 @@ namespace Flashcards.Core.Services.UserDataCreators
 {
     public interface IUserDataCreator
     {
-        Task SaveNewDeck(Deck deck);
+        Task<bool> SaveNewDeck(Deck deck);
         Task SaveNewFlashcard(Flashcard flashcard);
         Task SaveNewDailyActivity(DailyActivity activity);
     }
