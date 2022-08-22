@@ -60,7 +60,7 @@ namespace Flashcards.Core.Services.UserDataChangers
 
                 if (!isEmailValid) return false;
 
-                user.Email = email;
+                user.Email = email.ToLower();
                 context.Users.Update(user);
                 await context.SaveChangesAsync();
                 return true;

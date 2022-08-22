@@ -32,7 +32,7 @@ namespace Flashcards.Core.Services
                 User user = new User
                 {
                     Decks = new ObservableCollection<Deck>(),
-                    Email = email,
+                    Email = email.ToLower(),
                     Name = username,
                     PasswordHash = PasswordHasher.Hash(password)
                 };
