@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Flashcards.Wpf.Services
+namespace Flashcards.WpfApp.Services
 {
     /// <summary>
     /// Interaction logic for Dialog.xaml

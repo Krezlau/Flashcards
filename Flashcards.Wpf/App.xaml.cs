@@ -9,8 +9,8 @@ using Flashcards.Core.Services.UserDataProviders;
 using Flashcards.Core.Services.UserDataValidators;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
-using Flashcards.Wpf.Services;
-using Flashcards.Wpf.Views;
+using Flashcards.WpfApp.Services;
+using Flashcards.WpfApp.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +18,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace Flashcards.Wpf
+namespace Flashcards.WpfApp
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Flashcards.Wpf.Views
+namespace Flashcards.WpfApp.Views
 {
     /// <summary>
     /// Interaction logic for RegistrationView.xaml

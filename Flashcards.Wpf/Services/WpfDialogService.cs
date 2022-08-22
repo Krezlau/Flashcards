@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Flashcards.Wpf.Services
+namespace Flashcards.WpfApp.Services
 {
     public class WpfDialogService : IDialogService
     {

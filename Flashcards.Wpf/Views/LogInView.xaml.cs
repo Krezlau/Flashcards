@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Flashcards.Core.Services;
 
-namespace Flashcards.Wpf.Views
+namespace Flashcards.WpfApp.Views
 {
     /// <summary>
     /// Interaction logic for LogInView.xaml

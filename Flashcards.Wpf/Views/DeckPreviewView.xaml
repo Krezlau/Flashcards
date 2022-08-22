@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Flashcards.Wpf.Views.DeckPreviewView"
+﻿<UserControl x:Class="Flashcards.WpfApp.Views.DeckPreviewView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Flashcards.Wpf.Views" xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core" d:DataContext="{d:DesignInstance Type=viewmodels:DeckPreviewViewModel}"
+             xmlns:local="clr-namespace:Flashcards.WpfApp.Views" xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core" d:DataContext="{d:DesignInstance Type=viewmodels:DeckPreviewViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
