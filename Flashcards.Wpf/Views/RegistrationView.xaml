@@ -44,7 +44,8 @@
 
         <TextBox Text="{Binding Username}" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="3" Width="250" />
+                 Grid.Column="1" Grid.Row="3" Width="250"
+                 MinWidth="250"/>
 
         <TextBlock Text="Email:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
@@ -52,7 +53,8 @@
 
         <TextBox Text="{Binding Email}" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="5" Width="250" />
+                 Grid.Column="1" Grid.Row="5" Width="250"
+                 MinWidth="250"/>
 
         <TextBlock Text="Password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
@@ -61,7 +63,7 @@
         <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="7" Width="250"
-                 />
+                 MinWidth="250"/>
 
         <TextBlock Text="Confirm password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
@@ -71,12 +73,12 @@
                      Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="9" Width="250"
-                 />
+                 MinWidth="250"/>
 
         <Button Content="Register" Command="{Binding RegisterCommand}"
                 Margin="20" Padding="5" Grid.Column="1"
                 Grid.Row="10" VerticalAlignment="Top" 
-                Width="100"/>
+                Width="100" HorizontalAlignment="Center"/>
 
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Margin="20" Padding="5" Grid.Column="1"

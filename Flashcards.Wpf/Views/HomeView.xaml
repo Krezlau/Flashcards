@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Flashcards.WpfApp" xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core" d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
              mc:Ignorable="d" Height="auto"  Width="auto">
-    <Grid Background="Red">
+    <Grid Background="DimGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="100" />

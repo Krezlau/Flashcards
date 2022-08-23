@@ -45,12 +45,13 @@
 
         <TextBox Text="{Binding UpperTextField}" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="4" Width="250" />
+                 Grid.Column="1" Grid.Row="4" Width="250"
+                 MinWidth="250"/>
 
         <Button Content="Change" Command="{Binding ButtonCommand}"
                 Margin="20" Padding="5" Grid.Column="1"
                 Grid.Row="7" VerticalAlignment="Top" 
-                Width="100"/>
+                Width="100" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Current password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
@@ -59,7 +60,7 @@
         <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="6" Width="250"
-                 />
+                 MinWidth="250"/>
 
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Margin="65,20,20,20" Padding="5" Grid.Column="1"

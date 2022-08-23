@@ -41,7 +41,8 @@
 
         <TextBox Text="{Binding Username}" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="4" Width="250" />
+                 Grid.Column="1" Grid.Row="4" Width="250"
+                 MinWidth="250"/>
 
         <TextBlock Text="Password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
@@ -49,13 +50,14 @@
 
         <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
                  Padding="5" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="6" Width="250"
+                 Grid.Column="1" Grid.Row="6"
+                 Width="250" MinWidth="250"
                  />
 
         <Button Content="Log In" Command="{Binding LogInCommand}"
                 Margin="20" Padding="5" Grid.Column="1"
                 Grid.Row="7" VerticalAlignment="Top" 
-                Width="100"/>
+                Width="100" HorizontalAlignment="Center"/>
         
         <Button Content="Create account" Command="{Binding RegisterCommand}"
                 Margin="20,20,65,20" Padding="5" Grid.Column="1"
