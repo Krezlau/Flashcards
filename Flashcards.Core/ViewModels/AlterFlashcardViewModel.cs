@@ -22,6 +22,8 @@ namespace Flashcards.Core.ViewModels
 
         public string ButtonContent { get; set; } = "Add";
 
+        public string TopText { get; set; }
+
         public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
         {
             _navigationService = navigationService;
@@ -29,11 +31,14 @@ namespace Flashcards.Core.ViewModels
             ButtonCommand = new RelayCommand(OnAddClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
 
+            TopText = $"{_userDecksStore.SelectionStore.SelectedDeck.Name}: add new flashcard";
+
             if (_userDecksStore.SelectionStore.SelectedFlashcard != null)
             {
                 Front = _userDecksStore.SelectionStore.SelectedFlashcard.Front;
                 Back = _userDecksStore.SelectionStore.SelectedFlashcard.Back;
                 ButtonContent = "Edit";
+                TopText = $"{_userDecksStore.SelectionStore.SelectedDeck.Name}: change flashcard";
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
             _dialogService = dialogService;

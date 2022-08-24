@@ -17,50 +17,24 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Flashcards}"
-                  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="4"
-                  Grid.RowSpan="2"
-                  Margin="5" SelectedItem="{Binding SelectedFlashcard}">
-            <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="20" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Front}" Grid.Column="0"
-                                   Padding="5" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding Back}" Grid.Column="1"
-                                   Padding="5" 
-                                   TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding Level}" Grid.Column="2"
-                                   Padding="5" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>-->
-            <ListView.View>
-
-                <GridView>
-
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Front}" Header="Front" 
-                                    Width="230"/>
-
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Back}" Header="Back"
-                                    Width="230"/>
-                    
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Level}" Header="Level" Width="65"/>
-                </GridView>
-
-            </ListView.View>
-        </ListView>
+        <DataGrid ItemsSource="{Binding Flashcards}"
+                  Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4"
+                  AutoGenerateColumns="False" SelectedItem="{Binding SelectedFlashcard}"
+                  IsReadOnly="True" FontSize="14">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Front}" Header="Front" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Back}" Header="Back" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Level}" Header="Level" />
+                <DataGridTextColumn Binding="{Binding NextReview}" Header="NextReview" />
+            </DataGrid.Columns>
+        </DataGrid>
 
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Grid.Column="1" Grid.Row="1"
