@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:local="clr-namespace:Flashcards.WpfApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -42,8 +43,8 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="2" />
 
-        <TextBox Text="{Binding Username}" Margin="5"
-                 Padding="5" HorizontalAlignment="Center"
+        <ui:TextBox Text="{Binding Username}" Margin="5"
+                 PlaceholderText="Username" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="3" Width="250"
                  MinWidth="250"/>
 
@@ -51,8 +52,8 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="4" />
 
-        <TextBox Text="{Binding Email}" Margin="5"
-                 Padding="5" HorizontalAlignment="Center"
+        <ui:TextBox Text="{Binding Email}" Margin="5"
+                 PlaceholderText="Email"  HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="5" Width="250"
                  MinWidth="250"/>
 
@@ -60,8 +61,8 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="6" />
 
-        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged" Margin="5"
-                 Padding="5" HorizontalAlignment="Center"
+        <ui:PasswordBox TextChanged="PasswordBox_PasswordChanged" Margin="5"
+                 PlaceholderText="Password" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="7" Width="250"
                  MinWidth="250"/>
 
@@ -69,9 +70,9 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="8" />
 
-        <PasswordBox PasswordChanged="PasswordBox_ConfirmPasswordChanged"
+        <ui:PasswordBox TextChanged="PasswordBox_ConfirmPasswordChanged"
                      Margin="5"
-                 Padding="5" HorizontalAlignment="Center"
+                 PlaceholderText="Confirm password" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="9" Width="250"
                  MinWidth="250"/>
 
