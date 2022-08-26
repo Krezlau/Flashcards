@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flashcards.WpfApp.Views"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="780">
     <Grid>
@@ -14,29 +15,39 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
+        <Grid.InputBindings>
+            <KeyBinding Command="{Binding ButtonCommand}"
+                        Key="Enter" />
+        </Grid.InputBindings>
+        
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Grid.Column="1" Grid.Row="1"  Width="50"
                 HorizontalAlignment="Left"/>
 
-        <TextBlock Text="{Binding BigText}" FontSize="20" Margin="5"
-                   Grid.Column="1" Grid.Row="2" />
+        <TextBlock Text="{Binding BigText}" FontSize="24" Margin="5" Padding="5"
+                   Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
 
-        <TextBlock Text="Name:" FontSize="12" Grid.Column="1" Grid.Row="3" 
+        <TextBlock Text="Name:" Grid.Column="1" Grid.Row="3" Padding="5"
                    Margin="5" HorizontalAlignment="Center"/>
 
-        <TextBox Text="{Binding DeckName}" Width="200" Margin="5" FontSize="12"
-                 Grid.Row="4" Grid.Column="1" />
+        <ui:TextBox Text="{Binding DeckName}" Margin="5" FontSize="12"
+                 Grid.Row="4" Grid.Column="1" Width="250"
+                 MinWidth="250" PlaceholderText="Deck name"/>
 
         <Button Content="{Binding ButtonContent}" 
                 Command="{Binding ButtonCommand}" Grid.Column="1"
-                Grid.Row="5" Margin="5" Width="100"/>
+                Grid.Row="5" Margin="20" Width="100"
+                Padding="5" VerticalAlignment="Top"
+                HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>
