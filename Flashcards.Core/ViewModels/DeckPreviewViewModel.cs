@@ -54,8 +54,8 @@ namespace Flashcards.Core.ViewModels
             {
                 _reviewStore.SelectedDeck = _currentDeck;
                 CurrentDeckName = _currentDeck.Name;
-                CurrentDeckSize = "Flashcards: " + _currentDeck.Flashcards.Count;
-                CurrentDeckToReviewCount = "To Review: " + _reviewStore.ToReviewList.Count;
+                CurrentDeckSize = "Total number of flashcards: " + _currentDeck.Flashcards.Count;
+                CurrentDeckToReviewCount = "To review: " + _reviewStore.ToReviewList.Count;
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
