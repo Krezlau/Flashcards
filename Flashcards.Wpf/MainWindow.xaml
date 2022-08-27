@@ -12,10 +12,11 @@
     WindowStartupLocation="CenterScreen"
     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
     Title="Flashcards"
-    Width="1000"
-    Height="600"
+    MinWidth="1000"
+    MinHeight="600"
     FontSize="14"
     ResizeMode="NoResize"
+    ExtendsContentIntoTitleBar="True"
     mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -23,7 +24,11 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <ContentControl Content="{Binding LeftViewModel}" Grid.Column="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ContentControl Content="{Binding LeftViewModel}" Grid.Column="0" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
                     <views:HomeView />
@@ -31,7 +36,7 @@
             </ContentControl.Resources>
         </ContentControl>
 
-        <ContentControl Content="{Binding RightViewModel}" Grid.Column="2">
+        <ContentControl Content="{Binding RightViewModel}" Grid.Column="2" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:UserIconViewModel}" >
                     <views:UserIconView />
@@ -40,7 +45,7 @@
         </ContentControl>
 
 
-        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1">
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
                     <views:HomeView/>
@@ -86,5 +91,15 @@
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
+        <ui:TitleBar
+            Title="Flashcards"
+            Grid.ColumnSpan="3"
+            ForceShutdown="False"
+            MinimizeToTray="False"
+            ShowHelp="False"
+            ShowMaximize="True"
+            ShowMinimize="True"
+            UseSnapLayout="True"
+            Padding="16,8,8,8"/>
     </Grid>
 </ui:UiWindow>
