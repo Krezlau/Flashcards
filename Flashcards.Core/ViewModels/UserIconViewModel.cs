@@ -14,6 +14,7 @@ namespace Flashcards.Core.ViewModels
     public class UserIconViewModel : ObservableObject
     {
         private readonly UserDecksStore _userDecksStore;
+        private readonly IDialogService _dialogService;
 
         private readonly NavigationService<LogInViewModel> _logInNavService;
         private readonly NavigationService<AccountManagementViewModel> _accountManagementService;
@@ -37,7 +38,7 @@ namespace Flashcards.Core.ViewModels
         public ICommand ManageCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
 
-        public UserIconViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInNavService, NavigationService<AccountManagementViewModel> accountManagementService)
+        public UserIconViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInNavService, NavigationService<AccountManagementViewModel> accountManagementService, IDialogService dialogService)
         {
             _userDecksStore = userDecksStore;
             _logInNavService = logInNavService;
@@ -57,6 +58,7 @@ namespace Flashcards.Core.ViewModels
             }
 
             Streak = $"{_userDecksStore.Streak}\nDAYS";
+            _dialogService = dialogService;
         }
 
         private void OnStreakChanged()
@@ -67,6 +69,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnLogOutClick()
         {
+            _dialogService.ShowSnackbarMessage("Logged out", "Successfully logged out.");
             _logInNavService.Navigate();
             _userDecksStore.LogOutUser();
 

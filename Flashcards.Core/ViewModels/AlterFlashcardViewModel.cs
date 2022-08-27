@@ -46,6 +46,17 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnEditClick()
         {
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || UserInputValidator.ValidateFlashcardTextField(Back) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be at least 3 characters long.");
+                return;
+            }
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || UserInputValidator.ValidateFlashcardTextField(Back) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be not longer than 100 characters.");
+                return;
+            }
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard changed.");
             await _userDecksStore.AlterFlashcard(Front, Back);
             _navigationService.Navigate();
         }
@@ -75,6 +86,7 @@ namespace Flashcards.Core.ViewModels
                 Level = 0,
                 NextReview = DateTime.Today
             });
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard created.");
             _navigationService.Navigate();
         }
 

@@ -75,6 +75,7 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             userDecksStore.SelectionStore.SelectedDeck.Name = DeckName;
+            dialogService.ShowSnackbarMessage("Success", "Deck's name changed.");
             _navigationService.Navigate();
         }
 

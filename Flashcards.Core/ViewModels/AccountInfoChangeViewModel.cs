@@ -83,7 +83,7 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             _userDecksStore.User.Email = UpperTextField;
-            _dialogService.ShowMessageDialog("SUCCESS", "Email changed.");
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Email changed.");
             _navigationService.Navigate();
         }
 
@@ -119,7 +119,7 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             _userDecksStore.User.Name = UpperTextField;
-            _dialogService.ShowMessageDialog("SUCCESS", "Username changed.");
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Username changed.");
             _navigationService.Navigate();
         }
     }

@@ -82,7 +82,8 @@
             </StackPanel>
         </ui:CardAction>
         <ui:CardAction Margin="5" Icon="CalendarRtl20"
-                       Grid.Column="1" Grid.Row="3">
+                       Grid.Column="1" Grid.Row="3"
+                       Command="{Binding FutureReviewsCommand}">
             <StackPanel>
                 <TextBlock
                     FontSize="13"
@@ -95,7 +96,8 @@
         </ui:CardAction>
 
         <ui:CardAction Margin="5" Icon="Flowchart20"
-                       Grid.Column="2" Grid.Row="3">
+                       Grid.Column="2" Grid.Row="3"
+                       Command="{Binding DeckActivityCommand}">
             <StackPanel>
                 <TextBlock
                     FontSize="13"

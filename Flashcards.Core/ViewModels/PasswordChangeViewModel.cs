@@ -69,7 +69,7 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             await _authService.ChangeUserPasswordAsync(Password, OldPassword, _userDecksStore.User.Name);
-            _dialogService.ShowMessageDialog("SUCCESS", "Password changed.");
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Password changed.");
             _navigationService.Navigate();
         }
     }
