@@ -44,7 +44,6 @@ namespace Flashcards.WpfApp
                     services.AddSingleton<IUserDataCreator, DatabaseUserDataCreator>();
                     services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
-                    services.AddSingleton<IDialogService, WpfDialogService>();
                     services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
                     services.AddSingleton<IUserDataValidator, DatabaseUserDataValidator>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
@@ -57,10 +56,13 @@ namespace Flashcards.WpfApp
 
                     services.AddSingleton<ReviewStore>();
 
-                    services.AddSingleton(s => new MainWindow()
-                    {
-                        DataContext = s.GetRequiredService<MainViewModel>()
-                    });
+                    services.AddSingleton<Wpf.Ui.Mvvm.Services.SnackbarService>();
+
+                    services.AddSingleton<Wpf.Ui.Mvvm.Services.DialogService>();
+
+                    services.AddSingleton<IDialogService, WpfDialogService>();
+
+                    services.AddSingleton<MainWindow>();
                 })
                 .Build();
         }

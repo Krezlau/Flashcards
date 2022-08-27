@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:Flashcards.WpfApp.Views"
     xmlns:viewmodels="clr-namespace:Flashcards.Core.ViewModels;assembly=Flashcards.Core"
+    xmlns:controls="clr-namespace:Wpf.Ui.Controls"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
@@ -101,5 +102,20 @@
             ShowMinimize="True"
             UseSnapLayout="True"
             Padding="16,8,8,8"/>
+
+        <ui:Snackbar
+            Grid.Column="1"
+            x:Name="RootSnackbar"
+            Grid.Row="1"
+            MaxWidth="600"
+            Appearance="Secondary"
+            CloseButtonEnabled="True"
+            Icon="BookExclamationMark20"
+            Timeout="5000" />
+        <ui:Dialog
+            x:Name="RootDialog"
+            Grid.Column="0" Grid.ColumnSpan="3"
+            Grid.Row="0" Grid.RowSpan="2">
+        </ui:Dialog>
     </Grid>
 </ui:UiWindow>

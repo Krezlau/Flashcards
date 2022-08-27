@@ -97,7 +97,7 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");
                 return;
             }
-            
+            dialogService.ShowSnackbarMessage("Success", "Deck created.");
             userDecksStore.SelectionStore.SelectedDeck = deck;
             _navigationService.Navigate();
         }
