@@ -22,6 +22,8 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
@@ -56,14 +58,17 @@
                  />
 
         <Button Content="Log In" Command="{Binding LogInCommand}"
-                Margin="20" Padding="5" Grid.Column="1"
+                Margin="20,20,20,10" Padding="5" Grid.Column="1"
                 Grid.Row="7" VerticalAlignment="Top" 
                 Width="100" HorizontalAlignment="Center"/>
-        
+
+        <TextBlock Text="OR" Grid.Row="8" VerticalAlignment="Top"
+                   HorizontalAlignment="Center" Grid.Column="1"/>
+
         <Button Content="Create account" Command="{Binding RegisterCommand}"
-                Margin="20,20,65,20" Padding="5" Grid.Column="1"
-                Grid.Row="7" VerticalAlignment="Center" 
-                HorizontalAlignment="Right"/>
+                Margin="30" Padding="5" Grid.Column="1"
+                Grid.Row="8" VerticalAlignment="Center" 
+                HorizontalAlignment="Center" Width="150"/>
 
     </Grid>
 </UserControl>

@@ -62,7 +62,7 @@ namespace Flashcards.Core.ViewModels
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Illegal characters in password.");
                 return;
             }
-            bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
+            bool ifPasswordCorrect = await _authService.IfPasswordCorrect(OldPassword, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");

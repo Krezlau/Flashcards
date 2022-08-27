@@ -35,6 +35,7 @@ namespace Flashcards.Core.ViewModels
         public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService, NavigationService<UserWelcomeViewModel> userWelcomeService)
         {
             ButtonCommand = new RelayCommand(OnAddClick);
+            GoBackCommand = new RelayCommand(OnGoBackClick);
             if (userDecksStore.SelectionStore.SelectedDeck != null)
             {
                 DeckName = userDecksStore.SelectionStore.SelectedDeck.Name;
@@ -43,7 +44,6 @@ namespace Flashcards.Core.ViewModels
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
 
-            GoBackCommand = new RelayCommand(OnGoBackClick);
             _navigationService = navigationService;
             this.userDecksStore = userDecksStore;
             this.dialogService = dialogService;
@@ -52,6 +52,11 @@ namespace Flashcards.Core.ViewModels
 
         private void OnGoBackClick()
         {
+            if (userDecksStore.SelectionStore.SelectedDeck != null)
+            {
+                _navigationService.Navigate();
+                return;
+            }
             _userWelcomeService.Navigate();
         }
 

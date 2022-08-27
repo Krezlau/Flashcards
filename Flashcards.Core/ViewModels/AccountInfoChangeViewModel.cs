@@ -28,6 +28,8 @@ namespace Flashcards.Core.ViewModels
 
         public string Password { get; set; }
 
+        public string UpperTextTrim => UpperText.Replace(':', ' ');
+
         public ICommand ButtonCommand { get; set; }
 
         public ICommand GoBackCommand { get; set; }
