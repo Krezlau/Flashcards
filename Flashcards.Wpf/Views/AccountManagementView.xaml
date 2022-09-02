@@ -4,75 +4,90 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Flashcards.WpfApp.Views"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="670">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="70" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="75" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Username}" HorizontalAlignment="Center"
-                   Grid.Row="1" Grid.Column="1" 
-                   FontSize="24" Margin="10"
-                   Padding="10,0,10,10" FontWeight="Bold"
-                   Grid.ColumnSpan="3"/>
+        <TextBlock
+            Text="{Binding Username}"
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="24"
+            FontWeight="Bold"
+            Margin="10" 
+        />
 
-        <Border Width="250" Height="200"
-                CornerRadius="10" Background="Aqua"
-                Grid.Row="4" Grid.Column="1">
+        <ui:Card
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="20"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Padding="0">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="7*" />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="100" />
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
 
-                <Label Content="Activity" Grid.Row="0"
+                <Label Content="Streak" Grid.Row="0"
+                       Grid.Column="0" Grid.ColumnSpan="2"
                        VerticalAlignment="Center"
-                       FontSize="20" Margin="15,5,5,5"
+                       FontSize="20" Margin="25,0"
                        FontWeight="Bold"/>
 
-                <TextBlock Text="{Binding ActivityTileText}"
-                           Grid.Row="1"
+                <Image Source="\Assets\fire.png"
+                       Grid.Column="0" Grid.Row="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="10" />
+
+                <TextBlock Text="{Binding StreakTileText}"
+                           Grid.Row="1" Grid.Column="1"
                            VerticalAlignment="Top"
                            FontSize="16"
                            TextWrapping="Wrap"
                            Margin="15,20,15,5" />
-
-                <Button Content="Check your activity charts >" Command="{Binding ActivityChartsCommand}"
-                        Grid.Row="2" BorderThickness="0,0,0,0" Background="{x:Null}"
-                        FontSize="16" HorizontalContentAlignment="Right" Padding="0,0,20,0"
-                        FontWeight="DemiBold" IsCancel="True"/>
-
             </Grid>
-        </Border>
-
-        <Border Width="250" Height="200"
-                CornerRadius="10" Background="Aqua"
-                Grid.Row="2" Grid.Column="3">
+        </ui:Card>
+        <ui:Card
+            Grid.Row="2"
+            Grid.Column="2"
+            Margin="20"
+            VerticalAlignment="Stretch" 
+            VerticalContentAlignment="Stretch"
+            Padding="0">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="75" />
-                    <RowDefinition Height="75" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
 
                 <Label Content="Decks" Grid.Row="0"
                        VerticalAlignment="Center"
-                       FontSize="20" Margin="15,5,5,5"
+                       FontSize="20" Margin="25,0"
                        FontWeight="Bold"/>
 
                 <TextBlock Text="{Binding DeckTileText1}"
@@ -89,105 +104,110 @@
                            TextWrapping="Wrap"
                            Margin="15,5,15,20" />
             </Grid>
-        </Border>
-
-        <Border Width="250" Height="200"
-                CornerRadius="10" Background="Aqua"
-                Grid.Row="2" Grid.Column="1">
+        </ui:Card>
+        <ui:Card
+            Grid.Row="3"
+            Grid.Column="1"
+            Margin="20"
+            VerticalAlignment="Stretch" 
+            VerticalContentAlignment="Stretch"
+            Padding="0">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="75" />
-                    <ColumnDefinition Width="175" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="150" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Label Content="Streak" Grid.Row="0"
-                       Grid.Column="0" Grid.ColumnSpan="2"
+                <Label Content="Activity" Grid.Row="0"
                        VerticalAlignment="Center"
-                       FontSize="20" Margin="15,5,5,5"
+                       FontSize="20" Margin="25,0"
                        FontWeight="Bold"/>
 
-                <Image Source="\Assets\fire.png"
-                       Grid.Column="0" Grid.Row="1"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Margin="10" />
-
-                <TextBlock Text="{Binding StreakTileText}"
-                           Grid.Row="1" Grid.Column="1"
+                <TextBlock Text="{Binding ActivityTileText}"
+                           Grid.Row="1"
                            VerticalAlignment="Top"
                            FontSize="16"
                            TextWrapping="Wrap"
                            Margin="15,20,15,5" />
-            </Grid>
-        </Border>
 
-        <Border Width="250" Height="200"
-                CornerRadius="10" Background="Aqua"
-                Grid.Row="4" Grid.Column="3">
+                <ui:CardAction
+                    Grid.Row="2"
+                    Content="Check your activity charts"
+                    Margin="0"
+                    VerticalAlignment="Stretch"
+                    Padding="14,0"
+                    Command="{Binding ActivityChartsCommand}"/>
+
+            </Grid>
+        </ui:Card>
+        <ui:Card
+            Grid.Row="3"
+            Grid.Column="2"
+            Margin="20"
+            VerticalAlignment="Stretch" 
+            VerticalContentAlignment="Stretch"
+            Padding="0">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220" />
-                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Label Content="Account info" Grid.Row="0"
                        VerticalAlignment="Center"
-                       FontSize="20" Margin="15,5,5,5"
+                       FontSize="20" Margin="25,0"
                        FontWeight="Bold"/>
 
-                <Button Grid.Column="1" Grid.Row="1"
-                       Margin="0,5,10,0" Width="20"
+                <ui:Button Grid.Column="1" Grid.Row="1"
+                       Margin="0,5" Padding="5,0"
                         Height="20" VerticalAlignment="Top"
                        HorizontalAlignment="Center"
-                        Command="{Binding ChangeUsernameCommand}">
-                    <Image Source="\Assets\edit.png" />
-                </Button>
+                        Command="{Binding ChangeUsernameCommand}"
+                        Icon="Pen20">
+                </ui:Button>
 
-                <Button Grid.Column="1" Grid.Row="2"
-                       Margin="0,5,10,0" Width="20"
+                <ui:Button Grid.Column="1" Grid.Row="2"
+                       Margin="0,5" Padding="5,0"
                         Height="20" VerticalAlignment="Top"
                        HorizontalAlignment="Center"
-                        Command="{Binding ChangeEmailCommand}">
-                    <Image Source="\Assets\edit.png" />
-                </Button>
+                        Command="{Binding ChangeEmailCommand}"
+                           Icon="Pen20">
+                </ui:Button>
 
-                <Button Grid.Column="1" Grid.Row="3"
-                       Margin="0,5,10,0" Width="20"
+                <ui:Button Grid.Column="1" Grid.Row="3"
+                       Margin="0,5" Padding="5,0"
                         Height="20" VerticalAlignment="Top"
                        HorizontalAlignment="Center"
-                        Command="{Binding ChangePasswordCommand}">
-                    <Image Source="\Assets\edit.png" />
-                </Button>
+                        Command="{Binding ChangePasswordCommand}"
+                           Icon="Pen20">
+                </ui:Button>
 
                 <TextBlock Text="{Binding UsernameText}"
                            Grid.Row="1"
                            VerticalAlignment="Top"
                            FontSize="16"
                            TextWrapping="Wrap"
-                           Margin="5"/>
+                           Margin="10,5"/>
                 <TextBlock Text="{Binding Email}"
                            Grid.Row="2"
                            VerticalAlignment="Top"
                            FontSize="16"
-                           TextWrapping="Wrap" Margin="5" />
+                           TextWrapping="Wrap" Margin="10,5" />
                 <TextBlock Text="Password: ********"
                            Grid.Row="3"
                            VerticalAlignment="Top"
                            FontSize="16"
-                           TextWrapping="Wrap" Margin="5" />
-                
+                           TextWrapping="Wrap" Margin="10,5" />
+
             </Grid>
-        </Border>
+        </ui:Card>
 
     </Grid>
 </UserControl>
