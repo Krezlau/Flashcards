@@ -5,22 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Wpf.Ui.Mvvm.Services;
 
-namespace Flashcards.Wpf.Services
+namespace Flashcards.WpfApp.Services
 {
     public class WpfDialogService : IDialogService
     {
-        private readonly MainWindow _mainWindow;
+        private readonly DialogService _dialogService;
+        private readonly SnackbarService _snackbarService;
 
-        public WpfDialogService(MainWindow mainWindow)
+        public WpfDialogService(DialogService dialogService, SnackbarService snackbarService)
         {
-            _mainWindow = mainWindow;
+            _dialogService = dialogService;
+            _snackbarService = snackbarService;
         }
 
         public void ShowMessageDialog(string title, string message)
         {
-            Dialog dialog = new Dialog(_mainWindow, title, message);
-            dialog.ShowDialog();
+            _dialogService.GetDialogControl().Footer = new FooterControl(_dialogService.GetDialogControl());
+            _dialogService.GetDialogControl().Show(title, message);
+        }
+
+        public void ShowSnackbarMessage(string title, string message)
+        {
+            _snackbarService.Show(title, message);
         }
     }
 }

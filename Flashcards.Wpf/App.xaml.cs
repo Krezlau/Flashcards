@@ -9,8 +9,8 @@ using Flashcards.Core.Services.UserDataProviders;
 using Flashcards.Core.Services.UserDataValidators;
 using Flashcards.Core.Stores;
 using Flashcards.Core.ViewModels;
-using Flashcards.Wpf.Services;
-using Flashcards.Wpf.Views;
+using Flashcards.WpfApp.Services;
+using Flashcards.WpfApp.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +18,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace Flashcards.Wpf
+namespace Flashcards.WpfApp
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -44,7 +44,6 @@ namespace Flashcards.Wpf
                     services.AddSingleton<IUserDataCreator, DatabaseUserDataCreator>();
                     services.AddSingleton<IUserDataDestroyer, DatabaseUserDataDestroyer>();
                     services.AddSingleton<IUserDataChanger, DatabaseUserDataChanger>();
-                    services.AddSingleton<IDialogService, WpfDialogService>();
                     services.AddSingleton<IAuthenticationService, DatabaseAuthService>();
                     services.AddSingleton<IUserDataValidator, DatabaseUserDataValidator>();
                     services.AddSingleton(new UserDbContextFactory(CONNECTION_STRING));
@@ -57,10 +56,13 @@ namespace Flashcards.Wpf
 
                     services.AddSingleton<ReviewStore>();
 
-                    services.AddSingleton(s => new MainWindow()
-                    {
-                        DataContext = s.GetRequiredService<MainViewModel>()
-                    });
+                    services.AddSingleton<Wpf.Ui.Mvvm.Services.SnackbarService>();
+
+                    services.AddSingleton<Wpf.Ui.Mvvm.Services.DialogService>();
+
+                    services.AddSingleton<IDialogService, WpfDialogService>();
+
+                    services.AddSingleton<MainWindow>();
                 })
                 .Build();
         }

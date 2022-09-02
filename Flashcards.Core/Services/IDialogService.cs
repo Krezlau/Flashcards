@@ -9,5 +9,6 @@ namespace Flashcards.Core.Services
     public interface IDialogService
     {
         void ShowMessageDialog(string title, string message);
+        void ShowSnackbarMessage(string title, string message);
     }
 }

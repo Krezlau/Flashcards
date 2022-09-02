@@ -43,6 +43,10 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand RenameCommand { get; set; }
 
+        public ICommand DeckActivityCommand { get; set; }
+
+        public ICommand FutureReviewsCommand { get; set; }
+
 
         public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService)
         {
@@ -54,18 +58,30 @@ namespace Flashcards.Core.ViewModels
             {
                 _reviewStore.SelectedDeck = _currentDeck;
                 CurrentDeckName = _currentDeck.Name;
-                CurrentDeckSize = "Flashcards: " + _currentDeck.Flashcards.Count;
-                CurrentDeckToReviewCount = "To Review: " + _reviewStore.ToReviewList.Count;
+                CurrentDeckSize = "Total number of flashcards: " + _currentDeck.Flashcards.Count;
+                CurrentDeckToReviewCount = "To review: " + _reviewStore.ToReviewList.Count;
             }
             LearnCommand = new RelayCommand(OnLearnClick);
             ManageFlashcardsCommand = new RelayCommand(OnManageClick);
             DeleteDeckCommand = new RelayCommand(OnDeleteClick);
             RenameCommand = new RelayCommand(OnRenameClick);
+            DeckActivityCommand = new RelayCommand(OnDeckActivityClick);
+            FutureReviewsCommand = new RelayCommand(OnFutureReviewsClick);
             _userWelcomeNavigatonService = userWelcomeNavigatonService;
             _flashcardManagementService = flashcardManagementService;
             _frontLearnService = frontLearnService;
             _newDeckService = newDeckService;
             _dialogService = dialogService;
+        }
+
+        private void OnFutureReviewsClick()
+        {
+            _dialogService.ShowSnackbarMessage("Coming soon!", "Feature not available yet.");
+        }
+
+        private void OnDeckActivityClick()
+        {
+            _dialogService.ShowSnackbarMessage("Coming soon!", "Feature not available yet.");
         }
 
         private void OnRenameClick()

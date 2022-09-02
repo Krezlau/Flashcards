@@ -17,7 +17,6 @@ namespace Flashcards.Core.ViewModels
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
         private readonly UserDecksStore _userDecksStore;
-        private readonly NavigationService<UserWelcomeViewModel> _userWelcomeService;
         private readonly NavigationService<LogInViewModel> _logInService;
 
         public string Username { get; set; }
@@ -31,10 +30,9 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public RegistrationViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, NavigationService<LogInViewModel> logInService, IAuthenticationService authService, IDialogService dialogService)
+        public RegistrationViewModel(UserDecksStore userDecksStore, NavigationService<LogInViewModel> logInService, IAuthenticationService authService, IDialogService dialogService)
         {
             _userDecksStore = userDecksStore;
-            _userWelcomeService = userWelcomeService;
             _logInService = logInService;
             RegisterCommand = new RelayCommand(OnRegisterClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
@@ -61,9 +59,8 @@ namespace Flashcards.Core.ViewModels
                     return;
 
                 }
-                User user = await _authService.LoginUserAsync(Username, Password);
-                _userDecksStore.Initialize(user);
-                _userWelcomeService.Navigate();
+                _dialogService.ShowSnackbarMessage("Account created", "You can now log in.");
+                _logInService.Navigate();
                 return;
             }
 

@@ -38,6 +38,10 @@ TASK08:
 TASK09:
 	* ui overhaul using wpfui
 
+TASK10:
+	* unit tests:
+		* validation
+		* database actions
 
 UNSPECIFIED:
 buttons for activity charts to show last 30 days / last year / all time
@@ -48,4 +52,3 @@ change database to an online one
 change initial decks loading to async with loading screen
 refactor DatabaseServices and UserDecksStore
 storing data and displaying it to the user (time spent reviewing flashcards etc.)
-ui redo

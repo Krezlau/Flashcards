@@ -22,6 +22,8 @@ namespace Flashcards.Core.ViewModels
 
         public string ButtonContent { get; set; } = "Add";
 
+        public string TopText { get; set; }
+
         public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
         {
             _navigationService = navigationService;
@@ -29,11 +31,14 @@ namespace Flashcards.Core.ViewModels
             ButtonCommand = new RelayCommand(OnAddClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
 
+            TopText = $"{_userDecksStore.SelectionStore.SelectedDeck.Name}: add new flashcard";
+
             if (_userDecksStore.SelectionStore.SelectedFlashcard != null)
             {
                 Front = _userDecksStore.SelectionStore.SelectedFlashcard.Front;
                 Back = _userDecksStore.SelectionStore.SelectedFlashcard.Back;
                 ButtonContent = "Edit";
+                TopText = $"{_userDecksStore.SelectionStore.SelectedDeck.Name}: change flashcard";
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
             _dialogService = dialogService;
@@ -41,6 +46,17 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnEditClick()
         {
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || UserInputValidator.ValidateFlashcardTextField(Back) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be at least 3 characters long.");
+                return;
+            }
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || UserInputValidator.ValidateFlashcardTextField(Back) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be not longer than 100 characters.");
+                return;
+            }
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard changed.");
             await _userDecksStore.AlterFlashcard(Front, Back);
             _navigationService.Navigate();
         }
@@ -70,6 +86,7 @@ namespace Flashcards.Core.ViewModels
                 Level = 0,
                 NextReview = DateTime.Today
             });
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard created.");
             _navigationService.Navigate();
         }
 

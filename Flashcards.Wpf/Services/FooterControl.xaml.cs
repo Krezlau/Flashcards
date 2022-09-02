@@ -12,17 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Controls.Interfaces;
 
-namespace Flashcards.WpfApp.Views
+namespace Flashcards.WpfApp.Services
 {
     /// <summary>
-    /// Interaction logic for UserIconView.xaml
+    /// Interaction logic for FooterControl.xaml
     /// </summary>
-    public partial class UserIconView : UserControl
+    public partial class FooterControl : UserControl
     {
-        public UserIconView()
+
+        private readonly IDialogControl owner;
+
+        public FooterControl(IDialogControl owner)
         {
             InitializeComponent();
+            this.owner = owner;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            owner.Hide();
         }
     }
 }

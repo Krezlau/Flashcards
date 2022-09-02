@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Flashcards.Core.Services;
 
-namespace Flashcards.Wpf.Views
+namespace Flashcards.WpfApp.Views
 {
     /// <summary>
     /// Interaction logic for LogInView.xaml
@@ -28,7 +28,7 @@ namespace Flashcards.Wpf.Views
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
+            { ((dynamic)this.DataContext).Password = ((Wpf.Ui.Controls.PasswordBox)sender).Password; }
         }
     }
 }

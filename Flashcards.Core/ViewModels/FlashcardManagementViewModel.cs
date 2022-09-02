@@ -18,6 +18,7 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewService;
         private readonly NavigationService<AlterFlashcardViewModel> _newFlashcardService;
+        private readonly IDialogService _dialogService;
 
         public ICommand NewFlashcardCommand { get; set; }
 
@@ -35,7 +36,7 @@ namespace Flashcards.Core.ViewModels
 
         public ObservableCollection<Flashcard> Flashcards => _userDecksStore.SelectionStore.SelectedDeck.Flashcards;
 
-        public FlashcardManagementViewModel(NavigationService<DeckPreviewViewModel> deckPreviewService, UserDecksStore userDecksStore, NavigationService<AlterFlashcardViewModel> newFlashcardService)
+        public FlashcardManagementViewModel(NavigationService<DeckPreviewViewModel> deckPreviewService, UserDecksStore userDecksStore, NavigationService<AlterFlashcardViewModel> newFlashcardService, IDialogService dialogService)
         {
             _deckPreviewService = deckPreviewService;
             _userDecksStore = userDecksStore;
@@ -45,11 +46,13 @@ namespace Flashcards.Core.ViewModels
             GoBackCommand = new RelayCommand(OnGoBackClick);
             EditCommand = new RelayCommand(OnEditClick);
             DeleteCommand = new RelayCommand(OnDeleteClick);
+            _dialogService = dialogService;
         }
 
         private async void OnDeleteClick()
         {
             await _userDecksStore.RemoveCurrentFlashcard();
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard deleted.");
         }
 
         private void OnEditClick()

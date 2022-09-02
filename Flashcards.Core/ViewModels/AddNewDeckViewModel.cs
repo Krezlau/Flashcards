@@ -35,6 +35,7 @@ namespace Flashcards.Core.ViewModels
         public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService, NavigationService<UserWelcomeViewModel> userWelcomeService)
         {
             ButtonCommand = new RelayCommand(OnAddClick);
+            GoBackCommand = new RelayCommand(OnGoBackClick);
             if (userDecksStore.SelectionStore.SelectedDeck != null)
             {
                 DeckName = userDecksStore.SelectionStore.SelectedDeck.Name;
@@ -43,7 +44,6 @@ namespace Flashcards.Core.ViewModels
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
 
-            GoBackCommand = new RelayCommand(OnGoBackClick);
             _navigationService = navigationService;
             this.userDecksStore = userDecksStore;
             this.dialogService = dialogService;
@@ -52,6 +52,11 @@ namespace Flashcards.Core.ViewModels
 
         private void OnGoBackClick()
         {
+            if (userDecksStore.SelectionStore.SelectedDeck != null)
+            {
+                _navigationService.Navigate();
+                return;
+            }
             _userWelcomeService.Navigate();
         }
 
@@ -75,6 +80,7 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
             userDecksStore.SelectionStore.SelectedDeck.Name = DeckName;
+            dialogService.ShowSnackbarMessage("Success", "Deck's name changed.");
             _navigationService.Navigate();
         }
 
@@ -97,7 +103,7 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");
                 return;
             }
-            
+            dialogService.ShowSnackbarMessage("Success", "Deck created.");
             userDecksStore.SelectionStore.SelectedDeck = deck;
             _navigationService.Navigate();
         }

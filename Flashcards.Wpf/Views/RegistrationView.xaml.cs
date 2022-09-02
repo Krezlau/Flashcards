@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Flashcards.Wpf.Views
+namespace Flashcards.WpfApp.Views
 {
     /// <summary>
     /// Interaction logic for RegistrationView.xaml
@@ -29,13 +29,13 @@ namespace Flashcards.Wpf.Views
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-            { ((dynamic)this.DataContext).Password = ((PasswordBox)sender).Password; }
+            { ((dynamic)this.DataContext).Password = ((Wpf.Ui.Controls.PasswordBox)sender).Password; }
         }
 
         private void PasswordBox_ConfirmPasswordChanged(object sender, RoutedEventArgs e)
         {
             if (this.DataContext != null)
-            { ((dynamic)this.DataContext).ConfirmPassword = ((PasswordBox)sender).Password; }
+            { ((dynamic)this.DataContext).ConfirmPassword = ((Wpf.Ui.Controls.PasswordBox)sender).Password; }
         }
     }
 }
