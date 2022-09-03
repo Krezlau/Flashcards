@@ -46,6 +46,10 @@ namespace Flashcards.Core.ViewModels
                     values.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].ReviewedFlashcardsCount));
                     sum += _userDecksStore.User.Activity[i].ReviewedFlashcardsCount;
                 }
+                while (values[^1].DateTime.AddDays(1) <= DateTime.Today)
+                {
+                    values.Add(new DateTimePoint(values[^1].DateTime.AddDays(1), 0));
+                }
             }
             if (_userDecksStore.User.Activity.Count == 0) NoActivityMessage = "No activity data on this account.";
 
