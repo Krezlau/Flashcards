@@ -13,9 +13,9 @@ namespace Flashcards.Core.Services
 {
     public class DatabaseAuthService : IAuthenticationService
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
 
-        public DatabaseAuthService(UserDbContextFactory dbContextFactory)
+        public DatabaseAuthService(IUserDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }

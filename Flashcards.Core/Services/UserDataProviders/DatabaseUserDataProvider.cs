@@ -13,9 +13,9 @@ namespace Flashcards.Core.Services.UserDataProviders
 {
     public class DatabaseUserDataProvider : IUserDataProvider
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
 
-        public DatabaseUserDataProvider(UserDbContextFactory dbContextFactory)
+        public DatabaseUserDataProvider(IUserDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }

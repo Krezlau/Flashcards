@@ -83,6 +83,7 @@ namespace Flashcards.Core.ViewModels
             if (UserInputValidator.ValidateUsername(Username) == 3)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Failed to register. Username can't consist of white space characters.");
+                return;
             }
             if (UserInputValidator.ValidatePassword(Password) == 1)
             {

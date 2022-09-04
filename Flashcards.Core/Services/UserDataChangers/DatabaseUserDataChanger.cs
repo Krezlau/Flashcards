@@ -11,10 +11,10 @@ namespace Flashcards.Core.Services.UserDataChangers
 {
     public class DatabaseUserDataChanger : IUserDataChanger
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
         private readonly IUserDataValidator _dataValidator;
 
-        public DatabaseUserDataChanger(UserDbContextFactory dbContextFactory, IUserDataValidator dataValidator)
+        public DatabaseUserDataChanger(IUserDbContextFactory dbContextFactory, IUserDataValidator dataValidator)
         {
             _dbContextFactory = dbContextFactory;
             _dataValidator = dataValidator;

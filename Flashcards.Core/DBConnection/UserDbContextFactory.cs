@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.DBConnection
 {
-    public class UserDbContextFactory
+    public class UserDbContextFactory : IUserDbContextFactory
     {
         private readonly string _connectionString;
 

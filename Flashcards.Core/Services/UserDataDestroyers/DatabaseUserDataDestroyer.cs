@@ -10,9 +10,9 @@ namespace Flashcards.Core.Services.UserDataDestroyers
 {
     public class DatabaseUserDataDestroyer : IUserDataDestroyer
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
 
-        public DatabaseUserDataDestroyer(UserDbContextFactory dbContextFactory)
+        public DatabaseUserDataDestroyer(IUserDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }
