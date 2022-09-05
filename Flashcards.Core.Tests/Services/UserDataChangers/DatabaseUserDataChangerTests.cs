@@ -15,20 +15,27 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
 {
     public class DatabaseUserDataChangerTests
     {
-        private readonly DatabaseUserDataChanger _dataChanger;
+        private readonly DatabaseUserDataChanger _validDataChanger;
+        private readonly DatabaseUserDataChanger _invalidDataChanger;
         private readonly TestDbContextFactory _dbContextFactory;
         public DatabaseUserDataChangerTests()
         {
-            var dataValidatorMock = new Mock<IUserDataValidator>();
-            dataValidatorMock.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
-            dataValidatorMock.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(true));
-            dataValidatorMock.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(true));
+            var dataValidatorMockTrue = new Mock<IUserDataValidator>();
+            dataValidatorMockTrue.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            dataValidatorMockTrue.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(true));
+            dataValidatorMockTrue.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(true));
+
+            var dataValidatorMockFalse = new Mock<IUserDataValidator>();
+            dataValidatorMockFalse.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(false));
+            dataValidatorMockFalse.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(false));
+            dataValidatorMockFalse.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(false));
 
             _dbContextFactory = new TestDbContextFactory();
-            _dataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMock.Object);
+            _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMockTrue.Object);
+            _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMockFalse.Object);
         }
 
-        public void CleanUp()
+        internal void CleanUp()
         {
             var context = _dbContextFactory.CreateDbContext();
             context.Flashcards.RemoveRange(context.Flashcards.ToList());
@@ -66,7 +73,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             dailyActivity.Day = DateTime.Parse("2022-06-30");
             dailyActivity.ReviewedFlashcardsCount = 30;
 
-            await _dataChanger.ChangeActivityAsync(dailyActivity);
+            await _validDataChanger.ChangeActivityAsync(dailyActivity);
 
             // single in order to make sure there aren't any dublicates
             var newActivity = context.DailyActivity.Single();
@@ -99,9 +106,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             context.Decks.Add(deck);
             context.SaveChanges();
 
-            deck.Name = "changed deck";
-
-            await _dataChanger.ChangeDeck(deck);
+            await _validDataChanger.ChangeDeck(deck, "changed deck");
 
             // single in order to make sure there aren't any dublicates
             var newDeck = context.Decks.Single();
@@ -148,7 +153,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             flashcard.NextReview = DateTime.Parse("2021-02-02");
             flashcard.Level = 1;
 
-            await _dataChanger.ChangeFlashcard(flashcard);
+            await _validDataChanger.ChangeFlashcard(flashcard);
 
             // single in order to make sure there aren't any dublicates
             var newFlashcard = context.Flashcards.Single();
@@ -157,6 +162,99 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             Assert.Equal("new back", newFlashcard.Back);
             Assert.Equal(DateTime.Parse("2021-02-02"), newFlashcard.NextReview);
             Assert.Equal(1, newFlashcard.Level);
+
+            CleanUp();
+        }
+
+        [Fact]
+        public async void ChangeUserEmailAsyncTest()
+        {
+            var context = _dbContextFactory.CreateDbContext();
+            var user = new User
+            {
+                Id = 1,
+                Name = "test",
+                Email = "test@test",
+                PasswordHash = "testtesttest"
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            string newEmail = "newemail@email";
+
+            await _validDataChanger.ChangeUserEmailAsync(user, newEmail);
+
+            // single in order to make sure there aren't any dublicates
+            var newUser = context.Users.Single();
+            Assert.Equal(newEmail, newUser.Email);
+
+            CleanUp();
+        }
+
+        [Fact]
+        public async void ChangeUserNameAsyncTest()
+        {
+            var context = _dbContextFactory.CreateDbContext();
+            var user = new User
+            {
+                Id = 1,
+                Name = "test",
+                Email = "test@test",
+                PasswordHash = "testtesttest"
+            };
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            string newUsername = "newusername";
+
+            await _validDataChanger.ChangeUserNameAsync(user, newUsername);
+
+            // single in order to make sure there aren't any dublicates
+            var newUser = context.Users.Single();
+            Assert.Equal(newUsername, newUser.Name);
+
+            CleanUp();
+        }
+
+        [Fact]
+        public async void ValidationTest()
+        {
+            var context = _dbContextFactory.CreateDbContext();
+            var user = new User
+            {
+                Id = 1,
+                Name = "test",
+                Email = "test@test",
+                PasswordHash = "testtesttest"
+            };
+            context.Users.Add(user);
+
+            var deck = new Deck
+            {
+                Name = "deck",
+                UserId = user.Id
+            };
+
+            context.Decks.Add(deck);
+            context.SaveChanges();
+
+            string newName = "changed";
+            string newEmail = "changed@email";
+
+            bool deckChange = await _invalidDataChanger.ChangeDeck(deck, newName);
+            bool emailChange = await _invalidDataChanger.ChangeUserEmailAsync(user, newEmail);
+            bool usernameChange = await _invalidDataChanger.ChangeUserNameAsync(user, newName);
+
+            Assert.False(deckChange);
+            Assert.False(emailChange);
+            Assert.False(usernameChange);
+
+            var newDeck = context.Decks.Single();
+            var newUser = context.Users.Single();
+
+            Assert.Equal("test", newUser.Name);
+            Assert.Equal("test@test", newUser.Email);
+            Assert.Equal("deck", newDeck.Name);
 
             CleanUp();
         }

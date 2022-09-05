@@ -29,14 +29,15 @@ namespace Flashcards.Core.Services.UserDataChangers
             }
         }
 
-        public async Task<bool> ChangeDeck(Deck deck)
+        public async Task<bool> ChangeDeck(Deck deck, string newName)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                bool isValid = await _dataValidator.ValidateDeckName(deck.Name, deck.UserId);
+                bool isValid = await _dataValidator.ValidateDeckName(newName, deck.UserId);
 
                 if (!isValid) return false;
 
+                deck.Name = newName;
                 context.Decks.Update(deck);
                 await context.SaveChangesAsync();
                 return true;

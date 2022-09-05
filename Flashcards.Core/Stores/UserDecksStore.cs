@@ -115,12 +115,9 @@ namespace Flashcards.Core.Stores
         public async Task<bool> AlterDeck(string name)
         {
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
-            string oldName = User.Decks[deckIndex].Name;
-            User.Decks[deckIndex].Name = name;
-            bool outcome = await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+            bool outcome = await _dataChanger.ChangeDeck(User.Decks[deckIndex], name);
             if (outcome == false)
             {
-                User.Decks[deckIndex].Name = oldName;
                 return false;
             }
             return true;
