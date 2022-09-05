@@ -35,17 +35,6 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMockFalse.Object);
         }
 
-        internal void CleanUp()
-        {
-            var context = _dbContextFactory.CreateDbContext();
-            context.Flashcards.RemoveRange(context.Flashcards.ToList());
-            context.Decks.RemoveRange(context.Decks.ToList());
-            context.DailyActivity.RemoveRange(context.DailyActivity.ToList());
-            context.Users.RemoveRange(context.Users.ToList());
-
-            context.SaveChanges();
-        }
-
         [Fact]
         public async void ChangeActivityAsyncTest()
         {
@@ -81,7 +70,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             Assert.Equal(DateTime.Parse("2022-06-30"), newActivity.Day);
             Assert.Equal(30, newActivity.ReviewedFlashcardsCount);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
 
         [Fact]
@@ -113,7 +102,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
 
             Assert.Equal("changed deck", newDeck.Name);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
 
         [Fact]
@@ -163,7 +152,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             Assert.Equal(DateTime.Parse("2021-02-02"), newFlashcard.NextReview);
             Assert.Equal(1, newFlashcard.Level);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
 
         [Fact]
@@ -188,7 +177,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             var newUser = context.Users.Single();
             Assert.Equal(newEmail, newUser.Email);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
 
         [Fact]
@@ -213,7 +202,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             var newUser = context.Users.Single();
             Assert.Equal(newUsername, newUser.Name);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
 
         [Fact]
@@ -256,7 +245,7 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
             Assert.Equal("test@test", newUser.Email);
             Assert.Equal("deck", newDeck.Name);
 
-            CleanUp();
+            _dbContextFactory.CleanUp(context);
         }
     }
 }
