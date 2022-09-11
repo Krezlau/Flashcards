@@ -12,19 +12,12 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
 {
     public class DatabaseUserDataValidatorTests
     {
-        private readonly DatabaseUserDataValidator _validator;
-        private readonly TestDbContextFactory _contextFactory;
-
-        public DatabaseUserDataValidatorTests()
-        {
-            _contextFactory = new TestDbContextFactory();
-            _validator = new DatabaseUserDataValidator(_contextFactory);
-        }
-
         [Theory]
         [InlineData("deck", "deck")]
         public async void ValidateDeckNameTest_WithConflictingName_ShouldReturnFalse(string nameOne, string nameTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateDeckNameTest_WithConflictingName_ShouldReturnFalse));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var deck = new Deck()
             {
@@ -49,6 +42,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("deck", "deck")]
         public async void ValidateDeckNameTest_WithConflictingNamesButDifferentUsers_ShouldReturnTrue(string nameOne, string nameTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateDeckNameTest_WithConflictingNamesButDifferentUsers_ShouldReturnTrue));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var userOne = new User()
             {
@@ -89,6 +84,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("deck1", "deck2")]
         public async void ValidateDeckNameTest_WithDifferentNames_ShouldReturnTrue(string nameOne, string nameTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateDeckNameTest_WithDifferentNames_ShouldReturnTrue));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var deck = new Deck()
             {
@@ -113,6 +110,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("test", "test")]
         public async void ValidateUserNameTest_WithConflictingNames_ShouldReturnFalse(string nameOne, string nameTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateUserNameTest_WithConflictingNames_ShouldReturnFalse));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var userOne = new User()
             {
@@ -132,6 +131,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("test1", "test2")]
         public async void ValidateUserNameTest_WithDifferentNames_ShouldReturnTrue(string nameOne, string nameTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateUserNameTest_WithDifferentNames_ShouldReturnTrue));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var userOne = new User()
             {
@@ -151,6 +152,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("email@email", "email@email")]
         public async void ValidateEmailTest_WithConflictingEmails_ShouldReturnFalse(string emailOne, string emailTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateEmailTest_WithConflictingEmails_ShouldReturnFalse));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var userOne = new User()
             {
@@ -170,6 +173,8 @@ namespace Flashcards.Core.Tests.Services.UserDataValidators
         [InlineData("email1@email", "email2@email")]
         public async void ValidateEmailTest_WithDifferentEmails_ShouldReturnTrue(string emailOne, string emailTwo)
         {
+            var _contextFactory = new TestDbContextFactory(nameof(ValidateEmailTest_WithDifferentEmails_ShouldReturnTrue));
+            var _validator = new DatabaseUserDataValidator(_contextFactory);
             var context = _contextFactory.CreateDbContext();
             var userOne = new User()
             {

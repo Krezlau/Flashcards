@@ -11,17 +11,16 @@ namespace Flashcards.Core.Tests.DbConnection
 {
     public class TestDbContextFactory : IUserDbContextFactory
     {
-        private readonly int Number;
+        private readonly string _name;
 
-        public TestDbContextFactory()
+        public TestDbContextFactory(string name)
         {
-            var rand = new Random();
-            Number = rand.Next();
+            _name = name;
         }
 
         public UsersContext CreateDbContext()
         {
-            DbContextOptions options = new DbContextOptionsBuilder().UseInMemoryDatabase($"{Number}testDB").Options;
+            DbContextOptions options = new DbContextOptionsBuilder().UseInMemoryDatabase($"{_name}_testDB").Options;
 
             return new UsersContext(options);
         }

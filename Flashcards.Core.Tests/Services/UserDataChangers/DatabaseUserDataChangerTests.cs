@@ -15,29 +15,27 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
 {
     public class DatabaseUserDataChangerTests
     {
-        private readonly DatabaseUserDataChanger _validDataChanger;
-        private readonly DatabaseUserDataChanger _invalidDataChanger;
-        private readonly TestDbContextFactory _dbContextFactory;
+        private readonly Mock<IUserDataValidator> _dataValidatorMockTrue;
+        private readonly Mock<IUserDataValidator> _dataValidatorMockFalse;
         public DatabaseUserDataChangerTests()
         {
-            var dataValidatorMockTrue = new Mock<IUserDataValidator>();
-            dataValidatorMockTrue.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
-            dataValidatorMockTrue.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(true));
-            dataValidatorMockTrue.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(true));
+            _dataValidatorMockTrue = new Mock<IUserDataValidator>();
+            _dataValidatorMockTrue.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            _dataValidatorMockTrue.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(true));
+            _dataValidatorMockTrue.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(true));
 
-            var dataValidatorMockFalse = new Mock<IUserDataValidator>();
-            dataValidatorMockFalse.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(false));
-            dataValidatorMockFalse.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(false));
-            dataValidatorMockFalse.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(false));
-
-            _dbContextFactory = new TestDbContextFactory();
-            _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMockTrue.Object);
-            _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, dataValidatorMockFalse.Object);
+            _dataValidatorMockFalse = new Mock<IUserDataValidator>();
+            _dataValidatorMockFalse.Setup(v => v.ValidateDeckName(It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(false));
+            _dataValidatorMockFalse.Setup(v => v.ValidateEmail(It.IsAny<string>())).Returns(Task.FromResult(false));
+            _dataValidatorMockFalse.Setup(v => v.ValidateUsername(It.IsAny<string>())).Returns(Task.FromResult(false));
         }
 
         [Fact]
         public async void ChangeActivityAsyncTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeActivityAsyncTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
@@ -76,6 +74,9 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
         [Fact]
         public async void ChangeDeckTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeDeckTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
@@ -108,6 +109,9 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
         [Fact]
         public async void ChangeFlashcardTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeFlashcardTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
@@ -158,6 +162,9 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
         [Fact]
         public async void ChangeUserEmailAsyncTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeUserEmailAsyncTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
@@ -183,6 +190,9 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
         [Fact]
         public async void ChangeUserNameAsyncTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeUserNameAsyncTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
@@ -208,6 +218,9 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
         [Fact]
         public async void ValidationTest()
         {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ValidationTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var _invalidDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockFalse.Object);
             var context = _dbContextFactory.CreateDbContext();
             var user = new User
             {
