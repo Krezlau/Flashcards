@@ -51,5 +51,18 @@ namespace Flashcards.Core.Models
             }
             return toReview;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
+
+            Deck d = (Deck)obj;
+            return d.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
     }
 }

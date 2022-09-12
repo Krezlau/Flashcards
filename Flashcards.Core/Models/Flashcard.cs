@@ -26,5 +26,18 @@ namespace Flashcards.Core.Models
         [ForeignKey("Deck")]
         [Required]
         public int DeckId { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
+
+            Flashcard f = (Flashcard)obj;
+            return f.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
     }
 }

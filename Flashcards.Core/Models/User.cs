@@ -1,4 +1,5 @@
 ﻿using Flashcards.Core.DBConnection;
+using Flashcards.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -59,6 +60,19 @@ namespace Flashcards.Core.Models
             if (Activity.Count == 0) return false;
             if (Activity[Activity.Count-1].Day.Day == date.Day) return true;
             return false;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
+
+            User u = (User)obj;
+            return Id == u.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
         }
     }
 }
