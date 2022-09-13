@@ -32,7 +32,13 @@ namespace Flashcards.Core.Tests.DbConnection
             context.DailyActivity.RemoveRange(context.DailyActivity.ToList());
             context.Users.RemoveRange(context.Users.ToList());
 
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+            }
         }
     }
 }
