@@ -53,7 +53,7 @@ namespace Flashcards.Core.ViewModels
             User user = await _authService.LoginUserAsync(Username, Password);
             if (user is not null)
             {
-                _userDecksStore.Initialize(user);
+                await _userDecksStore.Initialize(user);
                 _userWelcomeService.Navigate();
                 return;
             }

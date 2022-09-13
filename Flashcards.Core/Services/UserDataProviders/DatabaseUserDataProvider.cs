@@ -20,29 +20,7 @@ namespace Flashcards.Core.Services.UserDataProviders
             _dbContextFactory = dbContextFactory;
         }
 
-        //public async Task<ObservableUser> GetUserDecks(string _username)
-        //{
-        //    using (UsersContext context = _dbContextFactory.CreateDbContext())
-        //    {
-        //        List<UserDTO> userDTOs = await context.Users
-        //            .Where(b => b.Name == _username)
-        //            .Include(d => d.Decks)
-        //            .ToListAsync();
-
-        //        UserDTO userDTO;
-        //        try
-        //        {
-        //            userDTO = userDTOs.First();
-        //        } catch(Exception e)
-        //        {
-        //            return new ObservableUser(_username);
-        //        }
-
-        //        return ToUser(userDTO);
-        //    }
-        //}
-
-        public User LoadUserDecks(int userId)
+        public async Task<User> LoadUserDecksAsync(int userId)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
@@ -55,20 +33,28 @@ namespace Flashcards.Core.Services.UserDataProviders
                     return new User();
                 }
 
-                user.Activity = new List<DailyActivity>(context.DailyActivity
-                    .Where(b => b.UserId == userId)
-                    .OrderBy(a => a.Day)
-                    .ToList());
+                using (var activityContext = _dbContextFactory.CreateDbContext())
+                {
+                    var activity = activityContext.DailyActivity
+                        .Where(b => b.UserId == userId)
+                        .OrderBy(a => a.Day)
+                        .ToListAsync();
 
-                user.Decks = new ObservableCollection<Deck>(context.Decks
-                    .Where(b => b.UserId == userId)
-                    .ToList());
+                    var decks = context.Decks
+                        .Where(b => b.UserId == userId)
+                        .ToListAsync();
+
+
+                    user.Activity = new List<DailyActivity>(await activity);
+
+                    user.Decks = new ObservableCollection<Deck>(await decks);
+                }
 
                 foreach (Deck d in user.Decks)
                 {
-                    d.Flashcards = new ObservableCollection<Flashcard>(context.Flashcards
+                    d.Flashcards = new ObservableCollection<Flashcard>(await context.Flashcards
                         .Where(b => b.DeckId == d.Id)
-                        .ToList());
+                        .ToListAsync());
                 }
 
                 return user;

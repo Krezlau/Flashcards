@@ -64,9 +64,9 @@ namespace Flashcards.Core.Stores
             _navigationService = navigationService;
         }
 
-        public void Initialize(User user)
+        public async Task Initialize(User user)
         {
-            User = _dataProvider.LoadUserDecks(user.Id);
+            User = await _dataProvider.LoadUserDecksAsync(user.Id);
             IfTodayActivity = User.IfLearnedToday(DateTime.Today);
             Streak = User.CalculateStreak(DateTime.Today);
             _navigationService.NavigateLeft();

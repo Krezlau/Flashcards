@@ -9,6 +9,6 @@ namespace Flashcards.Core.Services.UserDataProviders
 {
     public interface IUserDataProvider
     {
-        User LoadUserDecks(int userId);
+        Task<User> LoadUserDecksAsync(int userId);
     }
 }
