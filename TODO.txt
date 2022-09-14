@@ -48,13 +48,15 @@ TASK11:
 		* registration
 		* changing account info, password
 		* adding/changing deck name and flashcards
+	* stores unit tests
+
+TASK12:
+	* buttons for activity charts to show last 30 days / last year / all time
+	* storing data about time spend reviewing 
+	* storing activity data for each deck
+	* future reviews calendar for each deck	
 
 UNSPECIFIED:
-buttons for activity charts to show last 30 days / last year / all time
-email verification
-email changing password
+email sender
 overall password security improvement
 change database to an online one
-change initial decks loading to async with loading screen
-refactor DatabaseServices and UserDecksStore
-storing data and displaying it to the user (time spent reviewing flashcards etc.)
