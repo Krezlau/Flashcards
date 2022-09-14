@@ -43,6 +43,12 @@ TASK10:
 		* validation
 		* database actions
 
+TASK11:
+	* validation in real time:
+		* registration
+		* changing account info, password
+		* adding/changing deck name and flashcards
+
 UNSPECIFIED:
 buttons for activity charts to show last 30 days / last year / all time
 email verification

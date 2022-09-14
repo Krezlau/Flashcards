@@ -11,10 +11,10 @@ namespace Flashcards.Core.Services.UserDataChangers
 {
     public class DatabaseUserDataChanger : IUserDataChanger
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
         private readonly IUserDataValidator _dataValidator;
 
-        public DatabaseUserDataChanger(UserDbContextFactory dbContextFactory, IUserDataValidator dataValidator)
+        public DatabaseUserDataChanger(IUserDbContextFactory dbContextFactory, IUserDataValidator dataValidator)
         {
             _dbContextFactory = dbContextFactory;
             _dataValidator = dataValidator;
@@ -29,14 +29,15 @@ namespace Flashcards.Core.Services.UserDataChangers
             }
         }
 
-        public async Task<bool> ChangeDeck(Deck deck)
+        public async Task<bool> ChangeDeck(Deck deck, string newName)
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                bool isValid = await _dataValidator.ValidateDeckName(deck.Name, deck.UserId);
+                bool isValid = await _dataValidator.ValidateDeckName(newName, deck.UserId);
 
                 if (!isValid) return false;
 
+                deck.Name = newName;
                 context.Decks.Update(deck);
                 await context.SaveChangesAsync();
                 return true;

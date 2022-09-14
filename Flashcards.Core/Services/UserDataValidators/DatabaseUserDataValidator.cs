@@ -11,9 +11,9 @@ namespace Flashcards.Core.Services.UserDataValidators
 {
     public class DatabaseUserDataValidator : IUserDataValidator
     {
-        private readonly UserDbContextFactory _contextFactory;
+        private readonly IUserDbContextFactory _contextFactory;
 
-        public DatabaseUserDataValidator(UserDbContextFactory contextFactory)
+        public DatabaseUserDataValidator(IUserDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
         }

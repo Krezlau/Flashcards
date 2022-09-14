@@ -94,13 +94,15 @@ namespace Flashcards.Core.Services
         /// 0 => password valid<br />
         /// 1 => password too short<br />
         /// 2 => password too long<br />
-        /// 3 => password consists of not allowed character<br />
+        /// 3 => password consists of white space characters<br />
+        /// 4 => password consists of not allowed character<br />
         /// </returns>
         public static int ValidatePassword(string password)
         {
             if (password is null || password.Length < PasswordMinLength) return 1;
             if (password.Length > PasswordMaxLength) return 2;
-            if (IfContainsUnicodeCharacter(password)) return 3;
+            if (password.Trim() != password) return 3;
+            if (IfContainsUnicodeCharacter(password)) return 4;
             return 0;
         }
 
@@ -111,7 +113,7 @@ namespace Flashcards.Core.Services
 
         public static bool IsValidEmail(string email)
         {
-            if (email is null) return false;
+            if (email is null || email.Trim() != email) return false;
             return new EmailAddressAttribute().IsValid(email);
         }
     }

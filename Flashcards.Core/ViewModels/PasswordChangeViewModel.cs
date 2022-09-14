@@ -57,7 +57,7 @@ namespace Flashcards.Core.ViewModels
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Password is too long - must be no longer than 25 characters.");
                 return;
             }
-            if (UserInputValidator.ValidatePassword(Password) == 3)
+            if (UserInputValidator.ValidatePassword(Password) == 3 || UserInputValidator.ValidatePassword(Password) == 4)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Illegal characters in password.");
                 return;

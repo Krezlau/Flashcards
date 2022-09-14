@@ -64,9 +64,9 @@ namespace Flashcards.Core.Stores
             _navigationService = navigationService;
         }
 
-        public void Initialize(User user)
+        public async Task Initialize(User user)
         {
-            User = _dataProvider.LoadUserDecks(user.Id);
+            User = await _dataProvider.LoadUserDecksAsync(user.Id);
             IfTodayActivity = User.IfLearnedToday(DateTime.Today);
             Streak = User.CalculateStreak(DateTime.Today);
             _navigationService.NavigateLeft();
@@ -115,12 +115,9 @@ namespace Flashcards.Core.Stores
         public async Task<bool> AlterDeck(string name)
         {
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
-            string oldName = User.Decks[deckIndex].Name;
-            User.Decks[deckIndex].Name = name;
-            bool outcome = await _dataChanger.ChangeDeck(User.Decks[deckIndex]);
+            bool outcome = await _dataChanger.ChangeDeck(User.Decks[deckIndex], name);
             if (outcome == false)
             {
-                User.Decks[deckIndex].Name = oldName;
                 return false;
             }
             return true;

@@ -10,9 +10,9 @@ namespace Flashcards.Core.Services.UserDataDestroyers
 {
     public class DatabaseUserDataDestroyer : IUserDataDestroyer
     {
-        private readonly UserDbContextFactory _dbContextFactory;
+        private readonly IUserDbContextFactory _dbContextFactory;
 
-        public DatabaseUserDataDestroyer(UserDbContextFactory dbContextFactory)
+        public DatabaseUserDataDestroyer(IUserDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }
@@ -20,7 +20,8 @@ namespace Flashcards.Core.Services.UserDataDestroyers
         {
             using (UsersContext context = _dbContextFactory.CreateDbContext())
             {
-                context.Decks.Remove(context.Decks.Single(a => a.Id == deck.Id));
+                context.Flashcards.RemoveRange(context.Flashcards.Where(f => f.DeckId == deck.Id));
+                context.Decks.Remove(context.Decks.First(a => a.Id == deck.Id));
                 await context.SaveChangesAsync();
             }
         }
