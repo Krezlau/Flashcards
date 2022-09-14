@@ -28,11 +28,6 @@ namespace Flashcards.Core.Services.UserDataProviders
                     .Where(b => b.Id == userId)
                     .First();
 
-                if (user == null)
-                {
-                    return new User();
-                }
-
                 using (var activityContext = _dbContextFactory.CreateDbContext())
                 {
                     var activity = activityContext.DailyActivity
