@@ -47,7 +47,7 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="2" />
 
-        <ui:TextBox Text="{Binding Username}" Margin="5"
+        <ui:TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                  PlaceholderText="Username" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="3" Width="250"
                  MinWidth="250"/>
@@ -63,7 +63,7 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="5" />
 
-        <ui:TextBox Text="{Binding Email}" Margin="5"
+        <ui:TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                  PlaceholderText="Email"  HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="6" Width="250"
                  MinWidth="250"/>

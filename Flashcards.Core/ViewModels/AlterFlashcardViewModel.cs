@@ -24,6 +24,66 @@ namespace Flashcards.Core.ViewModels
 
         public string TopText { get; set; }
 
+        private string _backErrorText = "";
+        public string BackErrorText
+        {
+            get => _backErrorText;
+            set => SetProperty(ref _backErrorText, value);
+        }
+
+        private string _frontErrorText = "";
+        public string FrontErrorText
+        {
+            get => _frontErrorText;
+            set => SetProperty(ref _frontErrorText, value);
+        }
+
+        private string front;
+        public string Front
+        {
+            get => front;
+            set
+            {
+                if (UserInputValidator.ValidateFlashcardTextField(value) == 1)
+                {
+                    FrontErrorText = "Front text too short.";
+                    front = value;
+                    return;
+                }
+                if (UserInputValidator.ValidateFlashcardTextField(value) == 2)
+                {
+                    FrontErrorText = "Front text too long. Must be no longer than 100 characters.";
+                    front = value;
+                    return;
+                }
+                FrontErrorText = "";
+                front = value;
+            }
+        }
+
+        private string back;
+        public string Back
+        {
+            get => back;
+            set
+            {
+                if (UserInputValidator.ValidateFlashcardTextField(value) == 1)
+                {
+                    BackErrorText = "Back text too short.";
+                    back = value;
+                    return;
+                }
+                if (UserInputValidator.ValidateFlashcardTextField(value) == 2)
+                {
+                    BackErrorText = "Back text too long. Must be no longer than 100 characters.";
+                    back = value;
+                    return;
+                }
+                BackErrorText = "";
+                back = value;
+            }
+        }
+
         public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
         {
             _navigationService = navigationService;
@@ -88,20 +148,6 @@ namespace Flashcards.Core.ViewModels
             });
             _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard created.");
             _navigationService.Navigate();
-        }
-
-        private string front;
-        public string Front
-        {
-            get => front;
-            set => SetProperty(ref front, value);
-        }
-
-        private string back;
-        public string Back
-        {
-            get => back;
-            set => SetProperty(ref back, value);
         }
 
         public ICommand ButtonCommand { get; set; }

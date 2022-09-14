@@ -79,7 +79,7 @@ namespace Flashcards.Core.ViewModels
 
         public string UpperTextTrim => UpperText.Replace(':', ' ');
 
-        private string _errorText;
+        private string _errorText = "";
         public string ErrorText
         {
             get => _errorText;
@@ -121,7 +121,13 @@ namespace Flashcards.Core.ViewModels
         }
 
         private async void OnChangeEmailClick()
-        { 
+        {
+            if (!UserInputValidator.IsValidEmail(UpperTextField))
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email not valid.");
+                return;
+            }
+
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
@@ -142,6 +148,22 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnChangeUsernameClick()
         {
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 1)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username is too short - must be at least 4 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 2)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username is too long - must be no longer than 25 characters.");
+                return;
+            }
+            if (UserInputValidator.ValidateUsername(UpperTextField) == 3)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Failed to change. New username can't consist of white space characters.");
+                return;
+            }
+
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
