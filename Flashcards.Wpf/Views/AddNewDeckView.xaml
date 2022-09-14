@@ -44,9 +44,16 @@
                  Grid.Row="4" Grid.Column="1" Width="250"
                  MinWidth="250" PlaceholderText="Deck name"/>
 
+        <TextBlock Text="{Binding ErrorText}"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   Grid.Column="1"
+                   Grid.Row="5"
+                   Foreground="Red"/>
+
         <Button Content="{Binding ButtonContent}" 
                 Command="{Binding ButtonCommand}" Grid.Column="1"
-                Grid.Row="5" Margin="20" Width="100"
+                Grid.Row="6" Margin="20" Width="100"
                 Padding="5" VerticalAlignment="Top"
                 HorizontalAlignment="Center"/>
     </Grid>
