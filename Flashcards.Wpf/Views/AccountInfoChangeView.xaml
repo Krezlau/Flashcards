@@ -46,7 +46,7 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="4" />
 
-        <ui:TextBox Text="{Binding UpperTextField}" Margin="5"
+        <ui:TextBox Text="{Binding UpperTextField, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                  Padding="5" HorizontalAlignment="Center" 
                  Grid.Column="1" Grid.Row="5" MaxWidth="600"
                  MinWidth="250" PlaceholderText="{Binding UpperTextTrim}"/>
