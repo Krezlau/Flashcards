@@ -21,7 +21,7 @@ namespace Flashcards.Core.Stores
         private readonly IUserDataDestroyer _dataDestroyer;
         private readonly IUserDataChanger _dataChanger;
 
-        private readonly NavigationService _navigationStore;
+        private readonly NavigationStore _navigationStore;
 
         private readonly NavigationService<HomeViewModel> _navigationService;
         private readonly NavigationService<UserIconViewModel> _rightNavService;
@@ -52,7 +52,7 @@ namespace Flashcards.Core.Stores
 
         public SelectionStore SelectionStore { get; }
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationService navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
+        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;

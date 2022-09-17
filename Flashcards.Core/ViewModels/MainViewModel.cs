@@ -10,9 +10,9 @@ namespace Flashcards.Core.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
-        private readonly NavigationService _navigationStore;
+        private readonly NavigationStore _navigationStore;
 
-        public MainViewModel(NavigationService navigationStore)
+        public MainViewModel(NavigationStore navigationStore)
         {
             _navigationStore = navigationStore;
 
