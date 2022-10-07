@@ -516,5 +516,136 @@ namespace Flashcards.Core.Tests.Stores
             Assert.Equal(0, store.User.Decks[0].Flashcards[^1].Level);
             _dataChangerMock.VerifyAll();
         }
+
+        [Fact]
+        public async void FlashcardSetReviewTest_WithIfTodayActivityTrue()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(FlashcardSetReviewTest_WithIfTodayActivityTrue));
+            var context = _contextFactory.CreateDbContext();
+
+            User user = new User()
+            {
+                Name = "user",
+                Email = "user@user",
+                PasswordHash = "hash"
+            };
+            context.Users.Add(user);
+
+            DailyActivity da = new DailyActivity()
+            {
+                Day = DateTime.Today,
+                ReviewedFlashcardsCount = 1,
+                User = user
+            };
+            context.DailyActivity.Add(da);
+
+            Deck deck = new Deck("deck", user.Id);
+            context.Decks.Add(deck);
+
+            Flashcard flashcard = new Flashcard()
+            {
+                DeckId = deck.Id,
+                Front = "front",
+                Back = "back",
+                Level = 0,
+                NextReview = DateTime.Today
+            };
+            context.Flashcards.Add(flashcard);
+            context.SaveChanges();
+
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.IsAny<int>())).Returns(Task.FromResult(user));
+
+            _dataChangerMock.Setup(ch => ch.ChangeFlashcard(It.IsAny<Flashcard>())).Verifiable();
+            _dataChangerMock.Setup(ch => ch.ChangeActivityAsync(It.IsAny<DailyActivity>())).Verifiable();
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(user);
+
+            await store.FlashcardSetReview(store.User.Decks[0].Flashcards[0]);
+
+            Assert.Equal(1, store.Streak);
+            Assert.Equal(2, store.User.Activity[0].ReviewedFlashcardsCount);
+            Assert.Equal(1, store.User.Decks[0].Flashcards[0].Level);
+            Assert.Equal(DateTime.Today.AddDays(1), store.User.Decks[0].Flashcards[0].NextReview);
+            _dataChangerMock.VerifyAll();
+        }
+
+        [Fact]
+        public async void FlashcardSetReviewTest_WithIfTodayActivityFalse()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(FlashcardSetReviewTest_WithIfTodayActivityFalse));
+            var context = _contextFactory.CreateDbContext();
+
+            User user = new User()
+            {
+                Name = "user",
+                Email = "user@user",
+                PasswordHash = "hash",
+                Activity = new List<DailyActivity>()
+            };
+            context.Users.Add(user);
+
+            Deck deck = new Deck("deck", user.Id);
+            context.Decks.Add(deck);
+
+            Flashcard flashcard = new Flashcard()
+            {
+                DeckId = deck.Id,
+                Front = "front",
+                Back = "back",
+                Level = 0,
+                NextReview = DateTime.Today
+            };
+            context.Flashcards.Add(flashcard);
+            context.SaveChanges();
+
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.IsAny<int>())).Returns(Task.FromResult(user));
+
+            _dataChangerMock.Setup(ch => ch.ChangeFlashcard(It.IsAny<Flashcard>())).Verifiable();
+            _dataCreatorMock.Setup(c => c.SaveNewDailyActivity(It.IsAny<DailyActivity>())).Verifiable();
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(user);
+
+            await store.FlashcardSetReview(store.User.Decks[0].Flashcards[0]);
+
+            Assert.True(store.IfTodayActivity);
+            Assert.Equal(1, store.User.Activity[0].ReviewedFlashcardsCount);
+            Assert.Equal(DateTime.Today, store.User.Activity[0].Day);
+            Assert.Equal(1, store.Streak);
+            Assert.Equal(1, store.User.Decks[0].Flashcards[0].Level);
+            Assert.Equal(DateTime.Today.AddDays(1), store.User.Decks[0].Flashcards[0].NextReview);
+            _dataChangerMock.VerifyAll();
+            _dataCreatorMock.VerifyAll();
+        }
+
+        [Fact]
+        public void StreakSetTest_ShouldInvokeStreakChangedEvent()
+        {
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+
+            int callCount = 0;
+            store.StreakChangedEvent += () => callCount++;
+            store.Streak = 1;
+            store.Streak = 10;
+            Assert.Equal(2, callCount);
+        }
+
+        [Fact]
+        public void EmailChangeRequestInvokeTest_ShouldInvokeEmailChangeRequest()
+        {
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+
+            int callCount = 0;
+            store.EmailChangeRequest += () => callCount++;
+            store.EmailChangeRequestInvoke();
+            Assert.Equal(1, callCount);
+        }
     }
 }

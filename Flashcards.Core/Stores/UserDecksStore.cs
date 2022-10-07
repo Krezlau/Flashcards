@@ -75,7 +75,7 @@ namespace Flashcards.Core.Stores
 
         public void EmailChangeRequestInvoke()
         {
-            EmailChangeRequest?.Invoke();
+            EmailChangeRequest.Invoke();
         }
 
         public async Task<bool> ChangeUserEmail(string email)
