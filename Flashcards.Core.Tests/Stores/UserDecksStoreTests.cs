@@ -268,7 +268,6 @@ namespace Flashcards.Core.Tests.Stores
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
             _navigationStoreMock.SetupAllProperties();
-            
 
             var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
                                             _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
@@ -308,6 +307,213 @@ namespace Flashcards.Core.Tests.Stores
             Assert.Equal(back, _selectionStore.SelectedFlashcard.Back);
             Assert.Equal(front, store.User.Decks[0].Flashcards[0].Front);
             Assert.Equal(back, store.User.Decks[0].Flashcards[0].Back);
+            _dataChangerMock.VerifyAll();
+        }
+
+        [Fact]
+        public async void AlterDeckTest_WithTrueOutcome_ShouldReturnTrue()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(AlterDeckTest_WithTrueOutcome_ShouldReturnTrue));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            _dataChangerMock.Setup(c => c.ChangeDeck(It.IsAny<Deck>(), It.IsAny<string>())).Returns(Task.FromResult(true));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            string newName = "new name";
+            store.SelectionStore.SelectedDeck = users[0].Decks[0];
+            var outcome = await store.AlterDeck(newName);
+            Assert.True(outcome);
+            Assert.Equal(newName, store.SelectionStore.SelectedDeck.Name);
+        }
+
+        [Fact]
+        public async void AlterDeckTest_WithFalseOutcome_ShouldReturnFalse()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(AlterDeckTest_WithFalseOutcome_ShouldReturnFalse));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            _dataChangerMock.Setup(c => c.ChangeDeck(It.IsAny<Deck>(), It.IsAny<string>())).Returns(Task.FromResult(false));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            string newName = "new name";
+            store.SelectionStore.SelectedDeck = users[0].Decks[0];
+            var outcome = await store.AlterDeck(newName);
+            Assert.False(outcome);
+            Assert.NotEqual(newName, store.SelectionStore.SelectedDeck.Name);
+        }
+
+        [Fact]
+        public async void AddNewDeckTest_WithTrueOutcome_ShouldReturnTrue()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(AddNewDeckTest_WithTrueOutcome_ShouldReturnTrue));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            _dataCreatorMock.Setup(c => c.SaveNewDeck(It.IsAny<Deck>())).Returns(Task.FromResult(true));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            int beforeDeckCount = users[0].Decks.Count;
+            string newDeckName = "new deck";
+            Deck newDeck = new Deck(newDeckName, store.User.Id);
+            bool outcome = await store.AddNewDeck(newDeck);
+
+            Assert.True(outcome);
+            Assert.Equal(beforeDeckCount + 1, store.User.Decks.Count);
+            Assert.Equal(newDeckName, store.User.Decks[^1].Name);
+        }
+
+        [Fact]
+        public async void AddNewDeckTest_WithFalseOutcome_ShouldReturnFalse()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(AddNewDeckTest_WithFalseOutcome_ShouldReturnFalse));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            _dataCreatorMock.Setup(c => c.SaveNewDeck(It.IsAny<Deck>())).Returns(Task.FromResult(false));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            int beforeDeckCount = users[0].Decks.Count;
+            string newDeckName = "new deck";
+            Deck newDeck = new Deck(newDeckName, store.User.Id);
+            bool outcome = await store.AddNewDeck(newDeck);
+
+            Assert.False(outcome);
+            Assert.Equal(beforeDeckCount, store.User.Decks.Count);
+        }
+
+        [Fact]
+        public async void RemoveCurrentFlashcardTest()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(RemoveCurrentFlashcardTest));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            int deckOneCount = store.User.Decks[0].Flashcards.Count;
+            store.SelectionStore.SelectedDeck = store.User.Decks[0];
+            store.SelectionStore.SelectedFlashcard = store.User.Decks[0].Flashcards[1];
+
+            await store.RemoveCurrentFlashcard();
+            Assert.Equal(deckOneCount - 1, store.User.Decks[0].Flashcards.Count);
+            Assert.Throws<ArgumentOutOfRangeException>(() => store.User.Decks[0].Flashcards[1]);
+        }
+
+        [Fact]
+        public async void RemoveCurrentDeckTest()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(RemoveCurrentDeckTest));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            int decksCount = store.User.Decks.Count;
+            store.SelectionStore.SelectedDeck = store.User.Decks[0];
+
+            await store.RemoveCurrentDeck();
+
+            Assert.Equal(decksCount - 1, store.User.Decks.Count);
+        }
+
+        [Fact]
+        public async void AddFlashcardToSelectedDeckTest()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(AddFlashcardToSelectedDeckTest));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+
+            _dataCreatorMock.Setup(c => c.SaveNewFlashcard(It.IsAny<Flashcard>())).Verifiable();
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            store.SelectionStore.SelectedDeck = store.User.Decks[0];
+
+            Flashcard f = new Flashcard()
+            {
+                DeckId = store.User.Decks[0].Id,
+                Front = "front",
+                Back = "back",
+                Level = 0,
+                NextReview = DateTime.Parse("2022-12-30")
+            };
+
+            await store.AddFlashcardToSelectedDeck(f);
+            Assert.Equal(f, store.User.Decks[0].Flashcards[^1]);
+            _dataCreatorMock.VerifyAll();
+        }
+
+        [Fact]
+        public async void FlashcardSetReviewFailedTest()
+        {
+            TestDbContextFactory _contextFactory = new TestDbContextFactory(nameof(FlashcardSetReviewFailedTest));
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
+            _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+
+            _dataChangerMock.Setup(c => c.ChangeFlashcard(It.IsAny<Flashcard>())).Verifiable();
+            var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
+                                            _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
+                                            _rightNavService, _leftNavService);
+            await store.Initialize(users[0]);
+
+            store.SelectionStore.SelectedDeck = store.User.Decks[0];
+
+            //flashcard to be failed
+            Flashcard f = new Flashcard()
+            {
+                DeckId = store.User.Decks[0].Id,
+                Front = "front",
+                Back = "back",
+                Level = 10,
+                NextReview = DateTime.Parse("2022-12-30")
+            };
+
+            await store.AddFlashcardToSelectedDeck(f);
+
+            await store.FlashcardSetReviewFailed(f);
+
+            Assert.Equal(0, f.Level);
+            Assert.Equal(0, store.User.Decks[0].Flashcards[^1].Level);
             _dataChangerMock.VerifyAll();
         }
     }

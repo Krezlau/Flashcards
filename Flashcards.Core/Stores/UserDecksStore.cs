@@ -120,6 +120,7 @@ namespace Flashcards.Core.Stores
             {
                 return false;
             }
+            User.Decks[deckIndex].Name = name;
             return true;
         }
 
@@ -134,7 +135,6 @@ namespace Flashcards.Core.Stores
         public async Task RemoveCurrentFlashcard()
         {
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
-            int flashcardIndex = SelectionStore.GetSelectedFlashcardIndex();
             await _dataDestroyer.DeleteFlashcard(SelectionStore.SelectedFlashcard);
             User.Decks[deckIndex].Flashcards.Remove(SelectionStore.SelectedFlashcard);
         }
