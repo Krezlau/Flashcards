@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Stores
 {
-    public class NavigationService
+    public class NavigationStore
     {
         private ObservableObject _currentViewModel;
         public ObservableObject CurrentViewModel

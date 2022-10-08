@@ -25,7 +25,30 @@ namespace Flashcards.Core.ViewModels
         public string DeckName
         {
             get => deckName;
-            set => SetProperty(ref deckName, value);
+            set
+            {
+                if (UserInputValidator.ValidateDeckName(value) == 1)
+                {
+                    ErrorText = "Name too short.";
+                    deckName = value;
+                    return;
+                }
+                if (UserInputValidator.ValidateDeckName(value) == 2)
+                {
+                    ErrorText = "Name too long.";
+                    deckName = value;
+                    return;
+                }
+                ErrorText = "";
+                deckName = value;
+            }
+        }
+
+        private string _errorText = "";
+        public string ErrorText
+        {
+            get => _errorText;
+            set => SetProperty(ref _errorText, value);
         }
 
         public string BigText { get; set; } = "Create new deck";
@@ -72,7 +95,7 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", "Inserted name is too long.");
                 return;
             }
-            
+
             bool outcome = await userDecksStore.AlterDeck(DeckName);
             if (outcome == false)
             {
@@ -96,6 +119,7 @@ namespace Flashcards.Core.ViewModels
                 dialogService.ShowMessageDialog("ERROR", "Inserted name is too long.");
                 return;
             }
+
             Deck deck = new Deck(DeckName, userDecksStore.User.Id);
             bool outcome = await userDecksStore.AddNewDeck(deck);
             if (outcome == false)

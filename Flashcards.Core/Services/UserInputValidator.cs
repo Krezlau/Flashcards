@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Flashcards.Core.Services
@@ -82,7 +83,7 @@ namespace Flashcards.Core.Services
         {
             if (username is null || username.Length < UsernameMinLength) return 1;
             if (username.Length > UsernameMaxLength) return 2;
-            if (username.Trim() != username) return 3;
+            if (Regex.Replace(username, @"\s+", "") != username) return 3;
             return 0;
         }
 
@@ -101,7 +102,7 @@ namespace Flashcards.Core.Services
         {
             if (password is null || password.Length < PasswordMinLength) return 1;
             if (password.Length > PasswordMaxLength) return 2;
-            if (password.Trim() != password) return 3;
+            if (Regex.Replace(password, @"\s+", "") != password) return 3;
             if (IfContainsUnicodeCharacter(password)) return 4;
             return 0;
         }
@@ -113,7 +114,7 @@ namespace Flashcards.Core.Services
 
         public static bool IsValidEmail(string email)
         {
-            if (email is null || email.Trim() != email) return false;
+            if (email is null || Regex.Replace(email, @"\s+", "") != email) return false;
             return new EmailAddressAttribute().IsValid(email);
         }
     }

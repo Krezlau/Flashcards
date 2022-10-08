@@ -19,12 +19,125 @@ namespace Flashcards.Core.ViewModels
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<LogInViewModel> _logInService;
 
-        public string Username { get; set; }
-        public string Email { get; set; }
+        private string _usernameErrorText;
+        public string UsernameErrorText
+        {
+            get => _usernameErrorText;
+            set => SetProperty(ref _usernameErrorText, value);
+        }
 
-        public string Password { private get; set; }
+        private string _emailErrorText;
+        public string EmailErrorText
+        {
+            get => _emailErrorText;
+            set => SetProperty(ref _emailErrorText, value);
+        }
 
-        public string ConfirmPassword { private get; set; }
+        private string _passwordErrorText;
+        public string PasswordErrorText
+        {
+            get => _passwordErrorText;
+            set => SetProperty(ref _passwordErrorText, value);
+        }
+
+        private string _confirmPasswordErrorText;
+        public string ConfirmPasswordErrorText
+        {
+            get => _confirmPasswordErrorText;
+            set => SetProperty(ref _confirmPasswordErrorText, value);
+        }
+
+        private string _username;
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                if (UserInputValidator.ValidateUsername(value) == 1)
+                {
+                    UsernameErrorText = "Username too short - must be at least 4 characters.";
+                    _username = value;
+                    return;
+                }
+                if (UserInputValidator.ValidateUsername(value) == 2)
+                {
+                    UsernameErrorText = "Username too long - must be no longer than 25 characters.";
+                    _username = value;
+                    return;
+                }
+                if (UserInputValidator.ValidateUsername(value) == 3)
+                {
+                    UsernameErrorText = "Username can't consist of white space characters.";
+                    _username = value;
+                    return;
+                }
+                UsernameErrorText = "";
+                _username = value;
+            }
+        }
+
+        private string _email;
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (!UserInputValidator.IsValidEmail(value))
+                {
+                    EmailErrorText = "Email not valid.";
+                    _email = value;
+                    return;
+                }
+                _email = value;
+                EmailErrorText = "";
+            }
+        }
+
+        private string _password;
+        public string Password
+        {
+            private get => _password;
+            set
+            {
+                if (UserInputValidator.ValidatePassword(value) == 1)
+                {
+                    PasswordErrorText = "Password too short - must be at least 8 characters.";
+                    _password = value;
+                    return;
+                }
+                if (UserInputValidator.ValidatePassword(value) == 2)
+                {
+                    PasswordErrorText = "Password too long - must be no longer than 25 characters.";
+                    _password = value;
+                    return;
+                }
+                if (UserInputValidator.ValidatePassword(value) == 3 || UserInputValidator.ValidatePassword(value) == 4)
+                {
+                    PasswordErrorText = "Illegal characters in password.";
+                    _password = value;
+                    return;
+                }
+                _password = value;
+                PasswordErrorText = "";
+            }
+        }
+
+        private string _confirmPassword;
+        public string ConfirmPassword
+        {
+            private get => _confirmPassword;
+            set
+            {
+                if (value != Password)
+                {
+                    ConfirmPasswordErrorText = "Passwords do not match";
+                    _confirmPassword = value;
+                    return;
+                }
+                ConfirmPasswordErrorText = "";
+                _confirmPassword = value;
+            }
+        }
 
         public ICommand RegisterCommand { get; set; }
 

@@ -18,17 +18,73 @@ namespace Flashcards.Core.ViewModels
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
 
+        private bool ifEmailChange = false;
+
         public string LabelText { get; set; }
 
         public string PreviousValueText { get; set; }
 
         public string UpperText { get; set; }
 
-        public string UpperTextField { get; set; }
+        private string _upperTextField;
+        public string UpperTextField
+        {
+            get => _upperTextField;
+            set
+            {
+                if (ifEmailChange)
+                {
+                    if (!UserInputValidator.IsValidEmail(value))
+                    {
+                        ErrorText = "Email not valid.";
+                        _upperTextField = value;
+                        return;
+                    }
+                    _upperTextField = value;
+                    ErrorText = "";
+                    return;
+                }
+                if (!ifEmailChange)
+                {
+                    if (UserInputValidator.ValidateUsername(value) == 0)
+                    {
+                        ErrorText = "";
+                        _upperTextField = value;
+                        return;
+                    }
+                    if (UserInputValidator.ValidateUsername(value) == 1)
+                    {
+                        ErrorText =  "Username is too short - must be at least 4 characters.";
+                        _upperTextField = value;
+                        return;
+                    }
+                    if (UserInputValidator.ValidateUsername(value) == 2)
+                    {
+                        ErrorText = "Username is too long - must be no longer than 25 characters.";
+                        _upperTextField = value;
+                        return;
+                    }
+                    if (UserInputValidator.ValidateUsername(value) == 3)
+                    {
+                        ErrorText = "Username can't consist of white space characters.";
+                        _upperTextField = value;
+                        return;
+                    }
+                    _upperTextField = value;
+                }
+            }
+        }
 
         public string Password { get; set; }
 
         public string UpperTextTrim => UpperText.Replace(':', ' ');
+
+        private string _errorText = "";
+        public string ErrorText
+        {
+            get => _errorText;
+            set => SetProperty(ref _errorText, value);
+        }
 
         public ICommand ButtonCommand { get; set; }
 
@@ -61,10 +117,11 @@ namespace Flashcards.Core.ViewModels
             PreviousValueText = "Current email: " + _userDecksStore.User.Email;
             UpperText = "New email: ";
             ButtonCommand = new RelayCommand(OnChangeEmailClick);
+            ifEmailChange = true;
         }
 
         private async void OnChangeEmailClick()
-        { 
+        {
             if (!UserInputValidator.IsValidEmail(UpperTextField))
             {
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email not valid.");

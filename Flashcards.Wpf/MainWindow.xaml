@@ -14,7 +14,7 @@
     Background="{ui:ThemeResource ApplicationBackgroundBrush}"
     Title="Flashcards"
     MinWidth="1000"
-    MinHeight="600"
+    MinHeight="700"
     FontSize="14"
     ResizeMode="NoResize"
     ExtendsContentIntoTitleBar="True"

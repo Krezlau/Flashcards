@@ -98,6 +98,7 @@ namespace Flashcards.Core.Tests.Services
         [Theory]
         [InlineData("test ")]
         [InlineData(" test")]
+        [InlineData("te st")]
         [InlineData("    ")]
         [InlineData("\ttest")]
         [InlineData("test\n")]

@@ -39,7 +39,7 @@ namespace Flashcards.Core.Models
         {
             int sum = 0;
 
-            if (Activity.Count == 0) return 0;
+            if (Activity is null || Activity.Count == 0) return 0;
 
             if (Activity[Activity.Count - 1].Day.Day == date.Day)
             {
@@ -57,7 +57,7 @@ namespace Flashcards.Core.Models
 
         public bool IfLearnedToday(DateTime date)
         {
-            if (Activity.Count == 0) return false;
+            if (Activity is null || Activity.Count == 0) return false;
             if (Activity[Activity.Count-1].Day.Day == date.Day) return true;
             return false;
         }

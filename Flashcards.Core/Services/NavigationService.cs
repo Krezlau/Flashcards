@@ -11,10 +11,10 @@ namespace Flashcards.Core.Services
     public class NavigationService<TViewModel>
         where TViewModel : ObservableObject
     {
-        private readonly NavigationService _navigationStore;
+        private readonly NavigationStore _navigationStore;
         private readonly Func<ObservableObject> _createViewModel;
 
-        public NavigationService(NavigationService navigationStore, Func<TViewModel> createViewModel)
+        public NavigationService(NavigationStore navigationStore, Func<TViewModel> createViewModel)
         {
             _navigationStore = navigationStore;
             _createViewModel = createViewModel;

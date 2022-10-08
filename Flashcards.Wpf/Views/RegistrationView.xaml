@@ -25,6 +25,10 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
@@ -43,42 +47,70 @@
                    Padding="5" HorizontalAlignment="Center"
                    Grid.Column="1" Grid.Row="2" />
 
-        <ui:TextBox Text="{Binding Username}" Margin="5"
+        <ui:TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                  PlaceholderText="Username" HorizontalAlignment="Center"
                  Grid.Column="1" Grid.Row="3" Width="250"
                  MinWidth="250"/>
 
+        <TextBlock Text="{Binding UsernameErrorText}"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   Grid.Column="1"
+                   Grid.Row="4"
+                   Foreground="Red"/>
+
         <TextBlock Text="Email:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
-                   Grid.Column="1" Grid.Row="4" />
+                   Grid.Column="1" Grid.Row="5" />
 
-        <ui:TextBox Text="{Binding Email}" Margin="5"
+        <ui:TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Margin="5"
                  PlaceholderText="Email"  HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="5" Width="250"
+                 Grid.Column="1" Grid.Row="6" Width="250"
                  MinWidth="250"/>
+        
+        <TextBlock Text="{Binding EmailErrorText}"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   Grid.Column="1"
+                   Grid.Row="7"
+                   Foreground="Red"/>
 
         <TextBlock Text="Password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
-                   Grid.Column="1" Grid.Row="6" />
+                   Grid.Column="1" Grid.Row="8" />
 
         <ui:PasswordBox TextChanged="PasswordBox_PasswordChanged" Margin="5"
                  PlaceholderText="Password" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="7" Width="250"
+                 Grid.Column="1" Grid.Row="9" Width="250"
                  MinWidth="250"/>
+
+        <TextBlock Text="{Binding PasswordErrorText}"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   Grid.Column="1"
+                   Grid.Row="10"
+                   Foreground="Red"/>
 
         <TextBlock Text="Confirm password:" Margin="5"
                    Padding="5" HorizontalAlignment="Center"
-                   Grid.Column="1" Grid.Row="8" />
+                   Grid.Column="1" Grid.Row="11" />
 
         <ui:PasswordBox TextChanged="PasswordBox_ConfirmPasswordChanged"
                      Margin="5"
                  PlaceholderText="Confirm password" HorizontalAlignment="Center"
-                 Grid.Column="1" Grid.Row="9" Width="250"
+                 Grid.Column="1" Grid.Row="12" Width="250"
                  MinWidth="250"/>
+
+        <TextBlock Text="{Binding ConfirmPasswordErrorText}"
+                   Margin="5"
+                   HorizontalAlignment="Center"
+                   Grid.Column="1"
+                   Grid.Row="13"
+                   Foreground="Red"/>
 
         <Button Content="Register" Command="{Binding RegisterCommand}"
                 Margin="20" Padding="5" Grid.Column="1"
-                Grid.Row="10" VerticalAlignment="Top" 
+                Grid.Row="14" VerticalAlignment="Top" 
                 Width="100" HorizontalAlignment="Center"/>
 
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"

@@ -18,9 +18,65 @@ namespace Flashcards.Core.ViewModels
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
 
-        public string Password { get; set; }
+        private string _passwordErrorText = "";
+        public string PasswordErrorText
+        {
+            get => _passwordErrorText;
+            set => SetProperty(ref _passwordErrorText, value);
+        }
 
-        public string ConfirmPassword { get; set; }
+        private string _confirmPasswordErrorText = "";
+        public string ConfirmPasswordErrorText
+        {
+            get => _confirmPasswordErrorText;
+            set => SetProperty(ref _confirmPasswordErrorText, value);
+        }
+
+        private string _password;
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (UserInputValidator.ValidatePassword(value) == 1)
+                {
+                    PasswordErrorText = "Password too short - must be at least 8 characters.";
+                    _password = value;
+                    return;
+                }
+                if (UserInputValidator.ValidatePassword(value) == 2)
+                {
+                    PasswordErrorText = "Password too long - must be no longer than 25 characters.";
+                    _password = value;
+                    return;
+                }
+                if (UserInputValidator.ValidatePassword(Password) == 3 || UserInputValidator.ValidatePassword(Password) == 4)
+                {
+                    PasswordErrorText = "Illegal characters in password.";
+                    _password = value;
+                    return;
+                }
+                PasswordErrorText = "";
+                _password = value;
+            }
+        }
+
+        private string _confirmPassword;
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                if (value != Password)
+                {
+                    ConfirmPasswordErrorText = "Passwords do not match.";
+                    _confirmPassword = value;
+                    return;
+                }
+                ConfirmPasswordErrorText = "";
+                _confirmPassword = value;
+            }
+        }
 
         public string OldPassword { get; set; }
 
@@ -62,6 +118,12 @@ namespace Flashcards.Core.ViewModels
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Illegal characters in password.");
                 return;
             }
+            if (Password != ConfirmPassword)
+            {
+                _dialogService.ShowMessageDialog("ERROR", "Passwords do not match");
+                return;
+            }
+
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(OldPassword, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {

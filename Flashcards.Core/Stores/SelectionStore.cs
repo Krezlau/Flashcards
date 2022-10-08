@@ -26,26 +26,14 @@ namespace Flashcards.Core.Stores
 
         public int GetSelectedDeckIndex(User user)
         {
-            for (int i = 0; i < user.Decks.Count; i++)
-            {
-                if (user.Decks[i].Id == SelectedDeck.Id)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            if (user.Decks is null) return -1;
+            return user.Decks.IndexOf(SelectedDeck);
         }
 
         public int GetSelectedFlashcardIndex()
         {
-            for (int i = 0; i <= SelectedDeck.Flashcards.Count; i++)
-            {
-                if (SelectedDeck.Flashcards[i].Id == SelectedFlashcard.Id)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            if (SelectedDeck.Flashcards is null) return -1;
+            return SelectedDeck.Flashcards.IndexOf(SelectedFlashcard);
         }
     }
 }
