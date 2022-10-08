@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    /// <summary>
-    /// for data of deleted decks
-    /// </summary>
-    public class DailyActivity
+    public class DeckActivity
     {
         [Key]
         [Required]
@@ -27,16 +24,16 @@ namespace Flashcards.Core.Models
         public int MinutesSpentLearning { get; set; }
 
         [Required]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [ForeignKey("Deck")]
+        public int DeckId { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual Deck Deck { get; set; }
 
         public override bool Equals(object obj)
         {
             if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
 
-            DailyActivity da = (DailyActivity)obj;
+            DeckActivity da = (DeckActivity)obj;
 
             return da.Id == Id;
         }

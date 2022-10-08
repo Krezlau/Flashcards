@@ -15,6 +15,7 @@ namespace Flashcards.Core.Models
         [Key]
         [Required]
         public int Id { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Name
@@ -22,10 +23,15 @@ namespace Flashcards.Core.Models
             get => _name;
             set => SetProperty(ref _name, value);
         }
+
         public ObservableCollection<Flashcard> Flashcards { get; set; }
+
+        public List<DeckActivity> Activity { get; set; }
+
         [ForeignKey("User")]
         [Required]
         public int UserId { get; set; }
+
         public int Size => Flashcards.Count;
 
         public Deck(string name, int userId)
@@ -33,6 +39,7 @@ namespace Flashcards.Core.Models
             UserId = userId;
             Name = name;
             Flashcards = new ObservableCollection<Flashcard>();
+            Activity = new List<DeckActivity>();
         }
 
         public Deck() { }
