@@ -16,5 +16,6 @@ namespace Flashcards.Core.DBConnection
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Flashcard> Flashcards { get; set; }
         public DbSet<DailyActivity> DailyActivity { get; set; }
+        public DbSet<DeckActivity> DeckActivity { get; set; }
     }
 }
