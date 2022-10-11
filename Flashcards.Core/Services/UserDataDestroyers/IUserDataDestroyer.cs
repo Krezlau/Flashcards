@@ -11,5 +11,6 @@ namespace Flashcards.Core.Services.UserDataDestroyers
     {
         Task DeleteDeck(Deck deck);
         Task DeleteFlashcard(Flashcard flashcard);
+        Task DeleteDeckActivityAsync(DeckActivity activity);
     }
 }

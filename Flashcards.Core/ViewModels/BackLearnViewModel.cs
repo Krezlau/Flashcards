@@ -42,8 +42,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnGoBackClick()
         {
-            // how to count this? is it reviewed then?
-            // user has already seen the back definition but didnt choose good nor again
+            _reviewStore.EndOfLearning();
             _deckPreviewService.Navigate();
         }
 
@@ -65,6 +64,7 @@ namespace Flashcards.Core.ViewModels
         {
             if (_reviewStore.Iterator >= _reviewStore.ToReviewList.Count)
             {
+                _reviewStore.EndOfLearning();
                 _deckPreviewService.Navigate();
                 return;
             }

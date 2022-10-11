@@ -82,5 +82,10 @@ namespace Flashcards.Core.Services.UserDataChangers
                 return true;
             }
         }
+
+        public async Task ChangeDeckActivityAsync(DeckActivity activity)
+        {
+
+        }
     }
 }

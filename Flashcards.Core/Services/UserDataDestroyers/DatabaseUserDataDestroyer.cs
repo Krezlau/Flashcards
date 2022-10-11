@@ -34,5 +34,10 @@ namespace Flashcards.Core.Services.UserDataDestroyers
                 await context.SaveChangesAsync();
             }
         }
+        
+        public async Task DeleteDeckActivityAsync(DeckActivity activity)
+        {
+
+        }
     }
 }

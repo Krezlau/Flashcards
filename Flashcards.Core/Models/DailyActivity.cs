@@ -24,7 +24,7 @@ namespace Flashcards.Core.Models
         public int ReviewedFlashcardsCount { get; set; }
 
         [Required]
-        public int MinutesSpentLearning { get; set; }
+        public double MinutesSpentLearning { get; set; }
 
         [Required]
         [ForeignKey("User")]

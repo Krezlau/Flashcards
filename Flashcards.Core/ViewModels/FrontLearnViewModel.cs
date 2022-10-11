@@ -31,6 +31,8 @@ namespace Flashcards.Core.ViewModels
             _backLearnService = backLearnService;
             _reviewStore = reviewStore;
 
+            _reviewStore.StartSession();
+
             FlipCommand = new RelayCommand(OnFlipClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
         }
@@ -43,6 +45,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnGoBackClick()
         {
+            _reviewStore.EndOfLearning();
             _deckPreviewService.Navigate();
         }
     }
