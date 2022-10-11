@@ -170,7 +170,7 @@ namespace Flashcards.Core.Stores
                     ReviewedFlashcardsCount = 1
                 });
                 Streak++;
-                await _dataCreator.SaveNewDeckActivity(this.SelectionStore.SelectedDeck.Activity[^1]);
+                await _dataCreator.SaveNewDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
             }
             flashcard.Level += 1;
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);

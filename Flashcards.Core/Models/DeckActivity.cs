@@ -29,6 +29,17 @@ namespace Flashcards.Core.Models
 
         public virtual Deck Deck { get; set; }
 
+        public DailyActivity ToDailyActivity()
+        {
+            return new DailyActivity()
+            {
+                UserId = this.Deck.UserId,
+                Day = this.Day,
+                MinutesSpentLearning = this.MinutesSpentLearning,
+                ReviewedFlashcardsCount = this.ReviewedFlashcardsCount
+            };
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
