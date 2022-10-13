@@ -188,7 +188,10 @@ namespace Flashcards.Core.Stores
             if (IfTodayActivity)
             {
                 this.SelectionStore.SelectedDeck.Activity[^1].MinutesSpentLearning += time;
+                await _dataChanger.ChangeDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
             }
+            // any time that IfTodayActivity is false shouldn't count.
+            // only way for this to happen is to end session without any flashcard flipped
         }
     }
 }

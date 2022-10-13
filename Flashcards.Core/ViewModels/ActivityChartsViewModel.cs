@@ -28,41 +28,102 @@ namespace Flashcards.Core.ViewModels
 
             GoBackCommand = new RelayCommand(OnGoBackClick);
 
-            var values = new ObservableCollection<DateTimePoint>();
-            int sum = 0;
+            var reviewedCount_InitialList = new List<DateTimePoint>();
+            var minutesSpent_InitialList = new List<DateTimePoint>();
+            var daysRegisteredList = new List<DateTime>();
+            int reviewCountSum = 0;
 
+            // getting data from user activity (deleted decks' activity)
             if (_userDecksStore.User.Activity.Count != 0)
             {
-                values.Add(new DateTimePoint(_userDecksStore.User.Activity[0].Day, _userDecksStore.User.Activity[0].ReviewedFlashcardsCount));
-                sum += _userDecksStore.User.Activity[0].ReviewedFlashcardsCount;
+                reviewedCount_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[0].Day, _userDecksStore.User.Activity[0].ReviewedFlashcardsCount));
+                minutesSpent_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[0].Day, _userDecksStore.User.Activity[0].MinutesSpentLearning));
+                daysRegisteredList.Add(_userDecksStore.User.Activity[0].Day);
+                reviewCountSum += _userDecksStore.User.Activity[0].ReviewedFlashcardsCount;
 
                 for (int i = 1; i < _userDecksStore.User.Activity.Count; i++)
                 {
-                    while (values[^1].DateTime.AddDays(1) != _userDecksStore.User.Activity[i].Day)
-                    {
-                        values.Add(new DateTimePoint(values[^1].DateTime.AddDays(1), 0));
-                    }
+                    //while (values_initialList[^1].DateTime.AddDays(1) != _userDecksStore.User.Activity[i].Day)
+                    //{
+                    //    values_initialList.Add(new DateTimePoint(values_initialList[^1].DateTime.AddDays(1), 0));
+                    //}
 
-                    values.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].ReviewedFlashcardsCount));
-                    sum += _userDecksStore.User.Activity[i].ReviewedFlashcardsCount;
+                    reviewedCount_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].ReviewedFlashcardsCount));
+                    minutesSpent_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].MinutesSpentLearning));
+                    daysRegisteredList.Add(_userDecksStore.User.Activity[i].Day);
+                    reviewCountSum += _userDecksStore.User.Activity[i].ReviewedFlashcardsCount;
                 }
-                while (values[^1].DateTime.AddDays(1) <= DateTime.Today)
+                //while (reviewedCount_InitialList[^1].DateTime.AddDays(1) <= DateTime.Today)
+                //{
+                //    reviewedCount_InitialList.Add(new DateTimePoint(reviewedCount_InitialList[^1].DateTime.AddDays(1), 0));
+                //}
+            }
+
+            // getting data from each deck's activity
+            foreach (Deck deck in _userDecksStore.User.Decks)
+            {
+                if (deck.Activity.Count == 0) continue;
+                foreach (DeckActivity activity in deck.Activity)
                 {
-                    values.Add(new DateTimePoint(values[^1].DateTime.AddDays(1), 0));
+                    int index = daysRegisteredList.BinarySearch(activity.Day);
+                    if (index < 0)
+                    {
+                        daysRegisteredList.Insert(~index, activity.Day);
+                        reviewedCount_InitialList.Insert(~index, new DateTimePoint(activity.Day, activity.ReviewedFlashcardsCount));
+                        minutesSpent_InitialList.Insert(~index, new DateTimePoint(activity.Day, activity.MinutesSpentLearning));
+                        reviewCountSum += activity.ReviewedFlashcardsCount;
+                    }
+                    if (index >= 0)
+                    {
+                        reviewedCount_InitialList[index].Value += activity.ReviewedFlashcardsCount;
+                        minutesSpent_InitialList[index].Value += activity.MinutesSpentLearning;
+                        reviewCountSum += activity.ReviewedFlashcardsCount;
+                    }
                 }
             }
-            if (_userDecksStore.User.Activity.Count == 0) NoActivityMessage = "No activity data on this account.";
+
+            if (daysRegisteredList.Count == 0)
+            {
+                NoActivityMessage = "No activity data on this account.";
+                return;
+            }
+
+            //filling the holes
+            var reviewCount = new ObservableCollection<DateTimePoint>();
+            var minutesSpent = new ObservableCollection<DateTimePoint>();
+
+            for (int i = 0; i < daysRegisteredList.Count - 1; i++)
+            {
+                reviewCount.Add(reviewedCount_InitialList[i]);
+                minutesSpent.Add(minutesSpent_InitialList[i]);
+
+                while (reviewCount[^1].DateTime.AddDays(1) != daysRegisteredList[i + 1])
+                {
+                    reviewCount.Add(new DateTimePoint(reviewCount[^1].DateTime.AddDays(1), 0));
+                    minutesSpent.Add(new DateTimePoint(reviewCount[^1].DateTime.AddDays(1), 0));
+                }
+            }
+            reviewCount.Add(reviewedCount_InitialList[^1]);
+            minutesSpent.Add(minutesSpent_InitialList[^1]);
+
+            while (reviewCount[^1].DateTime.AddDays(1) <= DateTime.Today)
+            {
+                reviewCount.Add(new DateTimePoint(reviewCount[^1].DateTime.AddDays(1), 0));
+                minutesSpent.Add(new DateTimePoint(reviewCount[^1].DateTime.AddDays(1), 0));
+            }
+
+
 
             Series.Add(new LineSeries<DateTimePoint>
             {
                 TooltipLabelFormatter = (chartPoint) =>
                 $"{new DateTime((long)chartPoint.SecondaryValue):MMMM dd}: {chartPoint.PrimaryValue} reviewed",
-                Values = values,
+                Values = reviewCount,
                 LineSmoothness = 0,
                 GeometrySize = 10
             });
 
-            TotalReviewCount = $"Total review count: {sum}";
+            TotalReviewCount = $"Total review count: {reviewCountSum}";
         }
 
         public ICommand GoBackCommand { get; set; }

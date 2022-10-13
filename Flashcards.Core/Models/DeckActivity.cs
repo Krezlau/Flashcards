@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    public class DeckActivity
+    public class DeckActivity : IComparer<DeckActivity>
     {
         [Key]
         [Required]
@@ -52,6 +53,11 @@ namespace Flashcards.Core.Models
         public override int GetHashCode()
         {
             return HashCode.Combine(Id);
+        }
+
+        public int Compare(DeckActivity x, DeckActivity y)
+        {
+            return DateTime.Compare(x.Day, y.Day);
         }
     }
 }
