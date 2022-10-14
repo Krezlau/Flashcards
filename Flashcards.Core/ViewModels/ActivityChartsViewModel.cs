@@ -43,20 +43,11 @@ namespace Flashcards.Core.ViewModels
 
                 for (int i = 1; i < _userDecksStore.User.Activity.Count; i++)
                 {
-                    //while (values_initialList[^1].DateTime.AddDays(1) != _userDecksStore.User.Activity[i].Day)
-                    //{
-                    //    values_initialList.Add(new DateTimePoint(values_initialList[^1].DateTime.AddDays(1), 0));
-                    //}
-
                     reviewedCount_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].ReviewedFlashcardsCount));
                     minutesSpent_InitialList.Add(new DateTimePoint(_userDecksStore.User.Activity[i].Day, _userDecksStore.User.Activity[i].MinutesSpentLearning));
                     daysRegisteredList.Add(_userDecksStore.User.Activity[i].Day);
                     reviewCountSum += _userDecksStore.User.Activity[i].ReviewedFlashcardsCount;
                 }
-                //while (reviewedCount_InitialList[^1].DateTime.AddDays(1) <= DateTime.Today)
-                //{
-                //    reviewedCount_InitialList.Add(new DateTimePoint(reviewedCount_InitialList[^1].DateTime.AddDays(1), 0));
-                //}
             }
 
             // getting data from each deck's activity
@@ -114,11 +105,20 @@ namespace Flashcards.Core.ViewModels
 
 
 
-            Series.Add(new LineSeries<DateTimePoint>
+            ReviewCountSeries.Add(new LineSeries<DateTimePoint>
             {
                 TooltipLabelFormatter = (chartPoint) =>
                 $"{new DateTime((long)chartPoint.SecondaryValue):MMMM dd}: {chartPoint.PrimaryValue} reviewed",
                 Values = reviewCount,
+                LineSmoothness = 0,
+                GeometrySize = 10
+            });
+
+            MinutesSpentSeries.Add(new LineSeries<DateTimePoint>
+            {
+                TooltipLabelFormatter = (chartPoint) =>
+                $"{new DateTime((long)chartPoint.SecondaryValue):MMMM dd}: {ToWholeMinutesAndSeconds(chartPoint.PrimaryValue)} spent",
+                Values = minutesSpent,
                 LineSmoothness = 0,
                 GeometrySize = 10
             });
@@ -132,9 +132,11 @@ namespace Flashcards.Core.ViewModels
 
         public string NoActivityMessage { get; set; }
 
-        public ObservableCollection<ISeries> Series { get; set; } = new ObservableCollection<ISeries>();
+        public ObservableCollection<ISeries> ReviewCountSeries { get; set; } = new ObservableCollection<ISeries>();
 
-        public Axis[] XAxes { get; set; } =
+        public ObservableCollection<ISeries> MinutesSpentSeries { get; set; } = new ObservableCollection<ISeries>();
+
+        public Axis[] ReviewCountXAxes { get; set; } =
         {
             new Axis
             {
@@ -145,7 +147,18 @@ namespace Flashcards.Core.ViewModels
             }
         };
 
-        public Axis[] YAxes { get; set; } =
+        public Axis[] MinutesSpentXAxes { get; set; } =
+        {
+            new Axis
+            {
+                Labeler = value => new DateTime((long) value).ToString("MMMM dd"),
+                LabelsRotation = 45,
+                UnitWidth = TimeSpan.FromDays(1).Ticks,
+                MinStep = TimeSpan.FromDays(1).Ticks
+            }
+        };
+
+        public Axis[] ReviewCountYAxes { get; set; } =
         {
             new Axis
             {
@@ -154,9 +167,25 @@ namespace Flashcards.Core.ViewModels
             }
         };
 
+        public Axis[] MinutesSpentYAxes { get; set; } =
+        {
+            new Axis
+            {
+                MinStep = 0.1,
+                MinLimit = 0
+            }
+        };
+
         public void OnGoBackClick()
         {
             _navService.Navigate();
+        }
+
+        private string ToWholeMinutesAndSeconds(double minutes)
+        {
+            int wholeMinutes = (int)minutes;
+            int seconds = (int)((minutes - wholeMinutes) * 60);
+            return $"{wholeMinutes} min {seconds} seconds";
         }
     }
 }

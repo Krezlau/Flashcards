@@ -67,8 +67,11 @@ namespace Flashcards.Core.Stores
         public async Task Initialize(User user)
         {
             User = await _dataProvider.LoadUserDecksAsync(user.Id);
+
+            //TODO
             IfTodayActivity = User.IfLearnedToday(DateTime.Today);
             Streak = User.CalculateStreak(DateTime.Today);
+            
             _navigationService.NavigateLeft();
             _rightNavService.NavigateRight();
         }
@@ -134,6 +137,7 @@ namespace Flashcards.Core.Stores
 
         public async Task RemoveCurrentFlashcard()
         {
+            if (SelectionStore.SelectedFlashcard is null) return;
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
             await _dataDestroyer.DeleteFlashcard(SelectionStore.SelectedFlashcard);
             User.Decks[deckIndex].Flashcards.Remove(SelectionStore.SelectedFlashcard);
@@ -141,6 +145,7 @@ namespace Flashcards.Core.Stores
 
         public async Task RemoveCurrentDeck()
         {
+            if (SelectionStore.SelectedDeck is null) return;
             //move all decks activity to user activity
             await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
             User.Decks.Remove(SelectionStore.SelectedDeck);
