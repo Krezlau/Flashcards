@@ -77,6 +77,10 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<ActivityChartsViewModel>>((s) => () => s.GetRequiredService<ActivityChartsViewModel>());
                 services.AddSingleton<NavigationService<ActivityChartsViewModel>>();
 
+                services.AddTransient<DeckActivityChartsViewModel>();
+                services.AddSingleton<Func<DeckActivityChartsViewModel>>((s) => () => s.GetRequiredService<DeckActivityChartsViewModel>());
+                services.AddSingleton<NavigationService<DeckActivityChartsViewModel>>();
+
                 services.AddSingleton<MainViewModel>();
             });
 
@@ -100,7 +104,8 @@ namespace Flashcards.Core.HostBuilderExtensions
                                                 services.GetRequiredService<NavigationService<FrontLearnViewModel>>(),
                                                 services.GetRequiredService<ReviewStore>(),
                                                 services.GetRequiredService<NavigationService<AddNewDeckViewModel>>(),
-                                                services.GetRequiredService<IDialogService>());
+                                                services.GetRequiredService<IDialogService>(),
+                                                services.GetRequiredService<NavigationService<DeckActivityChartsViewModel>>());
         }
     }
 }

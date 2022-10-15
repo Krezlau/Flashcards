@@ -18,6 +18,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<FlashcardManagementViewModel> _flashcardManagementService;
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
         private readonly NavigationService<AddNewDeckViewModel> _newDeckService;
+        private readonly NavigationService<DeckActivityChartsViewModel> _deckActivityService;
         private readonly UserDecksStore userDecksStore;
         private readonly ReviewStore _reviewStore;
         private readonly IDialogService _dialogService;
@@ -48,7 +49,7 @@ namespace Flashcards.Core.ViewModels
         public ICommand FutureReviewsCommand { get; set; }
 
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService, NavigationService<DeckActivityChartsViewModel> deckActivityService)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
@@ -72,6 +73,7 @@ namespace Flashcards.Core.ViewModels
             _frontLearnService = frontLearnService;
             _newDeckService = newDeckService;
             _dialogService = dialogService;
+            _deckActivityService = deckActivityService;
         }
 
         private void OnFutureReviewsClick()
@@ -81,7 +83,7 @@ namespace Flashcards.Core.ViewModels
 
         private void OnDeckActivityClick()
         {
-            _dialogService.ShowSnackbarMessage("Coming soon!", "Feature not available yet.");
+            _deckActivityService.Navigate();
         }
 
         private void OnRenameClick()

@@ -15,6 +15,9 @@
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
 
+        <TextBlock Text="{Binding Title}" VerticalAlignment="Center"
+                   HorizontalAlignment="Center" Grid.Row="1" FontSize="20" />
+        
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Grid.Row="1" Width="50" Margin="20,0" Padding="5"
                 HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -50,8 +53,8 @@
         </ScrollViewer>
         
 
-        <TextBlock Text="{Binding TotalReviewCount}" VerticalAlignment="Center"
-                   HorizontalAlignment="Center" Grid.Row="3" FontSize="20"/>
+        <TextBlock Text="{Binding BottomText}" VerticalAlignment="Center"
+                   HorizontalAlignment="Center" Grid.Row="3" FontSize="16"/>
 
     </Grid>
 </UserControl>
