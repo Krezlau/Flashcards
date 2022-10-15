@@ -10,18 +10,42 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10" />
             <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <TextBlock Text="{Binding Title}" VerticalAlignment="Center"
-                   HorizontalAlignment="Center" Grid.Row="1" FontSize="20" />
-        
+                   HorizontalAlignment="Center" Grid.Row="1" FontSize="20"
+                   Grid.ColumnSpan="5"/>
+
         <Button Content=" &lt; " Command="{Binding GoBackCommand}"
                 Grid.Row="1" Width="50" Margin="20,0" Padding="5"
-                HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <ScrollViewer Grid.Row="2">
+                HorizontalAlignment="Left" VerticalAlignment="Center"
+                Grid.ColumnSpan="5"/>
+
+        <Button Content="All time" Command="{Binding AllTimeCommand}"
+                Grid.Row="2" Grid.Column="1" Padding="5" Width="95"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Button Content="Last 365 days" Command="{Binding LastYearCommand}"
+                Grid.Row="2" Grid.Column="2" Padding="5" Width="95"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Button Content="Last 30 days" Command="{Binding LastMonthCommand}"
+                Grid.Row="2" Grid.Column="3" Padding="5" Width="95"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
@@ -51,10 +75,14 @@
                    Grid.Row="3"/>
             </Grid>
         </ScrollViewer>
-        
+
+        <TextBlock Text="{Binding BottomLabel}" VerticalAlignment="Center"
+                   HorizontalAlignment="Center" Grid.Row="4" FontSize="20"
+                   Grid.ColumnSpan="5"/>
 
         <TextBlock Text="{Binding BottomText}" VerticalAlignment="Center"
-                   HorizontalAlignment="Center" Grid.Row="3" FontSize="16"/>
+                   HorizontalAlignment="Center" Grid.Row="5" FontSize="16"
+                   Grid.ColumnSpan="5"/>
 
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -24,11 +25,35 @@ namespace Flashcards.Core.ViewModels
             _dataOrganizer = new ActivityDataOrganizer();
             _userDecksStore = userDecksStore;
             GoBackCommand = new RelayCommand(OnGoBackClick);
+            AllTimeCommand = new RelayCommand(OnAllTimeClick);
+            LastYearCommand = new RelayCommand(OnLastYearClick);
+            LastMonthCommand = new RelayCommand(OnLastMonthClick);
+
+            BottomLabel = "All time";
         }
 
         public ICommand GoBackCommand { get; set; }
 
-        public string BottomText { get; set; }
+        public ICommand AllTimeCommand { get; set; }
+
+        public ICommand LastYearCommand { get; set; }
+        
+        public ICommand LastMonthCommand { get; set; }
+
+        private string _bottomText;
+        public string BottomText
+        {
+            get => _bottomText;
+            set => SetProperty(ref _bottomText, value);
+        }
+
+
+        private string _bottomLabel;
+        public string BottomLabel
+        {
+            get => _bottomLabel;
+            set => SetProperty(ref _bottomLabel, value);
+        }
 
         public string NoActivityMessage { get; set; }
 
@@ -79,6 +104,55 @@ namespace Flashcards.Core.ViewModels
         };
 
         public abstract void OnGoBackClick();
+
+        public void OnAllTimeClick()
+        {
+            ReviewCountSeries[0].Values = _dataOrganizer.DailyReviewedCount;
+            MinutesSpentSeries[0].Values = _dataOrganizer.DailyMinutesSpent;
+
+            BottomLabel = "All time";
+            BottomText = $"Total review count: {_dataOrganizer.TotalReviewedCount}, " +
+                $"Total time spent: {ToWholeMinutesAndSeconds(_dataOrganizer.TotalMinutesSpent)}, " +
+                $"Avg per flashcard: {_dataOrganizer.AverageTimePerFlashcard:N2} min";
+        }
+
+        public void OnLastYearClick()
+        {
+            var minutes = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyMinutesSpent
+                                .Skip(Math.Max(0, _dataOrganizer.DailyMinutesSpent.Count - 365)));
+            var count = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyReviewedCount
+                                .Skip(Math.Max(0, _dataOrganizer.DailyReviewedCount.Count - 365)));
+
+            ReviewCountSeries[0].Values = count;
+            MinutesSpentSeries[0].Values = minutes;
+
+            int totalCount = (int)count.Sum(c => c.Value);
+            double totalMinutes = (double)minutes.Sum(m => m.Value);
+
+            BottomLabel = "Last 365 days";
+            BottomText = $"Total review count: {totalCount}, " +
+                $"Total time spent: {ToWholeMinutesAndSeconds(totalMinutes)}, " +
+                $"Avg per flashcard: {totalMinutes / totalCount:N2} min";
+        }
+
+        public void OnLastMonthClick()
+        {
+            var minutes = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyMinutesSpent
+                                .Skip(Math.Max(0, _dataOrganizer.DailyMinutesSpent.Count - 30)));
+            var count = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyReviewedCount
+                                .Skip(Math.Max(0, _dataOrganizer.DailyReviewedCount.Count - 30)));
+
+            ReviewCountSeries[0].Values = count;
+            MinutesSpentSeries[0].Values = minutes;
+
+            int totalCount = (int)count.Sum(c => c.Value);
+            double totalMinutes = (double)minutes.Sum(m => m.Value);
+
+            BottomLabel = "Last 30 days";
+            BottomText = $"Total review count: {totalCount}, " +
+                $"Total time spent: {ToWholeMinutesAndSeconds(totalMinutes)}, " +
+                $"Avg per flashcard: {totalMinutes / totalCount:N2} min";
+        }
 
         protected string ToWholeMinutesAndSeconds(double minutes)
         {
