@@ -106,6 +106,7 @@ namespace Flashcards.Core.ViewModels
         {
             if (_reviewStore.ToReviewList.Count > 0)
             {
+                _reviewStore.StartSession();
                 _frontLearnService.Navigate();
                 return;
             }
