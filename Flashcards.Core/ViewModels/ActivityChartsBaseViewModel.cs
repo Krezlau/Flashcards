@@ -30,6 +30,9 @@ namespace Flashcards.Core.ViewModels
             LastMonthCommand = new RelayCommand(OnLastMonthClick);
 
             BottomLabel = "All time";
+            BottomText = $"Total review count: 0, " +
+                $"Total time spent: 0 min 0 seconds, " +
+                $"Avg per flashcard: 0,00 min";
         }
 
         public ICommand GoBackCommand { get; set; }
@@ -107,6 +110,8 @@ namespace Flashcards.Core.ViewModels
 
         public void OnAllTimeClick()
         {
+            if (NoActivityMessage is not null) return;
+
             ReviewCountSeries[0].Values = _dataOrganizer.DailyReviewedCount;
             MinutesSpentSeries[0].Values = _dataOrganizer.DailyMinutesSpent;
 
@@ -118,6 +123,8 @@ namespace Flashcards.Core.ViewModels
 
         public void OnLastYearClick()
         {
+            if (NoActivityMessage is not null) return;
+
             var minutes = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyMinutesSpent
                                 .Skip(Math.Max(0, _dataOrganizer.DailyMinutesSpent.Count - 365)));
             var count = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyReviewedCount
@@ -137,6 +144,8 @@ namespace Flashcards.Core.ViewModels
 
         public void OnLastMonthClick()
         {
+            if (NoActivityMessage is not null) return;
+
             var minutes = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyMinutesSpent
                                 .Skip(Math.Max(0, _dataOrganizer.DailyMinutesSpent.Count - 30)));
             var count = new ObservableCollection<DateTimePoint>(_dataOrganizer.DailyReviewedCount

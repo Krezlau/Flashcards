@@ -125,16 +125,16 @@ namespace Flashcards.Core.Services
                 while (DailyReviewedCount[^1].DateTime.AddDays(1) != reviewedCount_InitialList[i + 1].DateTime)
                 {
                     DailyReviewedCount.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
-                    DailyMinutesSpent.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
+                    DailyMinutesSpent.Add(new DateTimePoint(DailyMinutesSpent[^1].DateTime.AddDays(1), 0));
                 }
             }
             DailyReviewedCount.Add(reviewedCount_InitialList[^1]);
             DailyMinutesSpent.Add(minutesSpent_InitialList[^1]);
 
-            while (DailyReviewedCount[^1].DateTime.AddDays(1) <= DateTime.Today)
+            while (DailyReviewedCount[^1].DateTime.AddDays(1) < DateTime.Today)
             {
                 DailyReviewedCount.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
-                DailyMinutesSpent.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
+                DailyMinutesSpent.Add(new DateTimePoint(DailyMinutesSpent[^1].DateTime.AddDays(1), 0));
             }
         }
     }
