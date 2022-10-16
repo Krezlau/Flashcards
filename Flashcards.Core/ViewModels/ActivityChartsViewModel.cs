@@ -51,9 +51,8 @@ namespace Flashcards.Core.ViewModels
             });
 
             Title = "Your activity";
-            BottomText = $"Total review count: {_dataOrganizer.TotalReviewedCount}, " +
-                $"Total time spent: {ToWholeMinutesAndSeconds(_dataOrganizer.TotalMinutesSpent)}, " +
-                $"Avg per flashcard: {_dataOrganizer.AverageTimePerFlashcard:N2} min";
+
+            OnLastMonthClick();
         }
 
         public override void OnGoBackClick()
