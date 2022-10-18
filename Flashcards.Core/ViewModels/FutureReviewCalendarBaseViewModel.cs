@@ -2,8 +2,10 @@
 using Flashcards.Core.Stores;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,15 +13,15 @@ using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
 {
-    public abstract class FutureReviewCalendarBaseViewModel
+    public abstract class FutureReviewCalendarBaseViewModel : ObservableObject
     {
         protected readonly UserDecksStore _userDecksStore;
-        protected readonly ActivityDataOrganizer _dataOrganizer;
+        protected readonly FutureReviewsOrganizer _dataOrganizer;
 
         protected FutureReviewCalendarBaseViewModel(UserDecksStore userDecksStore)
         {
             _userDecksStore = userDecksStore;
-            _dataOrganizer = new ActivityDataOrganizer();
+            _dataOrganizer = new FutureReviewsOrganizer(FutureReviewsXAxes, FutureReviewsSeries);
         }
 
         public string Title { get; set; }
@@ -28,15 +30,21 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public ISeries[] FutureReviewsSeries { get; set; }
+        public ObservableCollection<ISeries> FutureReviewsSeries { get; set; } = new ObservableCollection<ISeries>();
 
-        public Axis[] FutureReviewsXAxes { get; set; }
+        public Axis[] FutureReviewsXAxes { get; set; } =
+        {
+            new Axis
+            {
+                Labels = new List<string>()
+            }
+        };
 
         public Axis[] FutureReviewsYAxes { get; set; } =
         {
             new Axis
             {
-                Labels = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
+                Labels = new[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
             }
         };
 

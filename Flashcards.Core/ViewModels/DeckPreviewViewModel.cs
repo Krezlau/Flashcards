@@ -19,6 +19,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
         private readonly NavigationService<AddNewDeckViewModel> _newDeckService;
         private readonly NavigationService<DeckActivityChartsViewModel> _deckActivityService;
+        private readonly NavigationService<DeckFutureReviewsCalendarViewModel> _futureReviewsService;
         private readonly UserDecksStore userDecksStore;
         private readonly ReviewStore _reviewStore;
         private readonly IDialogService _dialogService;
@@ -49,7 +50,7 @@ namespace Flashcards.Core.ViewModels
         public ICommand FutureReviewsCommand { get; set; }
 
 
-        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService, NavigationService<DeckActivityChartsViewModel> deckActivityService)
+        public DeckPreviewViewModel(UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeNavigatonService, NavigationService<FlashcardManagementViewModel> flashcardManagementService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore, NavigationService<AddNewDeckViewModel> newDeckService, IDialogService dialogService, NavigationService<DeckActivityChartsViewModel> deckActivityService, NavigationService<DeckFutureReviewsCalendarViewModel> futureReviewsService)
         {
             this.userDecksStore = userDecksStore;
             _currentDeck = userDecksStore.SelectionStore.SelectedDeck;
@@ -74,11 +75,12 @@ namespace Flashcards.Core.ViewModels
             _newDeckService = newDeckService;
             _dialogService = dialogService;
             _deckActivityService = deckActivityService;
+            _futureReviewsService = futureReviewsService;
         }
 
         private void OnFutureReviewsClick()
         {
-            _dialogService.ShowSnackbarMessage("Coming soon!", "Feature not available yet.");
+            _futureReviewsService.Navigate();
         }
 
         private void OnDeckActivityClick()

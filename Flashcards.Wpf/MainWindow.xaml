@@ -93,6 +93,12 @@
                 <DataTemplate DataType="{x:Type viewmodels:DeckActivityChartsViewModel}">
                     <views:ActivityChartsView/>
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:DeckFutureReviewsCalendarViewModel}">
+                    <views:FutureReviewCalendarView/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:FutureReviewCalendarViewModel}">
+                    <views:FutureReviewCalendarView/>
+                </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
         <ui:TitleBar

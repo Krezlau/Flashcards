@@ -81,6 +81,14 @@ namespace Flashcards.Core.HostBuilderExtensions
                 services.AddSingleton<Func<DeckActivityChartsViewModel>>((s) => () => s.GetRequiredService<DeckActivityChartsViewModel>());
                 services.AddSingleton<NavigationService<DeckActivityChartsViewModel>>();
 
+                services.AddTransient<DeckFutureReviewsCalendarViewModel>();
+                services.AddSingleton<Func<DeckFutureReviewsCalendarViewModel>>((s) => () => s.GetRequiredService<DeckFutureReviewsCalendarViewModel>());
+                services.AddSingleton<NavigationService<DeckFutureReviewsCalendarViewModel>>();
+
+                services.AddTransient<FutureReviewCalendarViewModel>();
+                services.AddSingleton<Func<FutureReviewCalendarViewModel>>((s) => () => s.GetRequiredService<FutureReviewCalendarViewModel>());
+                services.AddSingleton<NavigationService<FutureReviewCalendarViewModel>>();
+
                 services.AddSingleton<MainViewModel>();
             });
 
@@ -105,7 +113,8 @@ namespace Flashcards.Core.HostBuilderExtensions
                                                 services.GetRequiredService<ReviewStore>(),
                                                 services.GetRequiredService<NavigationService<AddNewDeckViewModel>>(),
                                                 services.GetRequiredService<IDialogService>(),
-                                                services.GetRequiredService<NavigationService<DeckActivityChartsViewModel>>());
+                                                services.GetRequiredService<NavigationService<DeckActivityChartsViewModel>>(),
+                                                services.GetRequiredService<NavigationService<DeckFutureReviewsCalendarViewModel>>());
         }
     }
 }
