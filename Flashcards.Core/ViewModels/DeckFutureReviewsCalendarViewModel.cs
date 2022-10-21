@@ -22,7 +22,7 @@ namespace Flashcards.Core.ViewModels
                 NoReviewsMessage = "No reviews in sight.";
             }
 
-            Title = $"Reviews for \"{_userDecksStore.SelectionStore.SelectedDeck}\"";
+            Title = $"Reviews for \"{_userDecksStore.SelectionStore.SelectedDeck.Name}\"";
         }
 
         public override void OnGoBackClick()

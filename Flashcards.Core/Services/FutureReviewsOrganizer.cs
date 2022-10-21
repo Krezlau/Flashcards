@@ -1,11 +1,11 @@
 ﻿using Flashcards.Core.Models;
-using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using LiveChartsCore;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -81,81 +81,52 @@ namespace Flashcards.Core.Services
         private void FillTheGapsAndSetUpTheAxis(List<DateTimePoint> values)
         {
             FutureReviewsObservable = new ObservableCollection<WeightedPoint>();
-            int weekNumber = 0;
-            int dayOfTheWeek = (int)values[0].DateTime.DayOfWeek;
-            FutureReviewsXAxes[0].Labels.Add(values[0].DateTime.AddDays(-dayOfTheWeek).ToString("d"));
-            FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, values[0].Value));
-            Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{88}");
-            if (dayOfTheWeek > 6)
+
+            int index = 0;
+            double sum = 0;
+            while (index < values.Count && values[index].DateTime < DateTime.Today)
             {
-                dayOfTheWeek = 0;
-                FutureReviewsXAxes[0].Labels.Add(values[0].DateTime.AddDays(1).ToString("d"));
-                weekNumber++;
+                sum += (double)values[index++].Value;
             }
-            DateTime currentDate = values[0].DateTime;
-            for (int i = 1; i < values.Count - 1; i++)
+
+            DateTime currentDate = DateTime.Today;
+            int weekNumber = 0;
+            int dayOfTheWeek = (int)DateTime.Today.DayOfWeek;
+            FutureReviewsXAxes[0].Labels.Add(DateTime.Today.AddDays(-dayOfTheWeek).ToString("d"));
+
+            AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, (int)sum);
+
+            for (int i = index; i < values.Count; i++)
             {
                 dayOfTheWeek = (int)values[i].DateTime.DayOfWeek;
-                FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, values[i].Value));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{100}");
-                if (dayOfTheWeek > 6)
-                {
-                    dayOfTheWeek = 0;
-                    FutureReviewsXAxes[0].Labels.Add(values[i].DateTime.AddDays(1).ToString("d"));
-                    weekNumber++;
-                }
+                AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, values[i].DateTime, (int)values[i].Value);
                 currentDate = values[i].DateTime;
 
-                while (currentDate.AddDays(1) != values[i + 1].DateTime)
+                while (i < values.Count && currentDate.AddDays(1) != values[i + 1].DateTime)
                 {
-                    FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                    Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{112}");
-                    if (dayOfTheWeek > 6)
-                    {
-                        dayOfTheWeek = 0;
-                        FutureReviewsXAxes[0].Labels.Add(currentDate.AddDays(1).ToString("d"));
-                        weekNumber++;
-                    }
+                    AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, 0);
                     currentDate = currentDate.AddDays(1);
                 }
             }
-            FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, values[^1].Value));
-            Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{123}");
-            if (dayOfTheWeek > 6)
-            {
-                dayOfTheWeek = 0;
-                FutureReviewsXAxes[0].Labels.Add(values[^1].DateTime.AddDays(1).ToString("d"));
-                weekNumber++;
-            }
-            currentDate = currentDate.AddDays(1);
-
 
             // finish last week
             while (dayOfTheWeek <= 6)
             {
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-            Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{137}");
                 currentDate = currentDate.AddDays(1);
             }
             weekNumber++;
-            while (weekNumber <= 9)
+            while (weekNumber <= 25)
             {
                 FutureReviewsXAxes[0].Labels.Add(currentDate.AddDays(1).ToString("d"));
                 dayOfTheWeek = 0;
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{146}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{148}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{150}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{152}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{154}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber}\t{dayOfTheWeek - 1}\t{156}");
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber++, dayOfTheWeek++, 0));
-                Trace.WriteLine($"{weekNumber - 1}\t{dayOfTheWeek - 1}\t{158}");
                 currentDate = currentDate.AddDays(6);
             }
         }
@@ -164,17 +135,28 @@ namespace Flashcards.Core.Services
         {
             FutureReviewsSeries.Add(new HeatSeries<WeightedPoint>
             {
+                PointPadding = new LiveChartsCore.Drawing.Padding(1),
                 HeatMap = new[]
                 {
-                    new SKColor(255, 241, 118).AsLvcColor(), // the first element is the "coldest"
-                    SKColors.DarkSlateGray.AsLvcColor(),
-                    SKColors.Blue.AsLvcColor()
+                    SKColors.Black.AsLvcColor(),
+                    SKColors.SpringGreen.AsLvcColor()
                 },
                 Values = FutureReviewsObservable,
-                TooltipLabelFormatter = (chartPoint) => 
+                TooltipLabelFormatter = (chartPoint) =>
                 $"{DateTime.Parse(FutureReviewsXAxes[0].Labels[(int)chartPoint.Coordinate.SecondaryValue]).AddDays((int)chartPoint.PrimaryValue):d}" +
                 $" {(int)chartPoint.TertiaryValue}"
             });
+        }
+
+        private void AddDayToFutureReviews(ref int dayOfTheWeek, ref int weekNumber, DateTime currentDate, int value)
+        {
+            FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, value));
+            if (dayOfTheWeek > 6)
+            {
+                dayOfTheWeek = 0;
+                FutureReviewsXAxes[0].Labels.Add(currentDate.AddDays(1).ToString("d"));
+                weekNumber++;
+            }
         }
     }
 }

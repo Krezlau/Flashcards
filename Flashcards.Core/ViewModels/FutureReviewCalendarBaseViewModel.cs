@@ -3,6 +3,7 @@ using Flashcards.Core.Stores;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +23,7 @@ namespace Flashcards.Core.ViewModels
         {
             _userDecksStore = userDecksStore;
             _dataOrganizer = new FutureReviewsOrganizer(FutureReviewsXAxes, FutureReviewsSeries);
+            GoBackCommand = new RelayCommand(OnGoBackClick);
         }
 
         public string Title { get; set; }
@@ -44,7 +46,8 @@ namespace Flashcards.Core.ViewModels
         {
             new Axis
             {
-                Labels = new[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
+                Labels = new[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"},
+                ShowSeparatorLines = false
             }
         };
 
