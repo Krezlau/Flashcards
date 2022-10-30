@@ -91,7 +91,7 @@
                     Text="Future reviews calendar" />
                 <TextBlock
                     FontSize="12"
-                    Text="Coming soon!" />
+                    Text="See currently planned reviews" />
             </StackPanel>
         </ui:CardAction>
 

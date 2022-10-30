@@ -80,29 +80,30 @@
             Padding="0">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="2*" />
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Label Content="Decks" Grid.Row="0"
+                <Label Content="Future reviews calendar" Grid.Row="0"
                        VerticalAlignment="Center"
                        FontSize="20" Margin="25,0"
                        FontWeight="Bold"/>
 
-                <TextBlock Text="{Binding DeckTileText1}"
+                <TextBlock Text="Data on your reviews in the future."
                            Grid.Row="1"
                            VerticalAlignment="Top"
                            FontSize="16"
                            TextWrapping="Wrap"
                            Margin="15,20,15,5" />
 
-                <TextBlock Text="{Binding DeckTileText2}"
-                           Grid.Row="2"
-                           VerticalAlignment="Top"
-                           FontSize="16"
-                           TextWrapping="Wrap"
-                           Margin="15,5,15,20" />
+                <ui:CardAction
+                    Grid.Row="2"
+                    Content="See planned reviews"
+                    Margin="0"
+                    VerticalAlignment="Stretch"
+                    Padding="14,0"
+                    Command="{Binding FutureReviewsCommand}"/>
             </Grid>
         </ui:Card>
         <ui:Card

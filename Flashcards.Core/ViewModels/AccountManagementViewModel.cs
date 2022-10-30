@@ -18,6 +18,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AccountInfoChangeViewModel> _navigationService;
         private readonly NavigationService<PasswordChangeViewModel> _passwordChangeService;
         private readonly NavigationService<ActivityChartsViewModel> _chartsNavService;
+        private readonly NavigationService<FutureReviewCalendarViewModel> _futureReviewsService;
 
         public string Username => _userDecksStore.User.Name;
 
@@ -41,20 +42,22 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand ActivityChartsCommand { get; set; }
 
-        public AccountManagementViewModel(UserDecksStore userDecksStore, NavigationService<AccountInfoChangeViewModel> navigationService, NavigationService<PasswordChangeViewModel> passwordChangeService, NavigationService<ActivityChartsViewModel> chartsNavService)
+        public ICommand FutureReviewsCommand { get; set; }
+
+        public AccountManagementViewModel(UserDecksStore userDecksStore,
+                                          NavigationService<AccountInfoChangeViewModel> navigationService,
+                                          NavigationService<PasswordChangeViewModel> passwordChangeService,
+                                          NavigationService<ActivityChartsViewModel> chartsNavService,
+                                          NavigationService<FutureReviewCalendarViewModel> futureReviewsService)
         {
             _userDecksStore = userDecksStore;
             _navigationService = navigationService;
+            _futureReviewsService = futureReviewsService;
 
             Deck largestDeck = FindLargestDeck();
             int flashcardCount = CountFlashcards();
 
             StreakTileText = $"You have been learning for {_userDecksStore.Streak} days in a row. \n Keep going!"; //todo
-            if (largestDeck is not null)
-            {
-                DeckTileText2 = "The biggest deck is " + largestDeck.Name + " - with " + largestDeck.Size + " flashcards inside.";
-            }
-            DeckTileText1 = "There are " + _userDecksStore.User.Decks.Count + " decks on your account.";
             ActivityTileText = "We store data regarding your activity. Check your activity data here.";
 
             UsernameText = "Username: " + _userDecksStore.User.Name;
@@ -64,6 +67,7 @@ namespace Flashcards.Core.ViewModels
             ChangeEmailCommand = new RelayCommand(OnChangeEmailClick);
             ChangePasswordCommand = new RelayCommand(OnChangePasswordClick);
             ActivityChartsCommand = new RelayCommand(OnActivityClick);
+            FutureReviewsCommand = new RelayCommand(() => _futureReviewsService.Navigate());
             _passwordChangeService = passwordChangeService;
             _chartsNavService = chartsNavService;
         }

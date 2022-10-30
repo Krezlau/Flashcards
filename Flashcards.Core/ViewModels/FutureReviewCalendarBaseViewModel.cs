@@ -32,6 +32,10 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
+        public ICommand ActivityCommand { get; set; }
+
+        public ICommand ManageFlashcardsCommand { get; set; }
+
         public ObservableCollection<ISeries> FutureReviewsSeries { get; set; } = new ObservableCollection<ISeries>();
 
         public Axis[] FutureReviewsXAxes { get; set; } =
