@@ -14,5 +14,6 @@ namespace Flashcards.Core.Services.UserDataChangers
         Task<bool> ChangeUserEmailAsync(User user, string email);
         Task<bool> ChangeUserNameAsync(User user, string username);
         Task ChangeActivityAsync(DailyActivity activity);
+        Task ChangeDeckActivityAsync(DeckActivity activity);
     }
 }

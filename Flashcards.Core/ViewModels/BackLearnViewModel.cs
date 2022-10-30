@@ -40,10 +40,9 @@ namespace Flashcards.Core.ViewModels
             GoBackCommand = new RelayCommand(OnGoBackClick);
         }
 
-        private void OnGoBackClick()
+        private async void OnGoBackClick()
         {
-            // how to count this? is it reviewed then?
-            // user has already seen the back definition but didnt choose good nor again
+            await _userDecksStore.SaveSessionTime(_reviewStore.EndOfLearning());
             _deckPreviewService.Navigate();
         }
 
@@ -51,20 +50,21 @@ namespace Flashcards.Core.ViewModels
         {
             await _userDecksStore.FlashcardSetReviewFailed(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Again();
-            FlashcardDone();
+            await FlashcardDone();
         }
 
         private async void OnGoodClick()
         {
             await _userDecksStore.FlashcardSetReview(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Good();
-            FlashcardDone();
+            await FlashcardDone();
         }
 
-        private void FlashcardDone()
+        private async Task FlashcardDone()
         {
             if (_reviewStore.Iterator >= _reviewStore.ToReviewList.Count)
             {
+                await _userDecksStore.SaveSessionTime(_reviewStore.EndOfLearning());
                 _deckPreviewService.Navigate();
                 return;
             }

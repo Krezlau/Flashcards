@@ -1,30 +1,24 @@
-﻿using Flashcards.Core.Models;
-using Flashcards.Core.Services;
+﻿using Flashcards.Core.Services;
 using Flashcards.Core.Stores;
-using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Flashcards.Core.ViewModels
 {
-    public class ActivityChartsViewModel : ActivityChartsBaseViewModel
+    public class DeckActivityChartsViewModel : ActivityChartsBaseViewModel
     {
-        private readonly NavigationService<AccountManagementViewModel> _navService;
+        private readonly NavigationService<DeckPreviewViewModel> _navService;
 
-        public ActivityChartsViewModel(UserDecksStore userDecksStore, NavigationService<AccountManagementViewModel> navService) : base(userDecksStore)
+        public DeckActivityChartsViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> navService) : base(userDecksStore)
         {
             _navService = navService;
-            
-            bool ifActivityEver = _dataOrganizer.OrganizeActivityData(_userDecksStore.User);
+
+            bool ifActivityEver = _dataOrganizer.OrganizeActivityData(_userDecksStore.SelectionStore.SelectedDeck);
 
             if (!ifActivityEver)
             {
@@ -50,7 +44,7 @@ namespace Flashcards.Core.ViewModels
                 GeometrySize = 10
             });
 
-            Title = "Your activity";
+            Title = $"Your activity in \"{_userDecksStore.SelectionStore.SelectedDeck.Name}\"";
 
             OnLastMonthClick();
         }

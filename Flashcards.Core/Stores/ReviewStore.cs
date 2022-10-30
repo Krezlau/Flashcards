@@ -9,6 +9,10 @@ namespace Flashcards.Core.Stores
 {
     public class ReviewStore
     {
+        public DateTime StartTime { get; private set; }
+
+        public bool IfSessionActive { get; set; } = false;
+
         public List<Flashcard> ToReviewList { get; set; }
 
         public int Iterator { get; set; }
@@ -24,11 +28,17 @@ namespace Flashcards.Core.Stores
                 Iterator = 0;
             }
         }
-
-        public void EndOfLearning()
+        /// <summary>
+        /// end a session
+        /// </summary>
+        /// <returns>Number of minutes spent learning</returns>
+        public double EndOfLearning()
         {
             ToReviewList = SelectedDeck.CollectToReview();
             Iterator = 0;
+            IfSessionActive = false;
+            var timespan_minutes = (DateTime.Now - StartTime).TotalMinutes;
+            return timespan_minutes;
         }
 
         public void Again()
@@ -40,6 +50,12 @@ namespace Flashcards.Core.Stores
         public void Good()
         {
             Iterator++;
+        }
+
+        public void StartSession()
+        {
+            StartTime = DateTime.Now;
+            IfSessionActive = true;
         }
     }
 }

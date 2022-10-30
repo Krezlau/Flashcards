@@ -41,8 +41,9 @@ namespace Flashcards.Core.ViewModels
             _backLearnService.Navigate();
         }
 
-        private void OnGoBackClick()
+        private async void OnGoBackClick()
         {
+            await _userDecksStore.SaveSessionTime(_reviewStore.EndOfLearning());
             _deckPreviewService.Navigate();
         }
     }

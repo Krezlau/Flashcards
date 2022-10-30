@@ -74,15 +74,21 @@ namespace Flashcards.WpfApp
             NavigationStore _navigationStore = _host.Services.GetRequiredService<NavigationStore>();
             _navigationStore.CurrentViewModel = _host.Services.GetRequiredService<LogInViewModel>();
 
-            UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
+            
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
             base.OnStartup(e);
         }
 
-        protected override void OnExit(ExitEventArgs e)
+        protected async override void OnExit(ExitEventArgs e)
         {
+            ReviewStore _reviewStore = _host.Services.GetRequiredService<ReviewStore>();
+            if (_reviewStore.IfSessionActive)
+            {
+                UserDecksStore _userDecksStore = _host.Services.GetRequiredService<UserDecksStore>();
+                await _userDecksStore.SaveSessionTime(_reviewStore.EndOfLearning());
+            }
 
             _host.Dispose();
 

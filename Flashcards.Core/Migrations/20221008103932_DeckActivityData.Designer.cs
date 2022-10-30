@@ -4,14 +4,16 @@ using Flashcards.Core.DBConnection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Flashcards.Core.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20221008103932_DeckActivityData")]
+    partial class DeckActivityData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,8 +31,8 @@ namespace Flashcards.Core.Migrations
                     b.Property<DateTime>("Day")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("MinutesSpentLearning")
-                        .HasColumnType("float");
+                    b.Property<int>("MinutesSpentLearning")
+                        .HasColumnType("int");
 
                     b.Property<int>("ReviewedFlashcardsCount")
                         .HasColumnType("int");
@@ -80,8 +82,8 @@ namespace Flashcards.Core.Migrations
                     b.Property<int>("DeckId")
                         .HasColumnType("int");
 
-                    b.Property<double>("MinutesSpentLearning")
-                        .HasColumnType("float");
+                    b.Property<int>("MinutesSpentLearning")
+                        .HasColumnType("int");
 
                     b.Property<int>("ReviewedFlashcardsCount")
                         .HasColumnType("int");

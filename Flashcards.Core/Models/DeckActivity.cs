@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,10 +9,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    /// <summary>
-    /// for data of deleted decks
-    /// </summary>
-    public class DailyActivity
+    public class DeckActivity : IComparer<DeckActivity>
     {
         [Key]
         [Required]
@@ -27,16 +25,27 @@ namespace Flashcards.Core.Models
         public double MinutesSpentLearning { get; set; }
 
         [Required]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [ForeignKey("Deck")]
+        public int DeckId { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual Deck Deck { get; set; }
+
+        public DailyActivity ToDailyActivity()
+        {
+            return new DailyActivity()
+            {
+                UserId = this.Deck.UserId,
+                Day = this.Day,
+                MinutesSpentLearning = this.MinutesSpentLearning,
+                ReviewedFlashcardsCount = this.ReviewedFlashcardsCount
+            };
+        }
 
         public override bool Equals(object obj)
         {
             if (obj is null || !this.GetType().Equals(obj.GetType())) return false;
 
-            DailyActivity da = (DailyActivity)obj;
+            DeckActivity da = (DeckActivity)obj;
 
             return da.Id == Id;
         }
@@ -44,6 +53,11 @@ namespace Flashcards.Core.Models
         public override int GetHashCode()
         {
             return HashCode.Combine(Id);
+        }
+
+        public int Compare(DeckActivity x, DeckActivity y)
+        {
+            return DateTime.Compare(x.Day, y.Day);
         }
     }
 }

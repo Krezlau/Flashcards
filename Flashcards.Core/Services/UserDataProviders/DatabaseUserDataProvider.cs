@@ -50,6 +50,10 @@ namespace Flashcards.Core.Services.UserDataProviders
                     d.Flashcards = new ObservableCollection<Flashcard>(await context.Flashcards
                         .Where(b => b.DeckId == d.Id)
                         .ToListAsync());
+
+                    d.Activity = new List<DeckActivity>(await context.DeckActivity
+                        .Where(b => b.DeckId == d.Id)
+                        .ToListAsync());
                 }
 
                 return user;

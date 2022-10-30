@@ -51,5 +51,14 @@ namespace Flashcards.Core.Services.UserDataCreators
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task SaveNewDeckActivityAsync(DeckActivity activity)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.DeckActivity.Add(activity);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

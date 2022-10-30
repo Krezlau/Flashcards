@@ -67,8 +67,11 @@ namespace Flashcards.Core.Stores
         public async Task Initialize(User user)
         {
             User = await _dataProvider.LoadUserDecksAsync(user.Id);
+
+            //TODO
             IfTodayActivity = User.IfLearnedToday(DateTime.Today);
             Streak = User.CalculateStreak(DateTime.Today);
+            
             _navigationService.NavigateLeft();
             _rightNavService.NavigateRight();
         }
@@ -134,6 +137,7 @@ namespace Flashcards.Core.Stores
 
         public async Task RemoveCurrentFlashcard()
         {
+            if (SelectionStore.SelectedFlashcard is null) return;
             int deckIndex = SelectionStore.GetSelectedDeckIndex(User);
             await _dataDestroyer.DeleteFlashcard(SelectionStore.SelectedFlashcard);
             User.Decks[deckIndex].Flashcards.Remove(SelectionStore.SelectedFlashcard);
@@ -141,6 +145,8 @@ namespace Flashcards.Core.Stores
 
         public async Task RemoveCurrentDeck()
         {
+            if (SelectionStore.SelectedDeck is null) return;
+            //move all decks activity to user activity
             await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
             User.Decks.Remove(SelectionStore.SelectedDeck);
         }
@@ -153,23 +159,23 @@ namespace Flashcards.Core.Stores
 
         public async Task FlashcardSetReview(Flashcard flashcard)
         {
-            // probably should be called with list of flashcards to change instead of being called on every flashcard
             if (IfTodayActivity)
             {
-                User.Activity[User.Activity.Count - 1].ReviewedFlashcardsCount++;
-                await _dataChanger.ChangeActivityAsync(User.Activity[User.Activity.Count - 1]);
+                this.SelectionStore.SelectedDeck.Activity[^1].ReviewedFlashcardsCount++;
+                await _dataChanger.ChangeDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
             }
             if (!IfTodayActivity)
             {
                 IfTodayActivity = true;
-                User.Activity.Add(new DailyActivity
+                this.SelectionStore.SelectedDeck.Activity.Add(new DeckActivity()
                 {
                     Day = DateTime.Today,
-                    UserId = User.Id,
-                    ReviewedFlashcardsCount = 1,
+                    MinutesSpentLearning = 0,
+                    DeckId = this.SelectionStore.SelectedDeck.Id,
+                    ReviewedFlashcardsCount = 1
                 });
                 Streak++;
-                await _dataCreator.SaveNewDailyActivity(User.Activity[User.Activity.Count - 1]);
+                await _dataCreator.SaveNewDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
             }
             flashcard.Level += 1;
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);
@@ -180,6 +186,17 @@ namespace Flashcards.Core.Stores
         {
             flashcard.Level = 0;
             await _dataChanger.ChangeFlashcard(flashcard);
+        }
+
+        public async Task SaveSessionTime(double time)
+        {
+            if (IfTodayActivity)
+            {
+                this.SelectionStore.SelectedDeck.Activity[^1].MinutesSpentLearning += time;
+                await _dataChanger.ChangeDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
+            }
+            // any time that IfTodayActivity is false shouldn't count.
+            // only way for this to happen is to end session without any flashcard flipped
         }
     }
 }

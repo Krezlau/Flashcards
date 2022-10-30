@@ -82,5 +82,14 @@ namespace Flashcards.Core.Services.UserDataChangers
                 return true;
             }
         }
+
+        public async Task ChangeDeckActivityAsync(DeckActivity activity)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                context.DeckActivity.Update(activity);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }
