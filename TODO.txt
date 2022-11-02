@@ -63,7 +63,7 @@ TASK13:
 
 TASK14:
 	* loading screens
-	* stores unit tests
+	* models unit tests
 
 UNSPECIFIED:
 email sender

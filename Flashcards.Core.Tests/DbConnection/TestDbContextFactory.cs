@@ -20,7 +20,9 @@ namespace Flashcards.Core.Tests.DbConnection
 
         public UsersContext CreateDbContext()
         {
-            DbContextOptions options = new DbContextOptionsBuilder().UseInMemoryDatabase($"{_name}_testDB").Options;
+            DbContextOptions options = new DbContextOptionsBuilder().UseInMemoryDatabase($"{_name}_testDB")
+                                                                    .EnableSensitiveDataLogging()
+                                                                    .Options;
 
             return new UsersContext(options);
         }

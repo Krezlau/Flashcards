@@ -30,11 +30,11 @@ namespace Flashcards.Core.Models
 
         public virtual Deck Deck { get; set; }
 
-        public DailyActivity ToDailyActivity()
+        public DailyActivity ToDailyActivity(int userId)
         {
             return new DailyActivity()
             {
-                UserId = this.Deck.UserId,
+                UserId = userId,
                 Day = this.Day,
                 MinutesSpentLearning = this.MinutesSpentLearning,
                 ReviewedFlashcardsCount = this.ReviewedFlashcardsCount
