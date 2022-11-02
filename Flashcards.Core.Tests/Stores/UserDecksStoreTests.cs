@@ -531,16 +531,17 @@ namespace Flashcards.Core.Tests.Stores
             };
             context.Users.Add(user);
 
-            DailyActivity da = new DailyActivity()
+            Deck deck = new Deck("deck", user.Id);
+            context.Decks.Add(deck);
+
+            var da = new DeckActivity()
             {
                 Day = DateTime.Today,
                 ReviewedFlashcardsCount = 1,
-                User = user
+                MinutesSpentLearning = 0.1,
+                DeckId = deck.Id
             };
-            context.DailyActivity.Add(da);
-
-            Deck deck = new Deck("deck", user.Id);
-            context.Decks.Add(deck);
+            context.DeckActivity.Add(da);
 
             Flashcard flashcard = new Flashcard()
             {
@@ -556,16 +557,18 @@ namespace Flashcards.Core.Tests.Stores
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.IsAny<int>())).Returns(Task.FromResult(user));
 
             _dataChangerMock.Setup(ch => ch.ChangeFlashcard(It.IsAny<Flashcard>())).Verifiable();
-            _dataChangerMock.Setup(ch => ch.ChangeActivityAsync(It.IsAny<DailyActivity>())).Verifiable();
+            _dataChangerMock.Setup(ch => ch.ChangeDeckActivityAsync(It.IsAny<DeckActivity>())).Verifiable();
             var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
                                             _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
                                             _rightNavService, _leftNavService);
             await store.Initialize(user);
 
+            store.SelectionStore.SelectedDeck = deck;
+
             await store.FlashcardSetReview(store.User.Decks[0].Flashcards[0]);
 
             Assert.Equal(1, store.Streak);
-            Assert.Equal(2, store.User.Activity[0].ReviewedFlashcardsCount);
+            Assert.Equal(2, store.User.Decks[0].Activity[0].ReviewedFlashcardsCount);
             Assert.Equal(1, store.User.Decks[0].Flashcards[0].Level);
             Assert.Equal(DateTime.Today.AddDays(1), store.User.Decks[0].Flashcards[0].NextReview);
             _dataChangerMock.VerifyAll();
@@ -603,17 +606,19 @@ namespace Flashcards.Core.Tests.Stores
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.IsAny<int>())).Returns(Task.FromResult(user));
 
             _dataChangerMock.Setup(ch => ch.ChangeFlashcard(It.IsAny<Flashcard>())).Verifiable();
-            _dataCreatorMock.Setup(c => c.SaveNewDailyActivity(It.IsAny<DailyActivity>())).Verifiable();
+            _dataCreatorMock.Setup(c => c.SaveNewDeckActivityAsync(It.IsAny<DeckActivity>())).Verifiable();
             var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
                                             _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
                                             _rightNavService, _leftNavService);
             await store.Initialize(user);
 
+            store.SelectionStore.SelectedDeck = deck;
+
             await store.FlashcardSetReview(store.User.Decks[0].Flashcards[0]);
 
             Assert.True(store.IfTodayActivity);
-            Assert.Equal(1, store.User.Activity[0].ReviewedFlashcardsCount);
-            Assert.Equal(DateTime.Today, store.User.Activity[0].Day);
+            Assert.Equal(1, store.User.Decks[0].Activity[0].ReviewedFlashcardsCount);
+            Assert.Equal(DateTime.Today, store.User.Decks[0].Activity[0].Day);
             Assert.Equal(1, store.Streak);
             Assert.Equal(1, store.User.Decks[0].Flashcards[0].Level);
             Assert.Equal(DateTime.Today.AddDays(1), store.User.Decks[0].Flashcards[0].NextReview);
