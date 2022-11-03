@@ -68,7 +68,6 @@ namespace Flashcards.Core.Stores
         {
             User = await _dataProvider.LoadUserDecksAsync(user.Id);
 
-            //TODO
             IfTodayActivity = User.IfLearnedToday(DateTime.Today);
             Streak = User.CalculateStreak(DateTime.Today);
             
@@ -159,25 +158,36 @@ namespace Flashcards.Core.Stores
 
         public async Task FlashcardSetReview(Flashcard flashcard)
         {
-            if (IfTodayActivity)
-            {
-                this.SelectionStore.SelectedDeck.Activity[^1].ReviewedFlashcardsCount++;
-                await _dataChanger.ChangeDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
-            }
+            if (SelectionStore.SelectedDeck is null) return;
+
             if (!IfTodayActivity)
             {
+                Streak++;
                 IfTodayActivity = true;
-                this.SelectionStore.SelectedDeck.Activity.Add(new DeckActivity()
+            }
+            if (SelectionStore.SelectedDeck.Activity is null)
+            {
+                SelectionStore.SelectedDeck.Activity = new List<DeckActivity>();
+            }
+            if (SelectionStore.SelectedDeck.Activity.Count != 0 &&
+                SelectionStore.SelectedDeck.Activity[^1].Day == DateTime.Today)
+            {
+                SelectionStore.SelectedDeck.Activity[^1].ReviewedFlashcardsCount++;
+                await _dataChanger.ChangeDeckActivityAsync(SelectionStore.SelectedDeck.Activity[^1]);
+            }
+            if (SelectionStore.SelectedDeck.Activity.Count == 0 ||
+                SelectionStore.SelectedDeck.Activity[^1].Day != DateTime.Today)
+            {
+                SelectionStore.SelectedDeck.Activity.Add(new DeckActivity()
                 {
                     Day = DateTime.Today,
                     MinutesSpentLearning = 0,
-                    DeckId = this.SelectionStore.SelectedDeck.Id,
+                    DeckId = SelectionStore.SelectedDeck.Id,
                     ReviewedFlashcardsCount = 1
                 });
-                Streak++;
-                await _dataCreator.SaveNewDeckActivityAsync(this.SelectionStore.SelectedDeck.Activity[^1]);
+                await _dataCreator.SaveNewDeckActivityAsync(SelectionStore.SelectedDeck.Activity[^1]);
             }
-            flashcard.Level += 1;
+            flashcard.Level++;
             flashcard.NextReview = DateTime.Today.AddDays(flashcard.Level);
             await _dataChanger.ChangeFlashcard(flashcard);
         }

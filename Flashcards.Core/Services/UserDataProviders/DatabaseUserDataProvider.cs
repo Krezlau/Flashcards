@@ -53,6 +53,7 @@ namespace Flashcards.Core.Services.UserDataProviders
 
                     d.Activity = new List<DeckActivity>(await context.DeckActivity
                         .Where(b => b.DeckId == d.Id)
+                        .OrderBy(b => b.Day)
                         .ToListAsync());
                 }
 

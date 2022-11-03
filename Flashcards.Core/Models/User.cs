@@ -49,6 +49,7 @@ namespace Flashcards.Core.Models
                 }
             }
 
+            if (Decks is null) Decks = new ObservableCollection<Deck>();
             foreach (Deck deck in Decks)
             {
                 if (deck.Activity is null || deck.Activity.Count == 0) continue;
@@ -81,6 +82,7 @@ namespace Flashcards.Core.Models
                 this.Activity.Count > 0 &&
                 this.Activity[^1].Day == date) { return true; }
 
+            if (Decks is null) Decks = new ObservableCollection<Deck>();
             foreach (Deck d in Decks)
             {
                 if (d.Activity is not null &&
