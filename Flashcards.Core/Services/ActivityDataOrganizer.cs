@@ -26,6 +26,11 @@ namespace Flashcards.Core.Services
 
         public bool OrganizeActivityData(User user)
         {
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
             DailyReviewedCount = new ObservableCollection<DateTimePoint>();
             DailyMinutesSpent = new ObservableCollection<DateTimePoint>();
             TotalMinutesSpent = 0;
@@ -36,44 +41,70 @@ namespace Flashcards.Core.Services
             var daysRegisteredList = new List<DateTime>();
 
             // getting data from user activity (deleted decks' activity)
-            if (user.Activity.Count != 0)
+            if (user.Activity is not null && user.Activity.Count != 0)
             {
                 daysRegisteredList.Add(user.Activity[0].Day);
-                reviewedCount_InitialList.Add(new DateTimePoint(user.Activity[0].Day, user.Activity[0].ReviewedFlashcardsCount));
-                minutesSpent_InitialList.Add(new DateTimePoint(user.Activity[0].Day, user.Activity[0].MinutesSpentLearning));
+
+                reviewedCount_InitialList.Add(new DateTimePoint(
+                    user.Activity[0].Day,
+                    user.Activity[0].ReviewedFlashcardsCount));
+
+                minutesSpent_InitialList.Add(new DateTimePoint(
+                    user.Activity[0].Day,
+                    user.Activity[0].MinutesSpentLearning));
+
                 TotalReviewedCount += user.Activity[0].ReviewedFlashcardsCount;
                 TotalMinutesSpent += user.Activity[0].MinutesSpentLearning;
 
                 for (int i = 1; i < user.Activity.Count; i++)
                 {
                     daysRegisteredList.Add(user.Activity[i].Day);
-                    reviewedCount_InitialList.Add(new DateTimePoint(user.Activity[i].Day, user.Activity[i].ReviewedFlashcardsCount));
-                    minutesSpent_InitialList.Add(new DateTimePoint(user.Activity[i].Day, user.Activity[i].MinutesSpentLearning));
+
+                    reviewedCount_InitialList.Add(new DateTimePoint(
+                        user.Activity[i].Day,
+                        user.Activity[i].ReviewedFlashcardsCount));
+
+                    minutesSpent_InitialList.Add(new DateTimePoint(
+                        user.Activity[i].Day,
+                        user.Activity[i].MinutesSpentLearning));
+
                     TotalReviewedCount += user.Activity[i].ReviewedFlashcardsCount;
                     TotalMinutesSpent += user.Activity[i].MinutesSpentLearning;
                 }
             }
 
             // getting data from each deck's activity
-            foreach (Deck deck in user.Decks)
+            if (user.Decks is not null)
             {
-                if (deck.Activity.Count == 0) continue;
-                foreach (DeckActivity activity in deck.Activity)
+                foreach (Deck deck in user.Decks)
                 {
-                    int index = daysRegisteredList.BinarySearch(activity.Day);
-                    if (index < 0)
+                    if (deck.Activity is null || deck.Activity.Count == 0) continue;
+                    foreach (DeckActivity activity in deck.Activity)
                     {
-                        daysRegisteredList.Insert(~index, activity.Day);
-                        reviewedCount_InitialList.Insert(~index, new DateTimePoint(activity.Day, activity.ReviewedFlashcardsCount));
-                        minutesSpent_InitialList.Insert(~index, new DateTimePoint(activity.Day, activity.MinutesSpentLearning));
+                        int index = daysRegisteredList.BinarySearch(activity.Day);
+                        if (index < 0)
+                        {
+                            daysRegisteredList.Insert(~index, activity.Day);
+
+                            reviewedCount_InitialList.Insert(
+                                ~index,
+                                new DateTimePoint(activity.Day, activity.ReviewedFlashcardsCount));
+
+                            minutesSpent_InitialList.Insert(
+                                ~index,
+                                new DateTimePoint(activity.Day, activity.MinutesSpentLearning));
+                        }
+                        if (index >= 0)
+                        {
+                            reviewedCount_InitialList[index].Value +=
+                                activity.ReviewedFlashcardsCount;
+
+                            minutesSpent_InitialList[index].Value += 
+                                activity.MinutesSpentLearning;
+                        }
+                        TotalReviewedCount += activity.ReviewedFlashcardsCount;
+                        TotalMinutesSpent += activity.MinutesSpentLearning;
                     }
-                    if (index >= 0)
-                    {
-                        reviewedCount_InitialList[index].Value += activity.ReviewedFlashcardsCount;
-                        minutesSpent_InitialList[index].Value += activity.MinutesSpentLearning;
-                    }
-                    TotalReviewedCount += activity.ReviewedFlashcardsCount;
-                    TotalMinutesSpent += activity.MinutesSpentLearning;
                 }
             }
 
@@ -88,6 +119,11 @@ namespace Flashcards.Core.Services
 
         public bool OrganizeActivityData(Deck selectedDeck)
         {
+            if (selectedDeck is null)
+            {
+                throw new ArgumentNullException(nameof(selectedDeck));
+            }
+
             DailyReviewedCount = new ObservableCollection<DateTimePoint>();
             DailyMinutesSpent = new ObservableCollection<DateTimePoint>();
             TotalMinutesSpent = 0;
@@ -96,13 +132,23 @@ namespace Flashcards.Core.Services
             var reviewedCount_InitialList = new List<DateTimePoint>();
             var minutesSpent_InitialList = new List<DateTimePoint>();
 
-            foreach (DeckActivity activity in selectedDeck.Activity)
+            if (selectedDeck.Activity is not null)
             {
-                reviewedCount_InitialList.Add(new DateTimePoint(activity.Day, activity.ReviewedFlashcardsCount));
-                minutesSpent_InitialList.Add(new DateTimePoint(activity.Day, activity.MinutesSpentLearning));
-                TotalReviewedCount += activity.ReviewedFlashcardsCount;
-                TotalMinutesSpent += activity.MinutesSpentLearning;
+                foreach (DeckActivity activity in selectedDeck.Activity)
+                {
+                    reviewedCount_InitialList.Add(new DateTimePoint(
+                        activity.Day,
+                        activity.ReviewedFlashcardsCount));
+
+                    minutesSpent_InitialList.Add(new DateTimePoint(
+                        activity.Day,
+                        activity.MinutesSpentLearning));
+                    
+                    TotalReviewedCount += activity.ReviewedFlashcardsCount;
+                    TotalMinutesSpent += activity.MinutesSpentLearning;
+                }
             }
+            
             if (TotalReviewedCount == 0)
             {
                 return false;
@@ -115,26 +161,39 @@ namespace Flashcards.Core.Services
             return true;
         }
 
-        private void FillHolesBetweenDays(List<DateTimePoint> reviewedCount_InitialList, List<DateTimePoint> minutesSpent_InitialList)
+        private void FillHolesBetweenDays(
+            List<DateTimePoint> reviewedCount_InitialList,
+            List<DateTimePoint> minutesSpent_InitialList)
         {
             for (int i = 0; i < reviewedCount_InitialList.Count - 1; i++)
             {
                 DailyReviewedCount.Add(reviewedCount_InitialList[i]);
                 DailyMinutesSpent.Add(minutesSpent_InitialList[i]);
 
-                while (DailyReviewedCount[^1].DateTime.AddDays(1) != reviewedCount_InitialList[i + 1].DateTime)
+                while (DailyReviewedCount[^1].DateTime.AddDays(1) !=
+                    reviewedCount_InitialList[i + 1].DateTime)
                 {
-                    DailyReviewedCount.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
-                    DailyMinutesSpent.Add(new DateTimePoint(DailyMinutesSpent[^1].DateTime.AddDays(1), 0));
+                    DailyReviewedCount.Add(new DateTimePoint(
+                        DailyReviewedCount[^1].DateTime.AddDays(1),
+                        0));
+
+                    DailyMinutesSpent.Add(new DateTimePoint(
+                        DailyMinutesSpent[^1].DateTime.AddDays(1),
+                        0));
                 }
             }
             DailyReviewedCount.Add(reviewedCount_InitialList[^1]);
             DailyMinutesSpent.Add(minutesSpent_InitialList[^1]);
 
-            while (DailyReviewedCount[^1].DateTime.AddDays(1) < DateTime.Today)
+            while (DailyReviewedCount[^1].DateTime.AddDays(1) <= DateTime.Today)
             {
-                DailyReviewedCount.Add(new DateTimePoint(DailyReviewedCount[^1].DateTime.AddDays(1), 0));
-                DailyMinutesSpent.Add(new DateTimePoint(DailyMinutesSpent[^1].DateTime.AddDays(1), 0));
+                DailyReviewedCount.Add(new DateTimePoint(
+                    DailyReviewedCount[^1].DateTime.AddDays(1),
+                    0));
+
+                DailyMinutesSpent.Add(new DateTimePoint(
+                    DailyMinutesSpent[^1].DateTime.AddDays(1),
+                    0));
             }
         }
     }
