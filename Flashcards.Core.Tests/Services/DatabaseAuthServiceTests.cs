@@ -127,18 +127,25 @@ namespace Flashcards.Core.Tests.Services
         {
             var _contextFactory = new TestDbContextFactory(nameof(ChangeUserPasswordAsyncTest_WithCorrectData_ShouldReturnTrue));
             var _authService = new DatabaseAuthService(_contextFactory);
-            var context = _contextFactory.CreateDbContext();
-            var user = CreateSampleUser(context);
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                var user = CreateSampleUser(context);
+            }
 
             var outcome = await _authService.ChangeUserPasswordAsync(newpassword, oldpassword, username);
 
-            var loggedUser = context.Users.Single();
-            // cant understand why this is failing
-            Assert.True(outcome);
-            Assert.True(PasswordHasher.Verify(newpassword, loggedUser.PasswordHash));
-            Assert.False(PasswordHasher.Verify(oldpassword, loggedUser.PasswordHash));
+            User loggedUser;
+            using (var context = _contextFactory.CreateDbContext())
+            {
+                loggedUser = context.Users.Single();
 
-            _contextFactory.CleanUp(context);
+                // cant understand why this is failing
+                Assert.True(outcome);
+                Assert.True(PasswordHasher.Verify(newpassword, loggedUser.PasswordHash));
+                Assert.False(PasswordHasher.Verify(oldpassword, loggedUser.PasswordHash));
+
+                _contextFactory.CleanUp(context);
+            }
         }
 
         [Theory]
