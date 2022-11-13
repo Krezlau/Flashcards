@@ -59,13 +59,13 @@ TASK12:
 TASK13:
 	* unit tests update
 	* unit tests for new features
-	* make database online
 
 TASK14:
 	* loading screens
 	* models unit tests
 
 UNSPECIFIED:
+make database online
 email sender
 overall password security improvement
 more data for each entity - date created etc.
