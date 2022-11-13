@@ -152,5 +152,32 @@ namespace Flashcards.Core.Tests.Services.UserDataCreators
 
             _contextFactory.CleanUp(context);
         }
+
+        [Fact]
+        public async void SaveNewDeckActivityAsyncTest()
+        {
+            var _contextFactory = new TestDbContextFactory(nameof(SaveNewDeckActivityAsyncTest));
+            var _dataCreator = new DatabaseUserDataCreator(_contextFactory, _dataValidatorMockTrue.Object);
+
+            var context = _contextFactory.CreateDbContext();
+            var user = CreateSampleUser(context);
+            var da = new DeckActivity()
+            {
+                Day = DateTime.Parse("2022-12-31"),
+                ReviewedFlashcardsCount = 1,
+                DeckId = 1,
+                MinutesSpentLearning = 1.2
+            };
+            await _dataCreator.SaveNewDeckActivityAsync(da);
+
+            var dbRecord = context.DeckActivity.Single();
+            Assert.Equal(da, dbRecord);
+            Assert.Equal(da.Day, dbRecord.Day);
+            Assert.Equal(da.ReviewedFlashcardsCount, dbRecord.ReviewedFlashcardsCount);
+            Assert.Equal(da.DeckId, dbRecord.DeckId);
+            Assert.Equal(da.MinutesSpentLearning, dbRecord.MinutesSpentLearning);
+
+            _contextFactory.CleanUp(context);
+        }
     }
 }

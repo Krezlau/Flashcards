@@ -37,19 +37,40 @@ namespace Flashcards.Core.Models
 
         public int CalculateStreak(DateTime date)
         {
-            int sum = 0;
+            var daysRegisteredList = new List<DateTime>();
 
-            if (Activity is null || Activity.Count == 0) return 0;
-
-            if (Activity[Activity.Count - 1].Day.Day == date.Day)
+            if (Activity is not null && Activity.Count != 0)
             {
-                sum += 1;
+                daysRegisteredList.Add(Activity[0].Day);
+
+                for (int j = 1; j < Activity.Count; j++)
+                {
+                    daysRegisteredList.Add(Activity[j].Day);
+                }
             }
 
-            while (sum < Activity.Count && Activity[Activity.Count - sum - 1].Day.Day == date.AddDays(-1).Day)
+            if (Decks is null) Decks = new ObservableCollection<Deck>();
+            foreach (Deck deck in Decks)
             {
-                sum++;
+                if (deck.Activity is null || deck.Activity.Count == 0) continue;
+                foreach (DeckActivity activity in deck.Activity)
+                {
+                    int index = daysRegisteredList.BinarySearch(activity.Day);
+                    if (index < 0)
+                    {
+                        daysRegisteredList.Insert(~index, activity.Day);
+                    }
+                }
+            }
+
+            if (daysRegisteredList.Count == 0) return 0;
+
+            int i = daysRegisteredList.Count - 1;
+            int sum = 0;
+            while (i >= 0 && date == daysRegisteredList[i--].Date)
+            {
                 date = date.AddDays(-1);
+                sum++;
             }
 
             return sum;
@@ -57,8 +78,17 @@ namespace Flashcards.Core.Models
 
         public bool IfLearnedToday(DateTime date)
         {
-            if (Activity is null || Activity.Count == 0) return false;
-            if (Activity[Activity.Count-1].Day.Day == date.Day) return true;
+            if (this.Activity is not null && 
+                this.Activity.Count > 0 &&
+                this.Activity[^1].Day == date) { return true; }
+
+            if (Decks is null) Decks = new ObservableCollection<Deck>();
+            foreach (Deck d in Decks)
+            {
+                if (d.Activity is not null &&
+                d.Activity.Count > 0 &&
+                d.Activity[^1].Day == date) { return true; }
+            }
             return false;
         }
 

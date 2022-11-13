@@ -15,22 +15,27 @@ namespace Flashcards.Core.Services
 {
     public class FutureReviewsOrganizer
     {
-        public FutureReviewsOrganizer(Axis[] futureReviewsXAxes, ObservableCollection<ISeries> futureReviewsSeries)
+        public FutureReviewsOrganizer(Axis[] futureReviewsXAxes,
+                                      ObservableCollection<ISeries> futureReviewsSeries)
         {
             FutureReviewsXAxes = futureReviewsXAxes;
             FutureReviewsSeries = futureReviewsSeries;
         }
 
-        public Axis[] FutureReviewsXAxes { get; set; }
+        public Axis[] FutureReviewsXAxes { get; private set; }
 
-        public ObservableCollection<ISeries> FutureReviewsSeries { get; set; }
+        public ObservableCollection<ISeries> FutureReviewsSeries { get; private set; }
 
         public ObservableCollection<WeightedPoint> FutureReviewsObservable { get; private set; }
 
         public bool OrganizeFutureReviews(User user)
         {
+            if (user is null) throw new ArgumentNullException(nameof(user));
+
             var reviewsCountPerDate = new List<DateTimePoint>();
             var coveredDates = new List<DateTime>();
+
+            if (user.Decks == null) return false;
 
             foreach (Deck deck in user.Decks)
             {
@@ -47,6 +52,8 @@ namespace Flashcards.Core.Services
 
         public bool OrganizeFutureReviews(Deck deck)
         {
+            if (deck is null) throw new ArgumentNullException(nameof(deck));
+
             var reviewsCountPerDate = new List<DateTimePoint>();
             var coveredDates = new List<DateTime>();
 
@@ -63,6 +70,7 @@ namespace Flashcards.Core.Services
 
         private void TakeDataFromDeck(Deck deck, List<DateTimePoint> list, List<DateTime> coveredDates)
         {
+            if (deck.Flashcards is null) return;
             foreach (Flashcard flashcard in deck.Flashcards)
             {
                 int index = coveredDates.BinarySearch(flashcard.NextReview);
@@ -84,7 +92,7 @@ namespace Flashcards.Core.Services
 
             int index = 0;
             double sum = 0;
-            while (index < values.Count && values[index].DateTime < DateTime.Today)
+            while (index < values.Count && values[index].DateTime <= DateTime.Today)
             {
                 sum += (double)values[index++].Value;
             }
@@ -96,13 +104,19 @@ namespace Flashcards.Core.Services
 
             AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, (int)sum);
 
+            while (index < values.Count && currentDate.AddDays(1) != values[index].DateTime)
+            {
+                AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, 0);
+                currentDate = currentDate.AddDays(1);
+            }
+
             for (int i = index; i < values.Count; i++)
             {
                 dayOfTheWeek = (int)values[i].DateTime.DayOfWeek;
                 AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, values[i].DateTime, (int)values[i].Value);
                 currentDate = values[i].DateTime;
 
-                while (i < values.Count && currentDate.AddDays(1) != values[i + 1].DateTime)
+                while (i < values.Count - 1 && currentDate.AddDays(1) != values[i + 1].DateTime)
                 {
                     AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, 0);
                     currentDate = currentDate.AddDays(1);
@@ -127,7 +141,7 @@ namespace Flashcards.Core.Services
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber++, dayOfTheWeek++, 0));
-                currentDate = currentDate.AddDays(6);
+                currentDate = currentDate.AddDays(7);
             }
         }
 

@@ -260,5 +260,46 @@ namespace Flashcards.Core.Tests.Services.UserDataChangers
 
             _dbContextFactory.CleanUp(context);
         }
+
+        [Fact]
+        public async void ChangeDeckActivityAsyncTest()
+        {
+            var _dbContextFactory = new TestDbContextFactory(nameof(ChangeDeckActivityAsyncTest));
+            var _validDataChanger = new DatabaseUserDataChanger(_dbContextFactory, _dataValidatorMockTrue.Object);
+            var context = _dbContextFactory.CreateDbContext();
+            var user = new User
+            {
+                Id = 1,
+                Name = "test",
+                Email = "test@test",
+                PasswordHash = "testtesttest"
+            };
+            context.Users.Add(user);
+
+            var deck = new Deck("testdeck", user.Id);
+            context.Decks.Add(deck);
+
+            var dailyActivity = new DeckActivity
+            {
+                Day = DateTime.Parse("2022-07-30"),
+                ReviewedFlashcardsCount = 1,
+                Deck = deck
+            };
+            context.DeckActivity.Add(dailyActivity);
+            context.SaveChanges();
+
+            dailyActivity.Day = DateTime.Parse("2022-06-30");
+            dailyActivity.ReviewedFlashcardsCount = 30;
+
+            await _validDataChanger.ChangeDeckActivityAsync(dailyActivity);
+
+            // single in order to make sure there aren't any dublicates
+            var newActivity = context.DeckActivity.Single();
+
+            Assert.Equal(DateTime.Parse("2022-06-30"), newActivity.Day);
+            Assert.Equal(30, newActivity.ReviewedFlashcardsCount);
+
+            _dbContextFactory.CleanUp(context);
+        }
     }
 }

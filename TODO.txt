@@ -56,9 +56,16 @@ TASK12:
 	* storing activity data for each deck
 	* future reviews calendar for each deck	
 
+TASK13:
+	* unit tests update
+	* unit tests for new features
+
+TASK14:
+	* loading screens
+	* models unit tests
+
 UNSPECIFIED:
+make database online
 email sender
 overall password security improvement
-change database to an online one
-loading screens
 more data for each entity - date created etc.
