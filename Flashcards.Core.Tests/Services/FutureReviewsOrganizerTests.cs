@@ -100,13 +100,264 @@ namespace Flashcards.Core.Tests.Services
         [Fact]
         public void OrganizeFutureReviews_UserHasOneDeckWithFlashcards_ShouldReturnTrue()
         {
+            var organizer = new FutureReviewsOrganizer(futureReviewsXAxes, futureReviewsSeries);
 
+            var user = new User()
+            {
+                Decks = new ObservableCollection<Deck>(),
+                Email = "email",
+                Id = 1,
+                Name = "user",
+                PasswordHash = "hash"
+            };
+
+            var deck = new Deck()
+            {
+                Flashcards = new ObservableCollection<Flashcard>(),
+                Id = 1,
+                Name = "deck1",
+                UserId = 1
+            };
+
+            var flashcardOne = new Flashcard()
+            {
+                Back = "back1",
+                Front = "front1",
+                DeckId = 1,
+                Id = 1,
+                Level = 0,
+                NextReview = DateTime.Today.AddDays(2)
+            };
+
+            var flashcardTwo = new Flashcard()
+            {
+                Back = "back2",
+                Front = "front2",
+                DeckId = 1,
+                Id = 2,
+                Level = 2,
+                NextReview = DateTime.Today.AddDays(2)
+            };
+
+            var flashcardThree = new Flashcard()
+            {
+                Back = "back3",
+                Front = "front3",
+                DeckId = 1,
+                Id = 3,
+                Level = 1,
+                NextReview = DateTime.Today.AddDays(3)
+            };
+            deck.Flashcards.Add(flashcardOne);
+            deck.Flashcards.Add(flashcardTwo);
+            deck.Flashcards.Add(flashcardThree);
+            user.Decks.Add(deck);
+
+            var expectedValues = new ObservableCollection<WeightedPoint>();
+            int i = 0;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.DayOfWeek, 0));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(1).DayOfWeek, 0));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(2).DayOfWeek, 2));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(3).DayOfWeek, 1));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            FillExpectedValues(i, expectedValues, DateTime.Today.AddDays(4));
+
+            Axis[] expectedAxes = { new Axis { Labels = new List<string>() } };
+            var firstDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            for (int j = 0; j <= 25; j++)
+            {
+                expectedAxes[0].Labels.Add(firstDate.ToString("d"));
+                firstDate = firstDate.AddDays(7);
+            }
+
+            bool outcome = organizer.OrganizeFutureReviews(user);
+
+            Assert.True(outcome);
+            Assert.Single(organizer.FutureReviewsXAxes);
+            Assert.Single(organizer.FutureReviewsSeries);
+
+            for (i = 0; i < expectedValues.Count; i++)
+            {
+                Assert.Equal(expectedValues[i].X, organizer.FutureReviewsObservable[i].X);
+                Assert.Equal(expectedValues[i].Y, organizer.FutureReviewsObservable[i].Y);
+                Assert.Equal(expectedValues[i].Weight, organizer.FutureReviewsObservable[i].Weight);
+            }
+
+            for (i = 0; i < expectedAxes[0].Labels.Count; i++)
+            {
+                Assert.Equal(expectedAxes[0].Labels[i], organizer.FutureReviewsXAxes[0].Labels[i]);
+            }
         }
 
         [Fact]
         public void OrganizeFutureReviews_UserHasMultipleDecksWithOrWithoutFlashcards_ShouldReturnTrue()
         {
+            var organizer = new FutureReviewsOrganizer(futureReviewsXAxes, futureReviewsSeries);
 
+            var user = new User()
+            {
+                Decks = new ObservableCollection<Deck>(),
+                Email = "email",
+                Id = 1,
+                Name = "user",
+                PasswordHash = "hash"
+            };
+
+            var deckOne = new Deck()
+            {
+                Flashcards = new ObservableCollection<Flashcard>(),
+                Id = 1,
+                Name = "deck1",
+                UserId = 1
+            };
+
+            var deckTwo = new Deck()
+            {
+                Id = 2,
+                Name = "deck2",
+                UserId = 1
+            };
+
+            var deckThree = new Deck()
+            {
+                Flashcards = new ObservableCollection<Flashcard>(),
+                Id = 3,
+                Name = "deck3",
+                UserId = 1
+            };
+
+            var deckFour = new Deck()
+            {
+                Flashcards = new ObservableCollection<Flashcard>(),
+                Id = 4,
+                Name = "deck4",
+                UserId = 1
+            };
+
+            var deckOne_flashcardOne = new Flashcard()
+            {
+                Back = "back1",
+                Front = "front1",
+                DeckId = 1,
+                Id = 1,
+                Level = 0,
+                NextReview = DateTime.Today
+            };
+
+            var deckOne_flashcardTwo = new Flashcard()
+            {
+                Back = "back2",
+                Front = "front2",
+                DeckId = 1,
+                Id = 2,
+                Level = 2,
+                NextReview = DateTime.Today.AddDays(-12)
+            };
+
+            var deckOne_flashcardThree = new Flashcard()
+            {
+                Back = "back3",
+                Front = "front3",
+                DeckId = 1,
+                Id = 3,
+                Level = 1,
+                NextReview = DateTime.Today.AddDays(3)
+            };
+
+            var deckFour_flashcardOne = new Flashcard()
+            {
+                Back = "back1",
+                Front = "front1",
+                DeckId = 4,
+                Id = 1,
+                Level = 0,
+                NextReview = DateTime.Today.AddDays(2)
+            };
+
+            var deckFour_flashcardTwo = new Flashcard()
+            {
+                Back = "back2",
+                Front = "front2",
+                DeckId = 4,
+                Id = 2,
+                Level = 2,
+                NextReview = DateTime.Today
+            };
+
+            var deckFour_flashcardThree = new Flashcard()
+            {
+                Back = "back3",
+                Front = "front3",
+                DeckId = 4,
+                Id = 3,
+                Level = 1,
+                NextReview = DateTime.Today.AddDays(-3)
+            };
+
+            var deckFour_flashcardFour = new Flashcard()
+            {
+                Back = "back4",
+                Front = "front4",
+                DeckId = 4,
+                Id = 4,
+                Level = 1,
+                NextReview = DateTime.Today.AddDays(3)
+            };
+
+            user.Decks.Add(deckOne);
+            user.Decks.Add(deckTwo);
+            user.Decks.Add(deckThree);
+            user.Decks.Add(deckFour);
+
+            deckOne.Flashcards.Add(deckOne_flashcardOne);
+            deckOne.Flashcards.Add(deckOne_flashcardTwo);
+            deckOne.Flashcards.Add(deckOne_flashcardThree);
+
+            deckFour.Flashcards.Add(deckFour_flashcardOne);
+            deckFour.Flashcards.Add(deckFour_flashcardTwo);
+            deckFour.Flashcards.Add(deckFour_flashcardThree);
+            deckFour.Flashcards.Add(deckFour_flashcardFour);
+
+            var expectedValues = new ObservableCollection<WeightedPoint>();
+            int i = 0;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.DayOfWeek, 4));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(1).DayOfWeek, 0));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(2).DayOfWeek, 1));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(3).DayOfWeek, 2));
+            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            FillExpectedValues(i, expectedValues, DateTime.Today.AddDays(4));
+
+            Axis[] expectedAxes = { new Axis { Labels = new List<string>() } };
+            var firstDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            for (int j = 0; j <= 25; j++)
+            {
+                expectedAxes[0].Labels.Add(firstDate.ToString("d"));
+                firstDate = firstDate.AddDays(7);
+            }
+
+            bool outcome = organizer.OrganizeFutureReviews(user);
+
+            Assert.True(outcome);
+            Assert.Single(organizer.FutureReviewsXAxes);
+            Assert.Single(organizer.FutureReviewsSeries);
+
+            for (i = 0; i < expectedValues.Count; i++)
+            {
+                Assert.Equal(expectedValues[i].X, organizer.FutureReviewsObservable[i].X);
+                Assert.Equal(expectedValues[i].Y, organizer.FutureReviewsObservable[i].Y);
+                Assert.Equal(expectedValues[i].Weight, organizer.FutureReviewsObservable[i].Weight);
+            }
+
+            for (i = 0; i < expectedAxes[0].Labels.Count; i++)
+            {
+                Assert.Equal(expectedAxes[0].Labels[i], organizer.FutureReviewsXAxes[0].Labels[i]);
+            }
         }
 
         [Fact]

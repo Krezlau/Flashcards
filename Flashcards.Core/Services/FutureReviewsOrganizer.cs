@@ -92,7 +92,7 @@ namespace Flashcards.Core.Services
 
             int index = 0;
             double sum = 0;
-            while (index < values.Count && values[index].DateTime < DateTime.Today)
+            while (index < values.Count && values[index].DateTime <= DateTime.Today)
             {
                 sum += (double)values[index++].Value;
             }
@@ -103,6 +103,12 @@ namespace Flashcards.Core.Services
             FutureReviewsXAxes[0].Labels.Add(DateTime.Today.AddDays(-dayOfTheWeek).ToString("d"));
 
             AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, (int)sum);
+
+            while (index < values.Count && currentDate.AddDays(1) != values[index].DateTime)
+            {
+                AddDayToFutureReviews(ref dayOfTheWeek, ref weekNumber, currentDate, 0);
+                currentDate = currentDate.AddDays(1);
+            }
 
             for (int i = index; i < values.Count; i++)
             {
@@ -135,7 +141,7 @@ namespace Flashcards.Core.Services
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber, dayOfTheWeek++, 0));
                 FutureReviewsObservable.Add(new WeightedPoint(weekNumber++, dayOfTheWeek++, 0));
-                currentDate = currentDate.AddDays(6);
+                currentDate = currentDate.AddDays(7);
             }
         }
 
