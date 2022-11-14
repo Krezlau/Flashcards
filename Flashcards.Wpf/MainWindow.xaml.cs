@@ -27,6 +27,7 @@ namespace Flashcards.WpfApp
             _dialogService.SetDialogControl(RootDialog);
             _loadingService = loadingService;
             _loadingService.SetLoadingScreen(LoadingScreen);
+            _loadingService.SetContent(center);
         }
     }
 }

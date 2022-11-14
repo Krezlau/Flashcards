@@ -19,11 +19,13 @@ namespace Flashcards.WpfApp.Services
         public void Enable()
         {
             _loadingRingService.GetLoadingScreen().Visibility = System.Windows.Visibility.Visible;
+            _loadingRingService.GetContent().Visibility = System.Windows.Visibility.Hidden;
         }
 
         public void Disable()
         {
             _loadingRingService.GetLoadingScreen().Visibility = System.Windows.Visibility.Hidden;
+            _loadingRingService.GetContent().Visibility = System.Windows.Visibility.Visible;
         }
     }
 }

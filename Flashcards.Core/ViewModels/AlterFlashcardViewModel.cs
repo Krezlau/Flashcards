@@ -16,6 +16,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly NavigationService<FlashcardManagementViewModel> _navigationService;
         private readonly IDialogService _dialogService;
+        private readonly ILoadingService _loadingService;
         private readonly UserDecksStore _userDecksStore;
 
         public ICommand GoBackCommand { get; set; }
@@ -84,7 +85,10 @@ namespace Flashcards.Core.ViewModels
             }
         }
 
-        public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService)
+        public AlterFlashcardViewModel(NavigationService<FlashcardManagementViewModel> navigationService,
+                                       UserDecksStore userDecksStore,
+                                       IDialogService dialogService,
+                                       ILoadingService loadingService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -102,22 +106,29 @@ namespace Flashcards.Core.ViewModels
                 ButtonCommand = new RelayCommand(OnEditClick);
             }
             _dialogService = dialogService;
+            _loadingService = loadingService;
         }
 
         private async void OnEditClick()
         {
-            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || UserInputValidator.ValidateFlashcardTextField(Back) == 1)
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 ||
+                UserInputValidator.ValidateFlashcardTextField(Back) == 1)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be at least 3 characters long.");
                 return;
             }
-            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || UserInputValidator.ValidateFlashcardTextField(Back) == 2)
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 ||
+                UserInputValidator.ValidateFlashcardTextField(Back) == 2)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be not longer than 100 characters.");
                 return;
             }
-            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard changed.");
+
+            _loadingService.Enable();
             await _userDecksStore.AlterFlashcard(Front, Back);
+            _loadingService.Disable();
+
+            _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard changed.");
             _navigationService.Navigate();
         }
 
@@ -128,16 +139,20 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnAddClick()
         {
-            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || UserInputValidator.ValidateFlashcardTextField(Back) == 1)
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 1 || 
+                UserInputValidator.ValidateFlashcardTextField(Back) == 1)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be at least 3 characters long.");
                 return;
             }
-            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || UserInputValidator.ValidateFlashcardTextField(Back) == 2)
+            if (UserInputValidator.ValidateFlashcardTextField(Front) == 2 || 
+                UserInputValidator.ValidateFlashcardTextField(Back) == 2)
             {
                 _dialogService.ShowMessageDialog("ERROR", "Flashcard text fields must be not longer than 100 characters.");
                 return;
             }
+
+            _loadingService.Enable();
             await _userDecksStore.AddFlashcardToSelectedDeck(new Flashcard
             {
                 Front = Front,
@@ -146,6 +161,8 @@ namespace Flashcards.Core.ViewModels
                 Level = 0,
                 NextReview = DateTime.Today
             });
+            _loadingService.Disable();
+            
             _dialogService.ShowSnackbarMessage("SUCCESS", "Flashcard created.");
             _navigationService.Navigate();
         }

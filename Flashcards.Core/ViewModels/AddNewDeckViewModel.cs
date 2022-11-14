@@ -15,6 +15,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeService;
         private readonly NavigationService<DeckPreviewViewModel> _navigationService;
         private readonly IDialogService dialogService;
+        private readonly ILoadingService _loadingService;
         private readonly UserDecksStore userDecksStore;
 
         public ICommand ButtonCommand { get; set; }
@@ -55,7 +56,11 @@ namespace Flashcards.Core.ViewModels
 
         public string ButtonContent { get; set; } = "Add";
 
-        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService, UserDecksStore userDecksStore, IDialogService dialogService, NavigationService<UserWelcomeViewModel> userWelcomeService)
+        public AddNewDeckViewModel(NavigationService<DeckPreviewViewModel> navigationService,
+                                   UserDecksStore userDecksStore,
+                                   IDialogService dialogService,
+                                   NavigationService<UserWelcomeViewModel> userWelcomeService,
+                                   ILoadingService loadingService)
         {
             ButtonCommand = new RelayCommand(OnAddClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
@@ -71,6 +76,7 @@ namespace Flashcards.Core.ViewModels
             this.userDecksStore = userDecksStore;
             this.dialogService = dialogService;
             _userWelcomeService = userWelcomeService;
+            _loadingService = loadingService;
         }
 
         private void OnGoBackClick()
@@ -96,7 +102,10 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            _loadingService.Enable();
             bool outcome = await userDecksStore.AlterDeck(DeckName);
+            _loadingService.Disable();
+            
             if (outcome == false)
             {
                 dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");
@@ -121,7 +130,11 @@ namespace Flashcards.Core.ViewModels
             }
 
             Deck deck = new Deck(DeckName, userDecksStore.User.Id);
+
+            _loadingService.Enable();
             bool outcome = await userDecksStore.AddNewDeck(deck);
+            _loadingService.Disable();
+            
             if (outcome == false)
             {
                 dialogService.ShowMessageDialog("ERROR", $"You already have a deck named {DeckName}.");

@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AccountManagementViewModel> _navigationService;
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
+        private readonly ILoadingService _loadingService;
 
         private bool ifEmailChange = false;
 
@@ -90,7 +91,11 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public AccountInfoChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore, IAuthenticationService authService, IDialogService dialogService)
+        public AccountInfoChangeViewModel(NavigationService<AccountManagementViewModel> navigationService,
+                                          UserDecksStore userDecksStore,
+                                          IAuthenticationService authService,
+                                          IDialogService dialogService,
+                                          ILoadingService loadingService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -104,6 +109,7 @@ namespace Flashcards.Core.ViewModels
             _userDecksStore.EmailChangeRequest += PrepareForEmailChange;
             _authService = authService;
             _dialogService = dialogService;
+            _loadingService = loadingService;
         }
 
         private void OnGoBackClick()
@@ -128,9 +134,11 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            _loadingService.Enable();
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
+                _loadingService.Disable();
                 _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
                 return;
             }
@@ -138,9 +146,12 @@ namespace Flashcards.Core.ViewModels
             bool outcome = await _userDecksStore.ChangeUserEmail(UpperTextField);
             if (outcome == false)
             {
+                _loadingService.Disable();
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Email already taken.");
                 return;
             }
+            _loadingService.Disable();
+
             _userDecksStore.User.Email = UpperTextField;
             _dialogService.ShowSnackbarMessage("SUCCESS", "Email changed.");
             _navigationService.Navigate();
@@ -164,9 +175,11 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            _loadingService.Enable();
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(Password, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
+                _loadingService.Disable();
                 _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
                 return;
             }
@@ -174,9 +187,12 @@ namespace Flashcards.Core.ViewModels
             bool outcome = await _userDecksStore.ChangeUserName(UpperTextField);
             if (outcome == false)
             {
+                _loadingService.Disable();
                 _dialogService.ShowMessageDialog("ERROR", "Failed to change. Username already taken.");
                 return;
             }
+            _loadingService.Disable();
+
             _userDecksStore.User.Name = UpperTextField;
             _dialogService.ShowSnackbarMessage("SUCCESS", "Username changed.");
             _navigationService.Navigate();
