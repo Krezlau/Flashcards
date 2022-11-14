@@ -135,7 +135,6 @@
             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
             >
             <ui:ProgressRing
-            x:Name="LoadingRing"
             Visibility="Visible"
             IsIndeterminate="True"
             />
