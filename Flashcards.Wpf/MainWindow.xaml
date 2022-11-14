@@ -29,7 +29,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ContentControl Content="{Binding LeftViewModel}" Grid.Column="0" Grid.Row="1">
+        <ContentControl x:Name="left" Content="{Binding LeftViewModel}" Grid.Column="0" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
                     <views:HomeView />
@@ -37,7 +37,7 @@
             </ContentControl.Resources>
         </ContentControl>
 
-        <ContentControl Content="{Binding RightViewModel}" Grid.Column="2" Grid.Row="1">
+        <ContentControl x:Name="right" Content="{Binding RightViewModel}" Grid.Column="2" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:UserIconViewModel}" >
                     <views:UserIconView />
@@ -46,7 +46,7 @@
         </ContentControl>
 
 
-        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1" Grid.Row="1">
+        <ContentControl x:Name="center" Content="{Binding CurrentViewModel}" Grid.Column="1" Grid.Row="1">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}" >
                     <views:HomeView/>
@@ -126,5 +126,20 @@
             Grid.Column="0" Grid.ColumnSpan="3"
             Grid.Row="0" Grid.RowSpan="2">
         </ui:Dialog>
+
+        <Border
+            x:Name="LoadingScreen"
+            Grid.Column="1"
+            Grid.Row="1"
+            Visibility="Hidden"
+            Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+            >
+            <ui:ProgressRing
+            x:Name="LoadingRing"
+            Visibility="Visible"
+            IsIndeterminate="True"
+            />
+        </Border>
+        
     </Grid>
 </ui:UiWindow>
