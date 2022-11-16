@@ -67,6 +67,7 @@ namespace Flashcards.Core.Models
 
             int i = daysRegisteredList.Count - 1;
             int sum = 0;
+            daysRegisteredList.OrderBy(d => d);
             while (i >= 0 && date == daysRegisteredList[i--].Date)
             {
                 date = date.AddDays(-1);
