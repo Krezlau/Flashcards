@@ -60,5 +60,13 @@ namespace Flashcards.Core.Services.UserDataProviders
                 return user;
             }
         }
+
+        public async Task<List<DailyActivity>> LoadUserActivityAsync(int userId)
+        {
+            using (UsersContext context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.DailyActivity.Where(da => da.UserId == userId).ToListAsync();
+            }
+        }
     }
 }

@@ -26,32 +26,34 @@ namespace Flashcards.Core.Services.UserDataDestroyers
 
                 //migrating deckactivity to dailyactivity
                 var activity = await context.DeckActivity.Where(da => da.DeckId == deck.Id).ToListAsync();
+                List<DailyActivity> dailyActivity = new List<DailyActivity>();
                 if (activity.Count > 0)
                 {
-                    var dailyActivity = new List<DailyActivity>(activity.Count);
                     foreach (var a in activity)
                     {
                         dailyActivity.Add(a.ToDailyActivity(deck.UserId));
                     }
-                    foreach (var a in dailyActivity)
-                    {
-                        var inDb = context.DailyActivity.Where(da => da.Day == a.Day).FirstOrDefault();
-                        if (inDb is not null)
-                        {
-                            inDb.ReviewedFlashcardsCount += a.ReviewedFlashcardsCount;
-                            inDb.MinutesSpentLearning += a.MinutesSpentLearning;
-                            context.DailyActivity.Update(inDb);
-                            continue;
-                        }
-                        if (inDb is null)
-                        {
-                            context.DailyActivity.Add(a);
-                            continue;
-                        }
-                    }
                     context.DeckActivity.RemoveRange(activity);
                 }
                 
+                await context.SaveChangesAsync();
+
+                foreach (var a in dailyActivity)
+                {
+                    var inDb = context.DailyActivity.Where(da => da.Day == a.Day).FirstOrDefault();
+                    if (inDb is not null)
+                    {
+                        inDb.ReviewedFlashcardsCount += a.ReviewedFlashcardsCount;
+                        inDb.MinutesSpentLearning += a.MinutesSpentLearning;
+                        context.DailyActivity.Update(inDb);
+                        continue;
+                    }
+                    if (inDb is null)
+                    {
+                        context.DailyActivity.Add(a);
+                        continue;
+                    }
+                }
                 await context.SaveChangesAsync();
             }
         }

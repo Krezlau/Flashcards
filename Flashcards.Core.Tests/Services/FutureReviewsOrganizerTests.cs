@@ -158,11 +158,11 @@ namespace Flashcards.Core.Tests.Services
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.DayOfWeek, 0));
             if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(1).DayOfWeek, 0));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(1).DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(2).DayOfWeek, 2));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(2).DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(3).DayOfWeek, 1));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(3).DayOfWeek + 1 == 7) i++;
             FillExpectedValues(i, expectedValues, DateTime.Today.AddDays(4));
 
             Axis[] expectedAxes = { new Axis { Labels = new List<string>() } };
@@ -326,11 +326,11 @@ namespace Flashcards.Core.Tests.Services
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.DayOfWeek, 4));
             if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(1).DayOfWeek, 0));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(1).DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(2).DayOfWeek, 1));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(2).DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(3).DayOfWeek, 2));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(3).DayOfWeek + 1 == 7) i++;
             FillExpectedValues(i, expectedValues, DateTime.Today.AddDays(4));
 
             Axis[] expectedAxes = { new Axis { Labels = new List<string>() } };
@@ -445,9 +445,9 @@ namespace Flashcards.Core.Tests.Services
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.DayOfWeek, 2));
             if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(1).DayOfWeek, 0));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(1).DayOfWeek + 1 == 7) i++;
             expectedValues.Add(new WeightedPoint(i, (int)DateTime.Today.AddDays(2).DayOfWeek, 1));
-            if ((int)DateTime.Today.DayOfWeek + 1 == 7) i++;
+            if ((int)DateTime.Today.AddDays(2).DayOfWeek + 1 == 7) i++;
             FillExpectedValues(i, expectedValues, DateTime.Today.AddDays(3));
 
             Axis[] expectedAxes = { new Axis { Labels = new List<string>() } };

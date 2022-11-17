@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<AccountManagementViewModel> _navigationService;
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
+        private readonly ILoadingService _loadingService;
 
         private string _passwordErrorText = "";
         public string PasswordErrorText
@@ -84,7 +85,11 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
-        public PasswordChangeViewModel(NavigationService<AccountManagementViewModel> navigationService, UserDecksStore userDecksStore, IAuthenticationService authService, IDialogService dialogService)
+        public PasswordChangeViewModel(NavigationService<AccountManagementViewModel> navigationService,
+                                       UserDecksStore userDecksStore,
+                                       IAuthenticationService authService,
+                                       IDialogService dialogService,
+                                       ILoadingService loadingService)
         {
             _navigationService = navigationService;
             _userDecksStore = userDecksStore;
@@ -93,6 +98,7 @@ namespace Flashcards.Core.ViewModels
             GoBackCommand = new RelayCommand(OnGoBackClick);
             _authService = authService;
             _dialogService = dialogService;
+            _loadingService = loadingService;
         }
 
         private void OnGoBackClick()
@@ -124,13 +130,17 @@ namespace Flashcards.Core.ViewModels
                 return;
             }
 
+            _loadingService.Enable();
             bool ifPasswordCorrect = await _authService.IfPasswordCorrect(OldPassword, _userDecksStore.User.Name);
             if (!ifPasswordCorrect)
             {
+                _loadingService.Disable();
                 _dialogService.ShowMessageDialog("ERROR", "Password is not correct.");
                 return;
             }
             await _authService.ChangeUserPasswordAsync(Password, OldPassword, _userDecksStore.User.Name);
+            _loadingService.Disable();
+
             _dialogService.ShowSnackbarMessage("SUCCESS", "Password changed.");
             _navigationService.Navigate();
         }

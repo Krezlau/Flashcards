@@ -136,5 +136,25 @@ namespace Flashcards.Core.Tests.Services.UserDataProviders
 
             _contextFactory.CleanUp(context);
         }
+
+        [Fact]
+        public async void LoadUserActivityAsyncTest()
+        {
+            var _contextFactory = new TestDbContextFactory(nameof(LoadUserActivityAsyncTest));
+            var _dataProvider = new DatabaseUserDataProvider(_contextFactory);
+
+            var context = _contextFactory.CreateDbContext();
+            var users = PrepareData(context);
+
+            var activityListOne = await _dataProvider.LoadUserActivityAsync(users[0].Id);
+            var activityListTwo = await _dataProvider.LoadUserActivityAsync(users[1].Id);
+            var activityListThree = await _dataProvider.LoadUserActivityAsync(users[2].Id);
+
+            Assert.Equal(users[0].Activity, activityListOne);
+            Assert.Equal(users[1].Activity, activityListTwo);
+            Assert.Empty(activityListThree);
+
+            _contextFactory.CleanUp(context);
+        }
     }
 }

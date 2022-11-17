@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
     {
         private readonly IAuthenticationService _authService;
         private readonly IDialogService _dialogService;
+        private readonly ILoadingService _loadingService;
         private readonly UserDecksStore _userDecksStore;
         private readonly NavigationService<UserWelcomeViewModel> _userWelcomeService;
         private readonly NavigationService<RegistrationViewModel> _registerService;
@@ -31,7 +32,12 @@ namespace Flashcards.Core.ViewModels
 
         public ICommand RegisterCommand { get; set; }
 
-        public LogInViewModel(IAuthenticationService authService, UserDecksStore userDecksStore, NavigationService<UserWelcomeViewModel> userWelcomeService, IDialogService dialogService, NavigationService<RegistrationViewModel> registerService)
+        public LogInViewModel(IAuthenticationService authService,
+                              UserDecksStore userDecksStore,
+                              NavigationService<UserWelcomeViewModel> userWelcomeService,
+                              IDialogService dialogService,
+                              NavigationService<RegistrationViewModel> registerService,
+                              ILoadingService loadingService)
         {
             _authService = authService;
             LogInCommand = new RelayCommand(OnLogInClick);
@@ -41,6 +47,7 @@ namespace Flashcards.Core.ViewModels
             _userWelcomeService = userWelcomeService;
             _dialogService = dialogService;
             _registerService = registerService;
+            _loadingService = loadingService;
         }
 
         private void OnRegisterClick()
@@ -50,13 +57,16 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnLogInClick()
         {
+            _loadingService.Enable();
             User user = await _authService.LoginUserAsync(Username, Password);
             if (user is not null)
             {
                 await _userDecksStore.Initialize(user);
                 _userWelcomeService.Navigate();
+                _loadingService.Disable();
                 return;
             }
+            _loadingService.Disable();
             _dialogService.ShowMessageDialog("ERROR", "Failed to log in. Check if your username and password are correct.");
         }
     }

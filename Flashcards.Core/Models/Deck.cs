@@ -48,6 +48,8 @@ namespace Flashcards.Core.Models
 
         public List<Flashcard> CollectToReview()
         {
+            if (Flashcards is null) Flashcards = new ObservableCollection<Flashcard>();
+
             List<Flashcard> toReview = new();
             foreach (Flashcard f in Flashcards)
             {

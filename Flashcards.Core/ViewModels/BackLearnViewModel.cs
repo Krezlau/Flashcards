@@ -17,6 +17,7 @@ namespace Flashcards.Core.ViewModels
         private readonly NavigationService<DeckPreviewViewModel> _deckPreviewService;
         private readonly NavigationService<FrontLearnViewModel> _frontLearnService;
         private readonly ReviewStore _reviewStore;
+        private readonly ILoadingService _loadingService;
 
         public ICommand GoBackCommand { get; set; }
 
@@ -28,7 +29,11 @@ namespace Flashcards.Core.ViewModels
 
         public string Back => _reviewStore.ToReviewList[_reviewStore.Iterator].Back;
 
-        public BackLearnViewModel(UserDecksStore userDecksStore, NavigationService<DeckPreviewViewModel> deckPreviewService, NavigationService<FrontLearnViewModel> frontLearnService, ReviewStore reviewStore)
+        public BackLearnViewModel(UserDecksStore userDecksStore,
+                                  NavigationService<DeckPreviewViewModel> deckPreviewService,
+                                  NavigationService<FrontLearnViewModel> frontLearnService,
+                                  ReviewStore reviewStore,
+                                  ILoadingService loadingService)
         {
             _userDecksStore = userDecksStore;
             _deckPreviewService = deckPreviewService;
@@ -38,6 +43,7 @@ namespace Flashcards.Core.ViewModels
             GoodCommand = new RelayCommand(OnGoodClick);
             AgainCommand = new RelayCommand(OnAgainClick);
             GoBackCommand = new RelayCommand(OnGoBackClick);
+            _loadingService = loadingService;
         }
 
         private async void OnGoBackClick()
@@ -48,23 +54,36 @@ namespace Flashcards.Core.ViewModels
 
         private async void OnAgainClick()
         {
+            _loadingService.Enable();
+
             await _userDecksStore.FlashcardSetReviewFailed(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Again();
             await FlashcardDone();
+
+            _loadingService.Disable();
         }
 
         private async void OnGoodClick()
         {
+            _loadingService.Enable();
+
             await _userDecksStore.FlashcardSetReview(_reviewStore.ToReviewList[_reviewStore.Iterator]);
             _reviewStore.Good();
             await FlashcardDone();
+
+            _loadingService.Disable();
         }
 
         private async Task FlashcardDone()
         {
             if (_reviewStore.Iterator >= _reviewStore.ToReviewList.Count)
             {
+                _loadingService.Enable();
+
                 await _userDecksStore.SaveSessionTime(_reviewStore.EndOfLearning());
+
+                _loadingService.Disable();
+
                 _deckPreviewService.Navigate();
                 return;
             }

@@ -60,6 +60,10 @@ namespace Flashcards.WpfApp
 
                     services.AddSingleton<Wpf.Ui.Mvvm.Services.DialogService>();
 
+                    services.AddSingleton<LoadingRingService>();
+
+                    services.AddSingleton<ILoadingService, WpfLoadingService>();
+
                     services.AddSingleton<IDialogService, WpfDialogService>();
 
                     services.AddSingleton<MainWindow>();

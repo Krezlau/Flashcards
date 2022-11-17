@@ -52,7 +52,14 @@ namespace Flashcards.Core.Stores
 
         public SelectionStore SelectionStore { get; }
 
-        public UserDecksStore(IUserDataProvider dataProvider, IUserDataCreator dataCreator, IUserDataDestroyer dataDestroyer, IUserDataChanger dataChanger, SelectionStore selectionStore, NavigationStore navigationStore, NavigationService<UserIconViewModel> rightNavService, NavigationService<HomeViewModel> navigationService)
+        public UserDecksStore(IUserDataProvider dataProvider,
+                              IUserDataCreator dataCreator,
+                              IUserDataDestroyer dataDestroyer,
+                              IUserDataChanger dataChanger,
+                              SelectionStore selectionStore,
+                              NavigationStore navigationStore,
+                              NavigationService<UserIconViewModel> rightNavService,
+                              NavigationService<HomeViewModel> navigationService)
         {
             _dataProvider = dataProvider;
             _dataCreator = dataCreator;
@@ -148,6 +155,7 @@ namespace Flashcards.Core.Stores
             //move all decks activity to user activity
             await _dataDestroyer.DeleteDeck(SelectionStore.SelectedDeck);
             User.Decks.Remove(SelectionStore.SelectedDeck);
+            User.Activity = await _dataProvider.LoadUserActivityAsync(User.Id);
         }
 
         public async Task AddFlashcardToSelectedDeck(Flashcard flashcard)

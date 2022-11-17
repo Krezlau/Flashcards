@@ -439,16 +439,21 @@ namespace Flashcards.Core.Tests.Stores
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 1))).Returns(Task.FromResult(users[0]));
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 2))).Returns(Task.FromResult(users[1]));
             _dataProviderMock.Setup(p => p.LoadUserDecksAsync(It.Is<int>(i => i == 3))).Returns(Task.FromResult(users[2]));
+
+            _dataProviderMock.Setup(p => p.LoadUserActivityAsync(It.IsAny<int>())).Verifiable();
+
             var store = new UserDecksStore(_dataProviderMock.Object, _dataCreatorMock.Object, _dataDestroyerMock.Object,
                                             _dataChangerMock.Object, _selectionStore, _navigationStoreMock.Object,
                                             _rightNavService, _leftNavService);
             await store.Initialize(users[0]);
 
             int decksCount = store.User.Decks.Count;
+            int userActivityCount = store.User.Activity.Count;
             store.SelectionStore.SelectedDeck = store.User.Decks[0];
 
             await store.RemoveCurrentDeck();
 
+            _dataProviderMock.Verify(p => p.LoadUserActivityAsync(It.IsAny<int>()));
             Assert.Equal(decksCount - 1, store.User.Decks.Count);
         }
 
