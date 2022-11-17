@@ -10,5 +10,7 @@ namespace Flashcards.Core.Services.UserDataProviders
     public interface IUserDataProvider
     {
         Task<User> LoadUserDecksAsync(int userId);
+
+        Task<List<DailyActivity>> LoadUserActivityAsync(int userId);
     }
 }
