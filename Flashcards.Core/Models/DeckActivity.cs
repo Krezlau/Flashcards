@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Flashcards.Core.Models
 {
-    public class DeckActivity : IComparer<DeckActivity>
+    public class DeckActivity
     {
         [Key]
         [Required]
@@ -53,11 +53,6 @@ namespace Flashcards.Core.Models
         public override int GetHashCode()
         {
             return HashCode.Combine(Id);
-        }
-
-        public int Compare(DeckActivity x, DeckActivity y)
-        {
-            return DateTime.Compare(x.Day, y.Day);
         }
     }
 }
