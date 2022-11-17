@@ -569,7 +569,24 @@ namespace Flashcards.Core.Tests.Models
         [Fact]
         public void EqualsTest()
         {
+            User primaryUser = new User
+            {
+                Name = "user",
+                Id = 1,
+                Email = "email",
+                PasswordHash = "hash"
+            };
 
+            User userNull = null;
+            Deck notAUser = new Deck("deck", 2);
+            User userWithDifferentId = new User { Id = 10 };
+            User userWithTheSameId = new User { Id = 1 };
+
+            Assert.False(primaryUser.Equals(userNull));
+            Assert.False(primaryUser.Equals(notAUser));
+            Assert.False(primaryUser.Equals(userWithDifferentId));
+            Assert.True(primaryUser.Equals(userWithTheSameId));
+            Assert.True(primaryUser.Equals(primaryUser));
         }
     }
 }
