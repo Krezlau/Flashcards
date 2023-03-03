@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LiveChartsCore.Drawing;
 
 namespace Flashcards.Core.Services
 {
@@ -147,14 +148,18 @@ namespace Flashcards.Core.Services
 
         private void SetUpTheSeries()
         {
+            var colors = new LvcColor[38];
+            colors[0] = new SKColor(0, 0, 0).AsLvcColor();
+            int j = 1;
+            for (int i = 75; i <= 255; i += 5)
+            {
+                colors[j++] = new SKColor(0, (byte)i, 0).AsLvcColor();
+            }
+
             FutureReviewsSeries.Add(new HeatSeries<WeightedPoint>
             {
                 PointPadding = new LiveChartsCore.Drawing.Padding(1),
-                HeatMap = new[]
-                {
-                    SKColors.Black.AsLvcColor(),
-                    SKColors.SpringGreen.AsLvcColor()
-                },
+                HeatMap = colors,
                 Values = FutureReviewsObservable,
                 TooltipLabelFormatter = (chartPoint) =>
                 $"{DateTime.Parse(FutureReviewsXAxes[0].Labels[(int)chartPoint.Coordinate.SecondaryValue]).AddDays((int)chartPoint.PrimaryValue):d}" +
